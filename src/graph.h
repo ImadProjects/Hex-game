@@ -12,4 +12,10 @@ struct graph_t {
                         // o[p][i] == 1 means that the vertex i is owned by p
 };
 
+struct graph_t* new__graph_t(int n, char c);
+
+void free__graph_t(struct graph_t* g);
+
+void print__mat(struct graph_t* g);
+
 #endif // _HEX_GRAPH_H_
