@@ -18,4 +18,4 @@ install: server
 	cp server install/
 
 clean:	
-	rm -rf *.o server install/server
+	rm -rf *.o server 
