@@ -2,7 +2,7 @@
 #include <gsl/gsl_spmatrix.h>
 #include "graph.h"
 
-#define N_GRAPH 5
+#define N_GRAPH 8
 
 int check(int n,int att){
   return n == att;
@@ -10,13 +10,17 @@ int check(int n,int att){
 
 int test_graph(void){
   int c = 0;
-  struct graph_t* g = new__graph_t(3, 'c');
+  struct graph_t* g = new__graph_t(3, 'h');
   c += check(g->num_vertices, 4);
   c += check(gsl_spmatrix_get(g->t, 0, 0), 0);
   c += check(gsl_spmatrix_get(g->t, 1, 0), 1);
   c += check(gsl_spmatrix_get(g->t, 0, 1), 1);
   c += check(gsl_spmatrix_get(g->t, 1, 1), 0);
-  c += check(gsl_spmatrix_get(g->o, 0, 0), 0);
+  c += check(gsl_spmatrix_get(g->t, 1, 3), 1);
+  c += check(gsl_spmatrix_get(g->t, 3, 1), 1);
+  c += check(gsl_spmatrix_get(g->o, 0, 6), 0);
+  coloriate__graph_t(g, 0, 6);
+  c += check(gsl_spmatrix_get(g->o, 0, 6), 1);
   print__mat(g);
   free__graph_t(g);
   return c;

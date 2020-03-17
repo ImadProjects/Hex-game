@@ -16,6 +16,8 @@ struct graph_t* new__graph_t(int n, char c);
 
 void free__graph_t(struct graph_t* g);
 
-void print__mat(struct graph_t* g);
+void print__mat(const struct graph_t* g);
+
+void coloriate__graph_t(struct graph_t* g, int color, int n);
 
 #endif // _HEX_GRAPH_H_
