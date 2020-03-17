@@ -30,8 +30,7 @@ alltests: server.o
 
 test:
 
-install: server
-	cp server install/
+install: server players
 
 clean:	
 	rm -rf *.o server 
