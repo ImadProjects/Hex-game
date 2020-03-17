@@ -8,6 +8,11 @@ build: server alltests players
 server: server.o
 	$(COMP) -o install/server server.o
 
+
+alltests: server.o
+	$(COMP) -o install/alltests server.o
+	$(COMP) --coverage  src/server.c
+
 server.o: src/server.c
 	$(COMP) $(CFLAGS) -o server.o src/server.c
 
@@ -25,8 +30,6 @@ player2.so:
 
 
 
-alltests: server.o
-	$(COMP) --coverage -o install/alltests server.o
 
 test:
 
@@ -37,3 +40,7 @@ clean:
 	rm -f install/*.so 
 	rm -f install/server
 	rm -f install/alltests
+	rm  -f *gcov
+	rm -f *gcno
+	rm -f *gcda
+	rm -f a.out
