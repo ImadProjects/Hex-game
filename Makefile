@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -std=c99 -c -ggdb
+CFLAGS =  -std=c99 -c -ggdb
 COMP=gcc
 GSL_PATH?=
 
@@ -13,7 +13,7 @@ alltests: server.o graph.o
 	$(COMP) -I${GSL_PATH} --coverage  src/graph.c src/server.c  -lgsl -lgslcblas -lm
 
 server.o: src/server.c
-	$(COMP) $(CFLAGS) -o server.o src/server.c
+	$(COMP) $(CFLAGS) -I${GSL_PATH} -o server.o src/server.c
 
 graph.o: src/graph.c
 	$(COMP) $(CFLAGS) -I${GSL_PATH} -o graph.o src/graph.c
@@ -37,7 +37,6 @@ install: server players
 
 clean:	
 	rm -rf *.o server 
-	rm -f install/*.so 
 	rm -f install/server
 	rm -f install/alltests
 	rm  -f *gcov
