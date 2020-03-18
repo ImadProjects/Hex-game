@@ -1,6 +1,7 @@
 #include <gsl/gsl_spmatrix.h>
 #include <stddef.h>
 #include "graph.h"
+#include <stdio.h>
 
 void assign_links(gsl_spmatrix* t, char c, int n);
 void assign_tr(gsl_spmatrix* t, char c, int n);
@@ -16,7 +17,6 @@ struct graph_t* new__graph_t(int n, char c){
   else{
     assign_tr(g->t, c, n);
   }
-  printf("coucou\n");
   return g;
 }
 
@@ -79,6 +79,7 @@ void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un
   int nb_elem2 = 2*n + 1;//constant le long d'une ligne
   int check = (n==1) - 1;
   for (i; i < 6*n*n; i++){
+    printf("%d, %d, %d\n", ligne, nb_elem, i);
     if (nb_elem != nb_elem2){
       gsl_spmatrix_set(t, i, i-1, 1);
     }
@@ -88,7 +89,7 @@ void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un
     if (nb_elem % 2 && ligne < 2*n - 1){
       gsl_spmatrix_set(t, i, i + nb_elem2 + check, 1);
     }
-    if (!(nb_elem % 2 && ligne > 0)){
+    if (nb_elem % 2 && ligne > 0){
        gsl_spmatrix_set(t, i, i - nb_elem2 - check, 1);
     }
     nb_elem--;
