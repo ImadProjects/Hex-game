@@ -2,7 +2,7 @@
 #include <gsl/gsl_spmatrix.h>
 #include "graph.h"
 
-#define N_GRAPH 8
+#define N_GRAPH 9
 
 int check(int n,int att){
   return n == att;
@@ -10,19 +10,20 @@ int check(int n,int att){
 
 int test_graph(void){
   int c = 0;
-  struct graph_t* g = new__graph_t(1, 't');//graphe triangulaire
+  struct graph_t* g = new__graph_t(2, 't');//graphe triangulaire
+  //en vrai j'ai vérifié toutes les matrices a la main a coté pour etre sur
   c += check(g->num_vertices, 24);
   c += check(gsl_spmatrix_get(g->t, 0, 0), 0);
   c += check(gsl_spmatrix_get(g->t, 1, 0), 1);
   c += check(gsl_spmatrix_get(g->t, 0, 1), 1);
   c += check(gsl_spmatrix_get(g->t, 1, 1), 0);
   c += check(gsl_spmatrix_get(g->t, 1, 3), 0);
-  c += check(gsl_spmatrix_get(g->t, 3, 0), 1);
+  c += check(gsl_spmatrix_get(g->t, 3, 0), 0);
   c += check(gsl_spmatrix_get(g->o, 0, 2), 0);
   coloriate__graph_t(g, 0, 2);
   c += check(gsl_spmatrix_get(g->o, 0, 2), 1);
   print__mat(g);
-  printf("%d\n", g->num_vertices);
+  printf("%ld sommets\n", g->num_vertices);
   free__graph_t(g);
   return c;
 }

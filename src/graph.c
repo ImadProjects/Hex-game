@@ -7,9 +7,13 @@
 void assign_links(gsl_spmatrix* t, char c, int n);
 void assign_tr(gsl_spmatrix* t, char c, int n);
 
+//le triangulaire ne marche pas pour n impair
 struct graph_t* new__graph_t(int n, char c){
+  if (c != 't'){
+    n++;
+  }
   struct graph_t* g = malloc(sizeof(struct graph_t));
-  g->num_vertices = n * n * (1 + 5 * (c == 't'));//n² sauf si triangulaire auquel cas on a 6n²
+  g->num_vertices = n*n * (1 + 5 * (c == 't'));//n² sauf si triangulaire auquel cas on a 6n²
   g->t = gsl_spmatrix_alloc(g->num_vertices, g->num_vertices);
   g->o = gsl_spmatrix_alloc(2, g->num_vertices);
   if (c != 't'){
@@ -18,7 +22,6 @@ struct graph_t* new__graph_t(int n, char c){
   else{
     assign_tr(g->t, c, n);
   }
-  printf("sortie\n");
   return g;
 }
 
@@ -40,7 +43,7 @@ void print__mat(const struct graph_t* g){
       printf("%d ", s);
       printf("\033[0m");
     }
-    printf(")\n");
+    printf(") %d\n", i);
   }
 }
 
@@ -75,39 +78,51 @@ void assign_links(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour
 }
 
 void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un graphe triangulaire
-  int i = 0;
+  int i;
   int ligne = 0;
   int nb_elem = 2*n + 1;//décroit le long d'une ligne
   int nb_elem2 = 2*n + 1;//constant le long d'une ligne
-  int check = (n==1) - 1;
-  for (i; i < 6*n*n; i++){
-    printf("%d, %d, %d\n", ligne, nb_elem, i);
+  int checkp = !(n==1) * 1;
+  int inc = 2;
+  for (i = 0; i < 6*n*n; i++){
+    //    printf("%d, %d, %d, %d\n", ligne, nb_elem, i, checkm);
     if (nb_elem != nb_elem2){
       gsl_spmatrix_set(t, i, i-1, 1);
     }
+
     if (nb_elem > 1){
       gsl_spmatrix_set(t, i, i+1, 1);
     }
-    if (nb_elem % 2 && ligne < 2*n - 1){
-      gsl_spmatrix_set(t, i, i + nb_elem2 + check, 1);
+
+
+    if (((((i % 2) == (ligne % 2)) && (i < 3*n*n))
+	 || (((i % 2) != (ligne % 2)) && (i >= 3*n*n)))
+	&& (ligne < 2*n - 1)){      	
+      gsl_spmatrix_set(t, i, i + nb_elem2 - (i >= 3*n*n), 1);
     }
-    if (nb_elem % 2 && ligne > 0){
-       gsl_spmatrix_set(t, i, i - nb_elem2 - check, 1);
+
+    
+    if (((((i % 2) != (ligne % 2)) && (i < 3*n*n))
+	 || (((i % 2) == (ligne % 2)) && (i >= 3*n*n)))
+	&& (ligne > 0)){
+      gsl_spmatrix_set(t, i, i - nb_elem2 + (i < 3*n*n), 1);
     }
+
+    
     nb_elem--;
     if (nb_elem == 0){
       ligne++;
-      if (i < 3*n - 1){
+      if (ligne == n/2){
+	checkp = 0;
+	inc = -2;
 	nb_elem2 += 2;
-	check = 1;
       }
       else{
-	if (i == 3*n - 1){
-	  check = 0;
+	if (checkp == 0){
+	  checkp = 1;
 	}
 	else{
-	  nb_elem2 -= 2;
-	  check = 1;
+	  nb_elem2 += inc;
 	}
       }
       nb_elem = nb_elem2;
