@@ -1,3 +1,4 @@
+#include "stdio.h"
 #include <gsl/gsl_spmatrix.h>
 #include <stddef.h>
 #include "graph.h"

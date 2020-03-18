@@ -1,22 +1,22 @@
 CFLAGS = -Wall -Wextra -std=c99 -c -ggdb
 COMP=gcc
-GSL_PATH?=/net/ens/renault/save/gsl-2.6/install make
+GSL_PATH?=
 
 
 build: server alltests players
 
-server: server.o
-	$(COMP) -o install/server server.o
+server: server.o graph.o
+	$(COMP) -I${GSL_PATH} -o install/server graph.o server.o -lgsl -lgslcblas -lm
 
-
-alltests: server.o
-	$(COMP) -o install/alltests server.o
-	$(COMP) --coverage  src/server.c
+alltests: server.o graph.o
+	$(COMP) -I${GSL_PATH} -o install/alltests graph.o server.o -lgsl -lgslcblas -lm
+	$(COMP) -I${GSL_PATH} --coverage  src/graph.c src/server.c  -lgsl -lgslcblas -lm
 
 server.o: src/server.c
 	$(COMP) $(CFLAGS) -o server.o src/server.c
 
-
+graph.o: src/graph.c
+	$(COMP) $(CFLAGS) -I${GSL_PATH} -o graph.o src/graph.c
 players: player1.so player2.so
 
 
