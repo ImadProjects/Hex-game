@@ -10,7 +10,7 @@ int check(int n,int att){
 
 int test_graph(void){
   int c = 0;
-  struct graph_t* g = new__graph_t(2, 't');//graphe hexa
+  struct graph_t* g = new__graph_t(1, 't');//graphe triangulaire
   c += check(g->num_vertices, 24);
   c += check(gsl_spmatrix_get(g->t, 0, 0), 0);
   c += check(gsl_spmatrix_get(g->t, 1, 0), 1);
@@ -19,7 +19,7 @@ int test_graph(void){
   c += check(gsl_spmatrix_get(g->t, 1, 3), 0);
   c += check(gsl_spmatrix_get(g->t, 3, 0), 1);
   c += check(gsl_spmatrix_get(g->o, 0, 2), 0);
-  coloriate__graph_t(g, 0, 6);
+  coloriate__graph_t(g, 0, 2);
   c += check(gsl_spmatrix_get(g->o, 0, 2), 1);
   print__mat(g);
   printf("%d\n", g->num_vertices);
