@@ -9,7 +9,6 @@ struct player{
 };
 
 static struct player p = {"hero",{0},-1};
-static struct graph_t* graph;
 
 char const* get_player_name()
 {
@@ -37,6 +36,7 @@ struct move_t propose_opening()
  */
 int accept_opening(const struct move_t opening)
 {
+  (void)opening;
   return 1;
 }
 

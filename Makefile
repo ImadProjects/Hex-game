@@ -1,5 +1,5 @@
-CFLAGS =  -std=c99 -c -ggdb
-COMP=gcc
+CFLAGS =  -std=c99 -c -ggdb 
+COMP=cc
 GSL_PATH?=/usr/local/gsl
 
 
@@ -20,16 +20,11 @@ graph.o: src/graph.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o graph.o src/graph.c 
 players: player1.so player2.so
 
-
-
 player1.so: 
-	$(COMP) -I ${GSL_PATH}/include  -fPIC -c  src/player.c  -o player1_dyn.o 
-	$(COMP)  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib  -shared graph.o player1_dyn.o  -o install/player1.so -lgsl -lgslcblas -lm
+	cc -std=c99  -fPIC -g -I/opt/gsl-2.6/include -shared src/player.c src/graph.c -lm -lgsl -lgslcblas -ldl -L/opt/gsl-2.6/lib -L/opt/gsl-2.6/lib64 -o install/player1.so
 
-player2.so: 
-	gcc -std=c99 -I ${GSL_PATH}/include  -fPIC -c  src/player.c -o player2_dyn.o 
-	gcc -std=c99 -I ${GSL_PATH}/include -L ${GSL_PATH}/lib  -shared graph.o player2_dyn.o -o install/player2.so  -lgsl -lgslcblas -lm
-
+player2.so:
+	cc -std=c99  -fPIC -g -I/opt/gsl-2.6/include -shared src/player.c src/graph.c -lm -lgsl -lgslcblas -ldl -L/opt/gsl-2.6/lib -L/opt/gsl-2.6/lib64 -o install/player2.so
 
 
 
@@ -40,9 +35,10 @@ install: server players
 clean:	
 	rm -rf *.o server 
 	rm -f install/server
-	rm -f install/alltests
+	rm -f install/alltests install/*.so 
 	rm  -f *gcov
 	rm -f *gcno
 	rm -f *gcda
 	rm -f a.out
+	rm -rf install/*.dSYM
 	clear
