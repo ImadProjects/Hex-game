@@ -10,8 +10,8 @@ server: server.o graph.o
 
 
 alltests: server.o graph.o
-	$(COMP) -I ${GSL_PATH}/include   -o install/alltests graph.o server.o -lgsl -lgslcblas -lm
-	$(COMP) -I ${GSL_PATH}/include   --coverage  src/graph.c src/server.c  -lgsl -lgslcblas -lm
+	$(COMP) -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o -lgsl -lgslcblas -lm
+	$(COMP) -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c  -lgsl -lgslcblas -lm
 
 server.o: src/server.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o server.o src/server.c
