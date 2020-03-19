@@ -54,31 +54,16 @@ void print__mat(const struct graph_t* g){
   }
 }
 
-void coloriate__graph_t(struct graph_t* g, int color, int n){
-  gsl_spmatrix_set(g->o, color, n, 1);
-}
 
-void print_square(struct graph_t* g){//pour graphe carré
-  int m = sqrt(g->num_vertices);
-  for (int i = 0; i < m; i++){
-    printf("(");
-    for (int j = 0; j < m; j++){
-      int s = (int) gsl_spmatrix_get(g->o, 0, j + i*m);
-      int ss = (int) gsl_spmatrix_get(g->o, 1, j + i*m);
-      if (s > ss){
-	printf("\033[0;31m");
-      }
-      if (s < ss){
-	printf("\033[0;32m");
-      }
-      printf(" o ");
-      printf("\033[0m");
-    }
-    printf(")\n");
+int coloriate__graph_t(struct graph_t* g, int color, int n){
+  if ((gsl_spmatrix_get(g->o, 0, n)==0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
+    gsl_spmatrix_set(g->o, color, n, 1);
+    return 0;
   }
+  return 1;
 }
 
-void print_hex(struct graph_t* g){//pour graphe hexa
+void print_graph(struct graph_t* g, char c){//pour graphe hexa
   printf("\n");
   int m = sqrt(g->num_vertices);
   char* s = malloc(sizeof(char) * (2*m+5));
@@ -92,7 +77,12 @@ void print_hex(struct graph_t* g){//pour graphe hexa
       ss[1] = ' ';
       ss[0] = '\n';
     }
-    printf("%s(", ss);
+    if (c == 'h'){
+      printf("%s(", ss);
+    }
+    else{
+      printf("\n(");
+    }
     for (int j = 0; j < m; j++){
       int s = (int) gsl_spmatrix_get(g->o, 0, j + i*m);
       int ss = (int) gsl_spmatrix_get(g->o, 1, j + i*m);
@@ -193,9 +183,9 @@ void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un
 void assign_colors(gsl_spmatrix* o, int n){
   int m = n;
   for (int i = 0; i < m-1; i++){
-    gsl_spmatrix_set(o, 0, i, 2);
+    gsl_spmatrix_set(o, 0, i, 3);
     gsl_spmatrix_set(o, 1, m*(i+1), 2);
-    gsl_spmatrix_set(o, 1, m*(i+1)-1, 2);
+    gsl_spmatrix_set(o, 1, m*(i+1)-1, 3);
     gsl_spmatrix_set(o, 0, n*n - i - 1, 2);
   }
 }

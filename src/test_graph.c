@@ -19,12 +19,10 @@ int test_graph(void){
   c += check(gsl_spmatrix_get(g->t, 1, 1), 0);
   c += check(gsl_spmatrix_get(g->t, 1, 3), 0);
   c += check(gsl_spmatrix_get(g->t, 3, 0), 0);
-  c += check(gsl_spmatrix_get(g->o, 0, 2), 2);
-  c += check(gsl_spmatrix_get(g->o, 0, 0), 2);
+  c += check(gsl_spmatrix_get(g->o, 1, 2), 0);
+  c += check(gsl_spmatrix_get(g->o, 0, 2), 3);
   print__mat(g);
-  //  printf("%ld sommets\n", g->num_vertices);
-  print_square(g);
-  print_hex(g);
+  print_graph(g, 'c');
   free__graph_t(g);
   return c;
 }
