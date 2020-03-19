@@ -20,4 +20,7 @@ void print__mat(const struct graph_t* g);
 
 void coloriate__graph_t(struct graph_t* g, int color, int n);
 
+void print_square(struct graph_t* g);//pour graphe carré
+void print_hex(struct graph_t* g);//pour graphe hexa
+
 #endif // _HEX_GRAPH_H_
