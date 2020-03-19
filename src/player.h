@@ -1,5 +1,5 @@
-#ifndef _HEX_PLAYER_H_
-#define _HEX_PLAYER_H_
+#ifndef _PLAYER_H_
+#define _PLAYER_H_
 
 #include <stdlib.h>
 
@@ -66,4 +66,4 @@ struct move_t play(struct move_t previous_move);
  */
 void finalize();
 
-#endif // _HEX_PLAYER_H_
+#endif // _PLAYER_H_
