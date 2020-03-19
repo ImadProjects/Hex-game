@@ -32,10 +32,10 @@ test_graph.o: src/test_graph.c
 players: player1.so player2.so
 
 player1.so: 
-	cc -std=c99  -fPIC -g -I/opt/gsl-2.6/include -shared src/player.c src/graph.c -lm -lgsl -lgslcblas -ldl -L/opt/gsl-2.6/lib -L/opt/gsl-2.6/lib64 -o install/player1.so
+	cc -std=c99  -fPIC -g -I ${GSL_PATH}/include -shared src/player.c src/graph.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player1.so
 
 player2.so:
-	cc -std=c99  -fPIC -g -I/opt/gsl-2.6/include -shared src/player.c src/graph.c -lm -lgsl -lgslcblas -ldl -L/opt/gsl-2.6/lib -L/opt/gsl-2.6/lib64 -o install/player2.so
+	cc -std=c99  -fPIC -g -I${GSL_PATH}/include -shared src/player.c src/graph.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player2.so
 
 
 
