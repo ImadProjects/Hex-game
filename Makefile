@@ -6,12 +6,12 @@ GSL_PATH?=/usr/local/gsl
 build: server alltests players
 
 server: server.o graph.o
-	$(COMP) -I ${GSL_PATH}/include --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o server.o -lgsl -lgslcblas -lm
+	$(COMP) -std=c99 -I ${GSL_PATH}/include --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o server.o -lgsl -lgslcblas -lm
 
 
 alltests: server.o graph.o
-	$(COMP) -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o -lgsl -lgslcblas -lm
-	$(COMP) -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c  -lgsl -lgslcblas -lm
+	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o -lgsl -lgslcblas -lm
+	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c  -lgsl -lgslcblas -lm
 
 server.o: src/server.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o server.o src/server.c
@@ -26,8 +26,8 @@ player1.so:
 	$(COMP)  -I ${GSL_PATH}/include  -shared -o install/player1.so player1_dyn.o
 
 player2.so: 
-	gcc -I ${GSL_PATH}/include  -fPIC -c src/player.c -o player2_dyn.o 
-	gcc -I ${GSL_PATH}/include  -shared -o install/player2.so player2_dyn.o
+	gcc -std=c99 -I ${GSL_PATH}/include  -fPIC -c src/player.c -o player2_dyn.o 
+	gcc -std=c99 -I ${GSL_PATH}/include  -shared -o install/player2.so player2_dyn.o
 
 
 
