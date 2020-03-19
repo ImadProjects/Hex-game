@@ -12,15 +12,17 @@ struct graph_t {
                         // o[p][i] == 1 means that the vertex i is owned by p
 };
 
+//ne marche pas bien pour les graphes triangulaires
 struct graph_t* new__graph_t(int n, char c);
 
 void free__graph_t(struct graph_t* g);
 
 void print__mat(const struct graph_t* g);
 
-void coloriate__graph_t(struct graph_t* g, int color, int n);
+//renvoie 0 si la case est libre, 1 sinon
+int coloriate__graph_t(struct graph_t* g, int color, int n);
 
-void print_square(struct graph_t* g);//pour graphe carré
-void print_hex(struct graph_t* g);//pour graphe hexa
+//pour graphe carré ou hexa
+void print_graph(struct graph_t* g, char c);
 
 #endif // _HEX_GRAPH_H_
