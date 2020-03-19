@@ -3,10 +3,17 @@ COMP=cc
 GSL_PATH?=/usr/local/gsl
 
 
-build: server alltests players
+build: server test players
 
 server: server.o graph.o
 	$(COMP) -std=c99 -I ${GSL_PATH}/include --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o server.o -lgsl -lgslcblas -lm
+
+
+
+test: test_graph.o graph.o
+	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o test_graph.o -lgsl -lgslcblas -lm
+	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/test_graph.c  -lgsl -lgslcblas -lm
+
 
 
 alltests: server.o graph.o
@@ -18,6 +25,10 @@ server.o: src/server.c
 
 graph.o: src/graph.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o graph.o src/graph.c 
+
+test_graph.o: src/test_graph.c
+	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o test_graph.o src/test_graph.c
+
 players: player1.so player2.so
 
 player1.so: 
@@ -28,7 +39,8 @@ player2.so:
 
 
 
-test:
+mem_check:
+	valgrind  --leak-check=full  install/alltests 
 
 install: server players
 
