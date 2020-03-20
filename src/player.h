@@ -2,7 +2,6 @@
 #define _PLAYER_H_
 
 #include <stdlib.h>
-
 #include "move.h"
 #include "graph.h"
 
@@ -65,5 +64,9 @@ struct move_t play(struct move_t previous_move);
  *   functions must have been freed
  */
 void finalize();
+
+void get_player();
+
+void initialize_player_functions(struct player *);
 
 #endif // _PLAYER_H_
