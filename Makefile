@@ -5,26 +5,31 @@ GSL_PATH?=/usr/local/gsl
 
 build: server test players
 
-server: server.o graph.o
-	$(COMP) -std=c99 -I ${GSL_PATH}/include --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o server.o -lgsl -lgslcblas -lm -ldl
+server: server.o graph.o pile.o
+	$(COMP) -std=c99 -I ${GSL_PATH}/include --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o pile.o server.o -lgsl -lgslcblas -lm -ldl
 
 
 
-test: test_graph.o graph.o
-	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o test_graph.o -lgsl -lgslcblas -lm -ldl
-	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/test_graph.c  -lgsl -lgslcblas -lm -ldl
+test: test_graph.o graph.o pile.o
+	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o test_graph.o pile.o -lgsl -lgslcblas -lm -ldl
+	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/test_graph.c pile.o -lgsl -lgslcblas -lm -ldl
 
 
 
-alltests: server.o graph.o
-	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o -lgsl -lgslcblas -lm
-	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c  -lgsl -lgslcblas -lm
+alltests: server.o graph.o pile.o
+	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o pile.o -lgsl -lgslcblas -lm
+	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c pile.o -lgsl -lgslcblas -lm
 
 server.o: src/server.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o server.o src/server.c
 
 graph.o: src/graph.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o graph.o src/graph.c 
+
+
+pile.o: src/pile.c
+	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o pile.o src/pile.c 
+
 
 test_graph.o: src/test_graph.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o test_graph.o src/test_graph.c
