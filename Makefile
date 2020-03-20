@@ -17,8 +17,8 @@ test: test_graph.o graph.o pile.o
 
 
 alltests: server.o graph.o pile.o
-	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o pile.o -lgsl -lgslcblas -lm
-	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c pile.o -lgsl -lgslcblas -lm
+	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o pile.o -lgsl -lgslcblas -lm -ldl
+	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c pile.o -lgsl -lgslcblas -lm -ldl
 
 server.o: src/server.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o server.o src/server.c
