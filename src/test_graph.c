@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <gsl/gsl_spmatrix.h>
 #include "graph.h"
+#include "pile.h"
 
 #define N_GRAPH 9
+#define N_PILE 7
 
 int check(int n,int att){
   return n == att;
@@ -21,12 +23,33 @@ int test_graph(void){
   c += check(gsl_spmatrix_get(g->t, 3, 0), 0);
   c += check(gsl_spmatrix_get(g->o, 1, 2), 0);
   c += check(gsl_spmatrix_get(g->o, 0, 2), 3);
-  print__mat(g);
+  //  print__mat(g);
   print_graph(g, 'c');
+  print_graph(g, 'h');
   free__graph_t(g);
   return c;
 }
-    
+
+int test_pile(void){
+  int c = 0;
+  struct pile* p = pile_vide(10);
+    c += check(p->size, 0);    //
+  for (int i = 0; i < 10; i++){
+    empiler(p, i);
+  }
+  c += check(p->size, 10); //
+  for (int i = 0; i < 8; i++){
+    depiler(p);
+  }
+  c += check(p->size, 2);//
+  c += check(depiler(p), 1);//
+  c += check(depiler(p), 0);//
+  c += check(p->size, 0);
+  c += check(depiler(p), -1);
+  pile_free(p);
+  return c;
+}
+
 void recap_test(char* s, int n, int expected){
   if (n == expected){
     printf("\033[0;32m");
@@ -43,6 +66,7 @@ void recap_test(char* s, int n, int expected){
 int main(void){
   int n = test_graph();
   recap_test("LE GRAPHE", n, N_GRAPH);
+  recap_test("LA PILE",   test_pile(), N_PILE);
   return 0;
 }
     
