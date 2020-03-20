@@ -65,6 +65,6 @@ struct move_t play(struct move_t previous_move);
  */
 void finalize();
 
-void get_player();
+//void get_player();
 
 #endif // _PLAYER_H_
