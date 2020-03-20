@@ -27,3 +27,7 @@ int depiler(struct pile* p){
   int res = p->t[p->size];
   return res;
 }
+
+int est_vide(struct pile* p){
+  return p->size == 0;
+}

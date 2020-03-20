@@ -26,5 +26,5 @@ int coloriate__graph_t(struct graph_t* g, int color, struct move_t move);
 //pour graphe carré ou hexa
 void print_graph(struct graph_t* g, char c);
 
-int is_winning(struct graph_t* g, int color, struct move_t move);
+int is_winning(struct graph_t* g, int color, struct move_t move, char c);
 #endif // _HEX_GRAPH_H_

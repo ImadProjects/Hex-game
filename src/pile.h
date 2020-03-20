@@ -16,4 +16,6 @@ void empiler(struct pile* p, int n);
 
 int depiler(struct pile* p);
 
+int est_vide(struct pile* p);
+
 #endif // PILE_H

@@ -5,6 +5,7 @@
 #include <gsl/gsl_spmatrix.h>
 #include <math.h>
 #include "move.h"
+#include "pile.h"
 
 void assign_links(gsl_spmatrix* t, char c, int n);
 void assign_tr(gsl_spmatrix* t, char c, int n);
@@ -192,8 +193,39 @@ void assign_colors(gsl_spmatrix* o, int n){
   }
 }
 
-int is_winning(struct graph_t* g, int color, struct move_t move){
+int is_winning(struct graph_t* g, int color, struct move_t move, char c){
+  struct pile* p = pile_vide(g->num_vertices);
+  char* tab = malloc(sizeof(char) * g->num_vertices); // indique si on a dejà visité un sommet
+  int cond1 = 0;
+  int cond2 = 0;
+  int s = (int) move.v;
+  for (int i = 0; i < g->num_vertices; i++){
+    tab[i] = 0;
+  }
+  tab[s] = 1;
+  empiler(p, s);
   
-
+  while (!est_vide(p)){
+    s = depiler(p);
+    if (gsl_spmatrix_get(g->o, color, s) == 3){//bord 1
+      cond1 = 1;
+    }
+    if (gsl_spmatrix_get(g->o, color, s) == 2){//bord 2
+      cond2 = 1;
+    }
+    if (cond1 && cond2){
+      pile_free(p);
+      free(tab);
+      return 1;
+    }
+    for (int i = 0; i < g->num_vertices; i++){
+      if((gsl_spmatrix_get(g->o, color, i) > 0) && (gsl_spmatrix_get(g->t, s, i)) && tab[i] == 0){
+	empiler(p, i);
+	tab[i] = 1;
+      }
+    }
+  }
+  pile_free(p);
+  free(tab);
   return 0;
 }
