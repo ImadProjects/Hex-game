@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <gsl/gsl_spmatrix.h>
 #include <math.h>
+#include "move.h"
 
 void assign_links(gsl_spmatrix* t, char c, int n);
 void assign_tr(gsl_spmatrix* t, char c, int n);
@@ -24,11 +25,11 @@ struct graph_t* new__graph_t(int n, char c){
   else{
     assign_tr(g->t, c, n);
   }
-    printf("sortie1\n");
+  //    printf("sortie1\n");
   if (c != 't'){
     assign_colors(g->o, n);
   }
-  printf("sortie2\n");
+  //  printf("sortie2\n");
   return g;
 }
 
@@ -55,7 +56,8 @@ void print__mat(const struct graph_t* g){
 }
 
 
-int coloriate__graph_t(struct graph_t* g, int color, int n){
+int coloriate__graph_t(struct graph_t* g, int color, struct move_t move){
+  int n = (int) move.v;
   if ((gsl_spmatrix_get(g->o, 0, n)==0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
     gsl_spmatrix_set(g->o, color, n, 1);
     return 0;
@@ -63,7 +65,7 @@ int coloriate__graph_t(struct graph_t* g, int color, int n){
   return 1;
 }
 
-void print_graph(struct graph_t* g, char c){//pour graphe hexa
+void print_graph(struct graph_t* g, char c){//pour graphe hexa ou carré
   printf("\n");
   int m = sqrt(g->num_vertices);
   char* s = malloc(sizeof(char) * (2*m+5));
@@ -190,3 +192,8 @@ void assign_colors(gsl_spmatrix* o, int n){
   }
 }
 
+int is_winning(struct graph_t* g, int color, struct move_t move){
+  
+
+  return 0;
+}

@@ -1,5 +1,6 @@
 #ifndef _HEX_GRAPH_H_
 #define _HEX_GRAPH_H_
+#include "move.h"
 
 #include <stdlib.h>
 #include <gsl/gsl_spmatrix.h>
@@ -20,9 +21,10 @@ void free__graph_t(struct graph_t* g);
 void print__mat(const struct graph_t* g);
 
 //renvoie 0 si la case est libre, 1 sinon
-int coloriate__graph_t(struct graph_t* g, int color, int n);
+int coloriate__graph_t(struct graph_t* g, int color, struct move_t move);
 
 //pour graphe carré ou hexa
 void print_graph(struct graph_t* g, char c);
 
+int is_winning(struct graph_t* g, int color, struct move_t move);
 #endif // _HEX_GRAPH_H_
