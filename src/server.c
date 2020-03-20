@@ -1,7 +1,9 @@
+#include <dlfcn.h>
 #include "graph.h"
+
 
 int main()
 {
-
-	return 0;
+  void * player1 = dlopen("install/player1.so",RTLD_NOW);
+  return 0;
 }

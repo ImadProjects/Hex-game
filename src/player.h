@@ -67,6 +67,4 @@ void finalize();
 
 void get_player();
 
-void initialize_player_functions(struct player *);
-
 #endif // _PLAYER_H_
