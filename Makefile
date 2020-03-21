@@ -59,4 +59,4 @@ clean:
 	rm -f *gcda
 	rm -f a.out
 	rm -rf install/*.dSYM
-	clear
+	
