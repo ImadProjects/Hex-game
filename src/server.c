@@ -1,9 +1,36 @@
 
 #include <dlfcn.h>
 #include "graph.h"
+#include <getopt.h>
 #include "player.h"
 
 
+// Global seed for the random number generator
+static int Length = 0;
+static char Shape = 'c';
+
+////////////////////////////////////////////////////////////////
+// Function for parsing the options of the program
+// Currently available options are :
+// -s <seed> : sets the seed
+void parse_opts(int argc, char* argv[]) {
+  int opt;
+  while ((opt = getopt(argc, argv, "m:t:")) != -1) {
+    switch (opt) {
+    case 'm':
+      Length = atoi(optarg);
+      break;
+    case 't':
+      Shape = atoi(optarg);
+      break;
+    default: /* '?' */
+      fprintf(stderr, "Usage: %s [-m Length] \n ",
+              argv[0]);
+      fprintf(stderr, "Usage: %s [-t Shape] \n ",
+              argv[0]);
+    }
+  }
+}
 
 struct player{
   char const *name;
@@ -26,9 +53,14 @@ struct player * compute_next_player(struct player *p1, struct player *p2)
 	*/
 
 
-int main()
+int main(int argc,  char* argv[])
 {
-	struct graph_t *graph = new__graph_t(3, 'c');
+	  printf("*********paramètres du jeu**********");
+  parse_opts(argc, argv);
+  printf("\nLength : %d\n", Length);
+  printf("shape : %d\n", Shape);
+//-------------------------------------------
+	struct graph_t *graph = new__graph_t(3, Shape); //replace with Length but doesn't work
 	void * player1 = dlopen("install/player1.so",RTLD_NOW);
 	void * player2 = dlopen("install/player2.so",RTLD_NOW);
 
