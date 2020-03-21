@@ -6,7 +6,7 @@ GSL_PATH?=/usr/local/gsl
 build: server test players
 
 server: server.o graph.o pile.o
-	$(COMP) -std=c99 -I ${GSL_PATH}/include --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o pile.o server.o -lgsl -lgslcblas -lm -ldl
+	$(COMP) -std=c99 -I ${GSL_PATH}/include -rdynamic --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o pile.o server.o -lgsl -lgslcblas -lm -ldl
 
 
 
@@ -45,7 +45,8 @@ player2.so:
 
 
 mem_check:
-	valgrind  --leak-check=full  install/alltests 
+	#valgrind  --leak-check=full  install/alltests 
+	valgrind  --leak-check=full  install/server
 
 install: server players
 
