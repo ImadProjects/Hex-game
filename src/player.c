@@ -1,39 +1,40 @@
-#include "player.h"
+ #include "player.h"
 
 struct player{
   char const *name;
   struct move_t move;
   enum color_t color;
   struct move_t (*player_propose_opening)();
-  int (*player_accept_opening)(const struct move_t opening);
-  void (*player_initialize_color)(enum color_t id);
-  void (*player_initialize_graph)(struct graph_t* graph);
-  struct move_t (*player_play)(struct move_t previous_move);
+  int (*accept_opening)(const struct move_t opening);
+  void (*initialize_color)(enum color_t id);
+  void (*initialize_graph)(struct graph_t* graph);
+  struct move_t (*play)(struct move_t previous_move);
+  void (*finalize)();
 };
 
 
-static struct player p;
+ struct player player1={"heeeero"};
 
 
 void initialize_player_functions(struct player* player)
 {
   player->player_propose_opening = propose_opening;
-  player->player_accept_opening = accept_opening;
-  player->player_initialize_graph = initialize_graph;
-  player->player_initialize_color = initialize_color;
-  player->player_play = play;
+  player->accept_opening = accept_opening;
+  player->initialize_graph = initialize_graph;
+  player->initialize_color = initialize_color;
+  player->play = play;
 }
 
 struct player get_player()
 {
-  initialize_player_functions(&p);
-  p.name = "player1";
-  return p;
+  initialize_player_functions(&player1);
+  player1.name = "player1";
+  return player1;
 }
 
 char const* get_player_name()
 {
-  return p.name;
+  return player1.name;
 }
 /* Returns a single move for an opening
  * PRECOND:
@@ -43,7 +44,7 @@ char const* get_player_name()
  */
 struct move_t propose_opening()
 {
-  return p.move;
+  return player1.move;
 }
 
 /* Acceptation of the opening
@@ -71,7 +72,7 @@ int accept_opening(const struct move_t opening)
  */
 void initialize_graph(struct graph_t* graph)
 {
-   graph = new__graph_t(3, 'c');
+  // graph = new__graph_t(3, 'c');
 
 }
 
@@ -84,7 +85,7 @@ void initialize_graph(struct graph_t* graph)
  */
 void initialize_color(enum color_t id)
 {
-  p.color = id;
+  player1.color = id;
 }
 
 /* Computes next move
@@ -95,6 +96,7 @@ void initialize_color(enum color_t id)
  */
 struct move_t play(struct move_t previous_move)
 {
+
   return previous_move;
 }
 
@@ -106,5 +108,5 @@ struct move_t play(struct move_t previous_move)
  */
 void finalize()
 {
- printf("end");
+ printf("The winner is %s\n",player1.name);
 }
