@@ -47,7 +47,7 @@ struct player{
 };
 
 
-struct player * compute_next_player(struct player *p1, struct player *p2, struct col_move_t *last_move)
+struct player * compute_next_player(struct player *p1, struct player *p2, struct move_t *last_move)
 {
   
   if(last_move->c == p1->color)
@@ -111,7 +111,7 @@ int main(int argc,  char* argv[]){
 			move = p1->play(move);
 			coloriate__graph_t(graph, 0, t);
 			print_graph(graph, 'c');
-			t.v++;
+			t.m++;
 			//printf("%d\n",select_player);
 			//printf("%d\n",t.v++); debug
 		}
