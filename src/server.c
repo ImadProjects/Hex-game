@@ -87,9 +87,9 @@ int main(int argc,  char* argv[]){
 	p2->initialize_graph(graph);
 	
 	struct move_t move = p1->propose_opening();
-	struct col_move_t * last_move;
-	last_move->m = move;
-	last_move->c = 0;
+	//struct col_move_t * last_move;
+	//last_move->m = move;
+	//last_move->c = 0;
 	if (p2->accept_opening(move))
 	{
 		p1->initialize_color(0);
@@ -104,7 +104,7 @@ int main(int argc,  char* argv[]){
 	struct move_t t ={1};
 	while (1)
 	{
-	  /*if (select_player==0)
+	  if (select_player==0)
 		{
 			select_player++;	
 			move = p1->play(move);
@@ -120,14 +120,15 @@ int main(int argc,  char* argv[]){
 			move = p2->play(move);
 			print_graph(graph, 'c');
 			select_player %=2;
-			//printf("%d\n",select_player); debug*/
+		}
+			//printf("%d\n",select_player); debug
 
-	  struct player * current_player = compute_next_player(player1,player2,last_move);
+	 /* struct player * current_player = compute_next_player(player1,player2,last_move);
 	  move = current_player->play(move);
 	  last_move->m = move;
 	  last_move->c = current_player->color;
 	  coloriate__graph_t(graph, current_player->color, t);
-	  t.v++;
+	  t.v++;*/
 	  print_graph(graph, 'c');
 	  if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
 			break;
