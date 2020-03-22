@@ -6,7 +6,7 @@
 
 
 // Global seed for the random number generator
-static int Length = 0;
+static int Length = 3;
 static char Shape = 'c';
 
 ////////////////////////////////////////////////////////////////
@@ -33,6 +33,7 @@ void parse_opts(int argc, char* argv[]) {
 }
 
 struct player{
+  
   char const *name;
   struct move_t move;
   enum color_t color;
@@ -42,6 +43,7 @@ struct player{
   void (*initialize_graph)(struct graph_t* graph);
   struct move_t (*play)(struct move_t previous_move);
   void (*finalize)();
+  
 };
 
 /*
@@ -53,14 +55,14 @@ struct player * compute_next_player(struct player *p1, struct player *p2)
 	*/
 
 
-int main(int argc,  char* argv[])
-{
+int main(int argc,  char* argv[]){
+  
 	  printf("*********paramètres du jeu**********");
   parse_opts(argc, argv);
   printf("\nLength : %d\n", Length);
   printf("shape : %d\n", Shape);
 //-------------------------------------------
-	struct graph_t *graph = new__graph_t(3, Shape); //replace with Length but doesn't work
+        struct graph_t *graph = new__graph_t(Length, Shape); 
 	void * player1 = dlopen("install/player1.so",RTLD_NOW);
 	void * player2 = dlopen("install/player2.so",RTLD_NOW);
 
