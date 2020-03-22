@@ -35,6 +35,7 @@ void parse_opts(int argc, char* argv[]) {
 struct player{
   
   char const *name;
+  struct graph_t *graph;
   struct move_t move;
   enum color_t color;
   struct move_t (*propose_opening)();
@@ -68,6 +69,7 @@ int main(int argc,  char* argv[]){
 
 	struct player * p1 = dlsym(player1,"player1");
 
+	p1->graph = graph;
 	p1->propose_opening = dlsym(player1,"propose_opening");
 	p1->accept_opening = dlsym(player1,"accept_opening");
 	p1->initialize_color = dlsym(player1,"initialize_color");
@@ -77,6 +79,7 @@ int main(int argc,  char* argv[]){
 
 	struct player * p2 = dlsym(player2,"player1");
 
+	p2->graph = graph;
 	p2->propose_opening = dlsym(player2,"propose_opening");
 	p2->accept_opening = dlsym(player2,"accept_opening");
 	p2->initialize_color = dlsym(player2,"initialize_color");
@@ -127,10 +130,15 @@ int main(int argc,  char* argv[]){
 		if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
 			break;
 	}
+	
 	if (is_winning(graph,0,move,'c')==0 )
-		p1->finalize();
+	  
+	  printf("The winner is the player 1\n");
+	
 	else
-		p2->finalize();
+	  
+	  printf("The winner is the player 2\n");
+
 	free__graph_t(graph);
 	dlclose(player1);
 	dlclose(player2);
