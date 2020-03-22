@@ -69,23 +69,23 @@ int main(int argc,  char* argv[]){
 
 	struct player * p1 = dlsym(player1,"player1");
 
-	p1->graph = graph;
 	p1->propose_opening = dlsym(player1,"propose_opening");
 	p1->accept_opening = dlsym(player1,"accept_opening");
 	p1->initialize_color = dlsym(player1,"initialize_color");
 	p1->initialize_graph = dlsym(player1,"initialize_graph");
 	p1->play = dlsym(player1,"play");
 	p1->finalize = dlsym(player1,"finalize");
+	p1->initialize_graph(graph);
 
 	struct player * p2 = dlsym(player2,"player1");
 
-	p2->graph = graph;
 	p2->propose_opening = dlsym(player2,"propose_opening");
 	p2->accept_opening = dlsym(player2,"accept_opening");
 	p2->initialize_color = dlsym(player2,"initialize_color");
 	p2->initialize_graph = dlsym(player2,"initialize_graph");
 	p2->play = dlsym(player2,"play");
 	p2->finalize = dlsym(player2,"finalize");
+	p2->initialize_graph(graph);
 
 
 	p1->initialize_graph(graph);
