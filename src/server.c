@@ -48,9 +48,13 @@ struct player{
 
 struct player * compute_next_player(struct player *p1, struct player *p2, struct col_move_t *last_move)
 {
+  
   if(last_move->c == p1->color)
+    
     return p2;
+  
   return p1;
+  
 }
 
 
@@ -90,16 +94,10 @@ int main(int argc,  char* argv[]){
 	//struct col_move_t * last_move;
 	//last_move->m = move;
 	//last_move->c = 0;
-	if (p2->accept_opening(move))
-	{
-		p1->initialize_color(0);
-		p2->initialize_color(1);
-	}
-	else
-	{
-		p1->initialize_color(1);
-		p2->initialize_color(0);
-	}
+
+	p1->initialize_color(1 - p2->accept_opening(move));
+	p2->initialize_color(p2->accept_opening(move));
+	
 	int select_player = 0;
 	struct move_t t ={1};
 	while (1)
