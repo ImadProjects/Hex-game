@@ -100,25 +100,27 @@ int main(int argc,  char* argv[]){
 	p2->initialize_color(p2->accept_opening(move));
 	
 	int select_player = 0;
-	struct move_t t ={1};
-	while (1){
+	//struct move_t t;
+	//t.m = 1;
 
-	  srand(time(NULL));
+	srand(time(NULL));	  
+	while (1){
 	  
-	  if (select_player==0)
+	  if (select_player == 0)
 		{
 			select_player++;	
 			move = p1->play(move);
-			coloriate__graph_t(graph, 0, t);
+			coloriate__graph_t(graph, 0, move);
 			print_graph(graph, 'c');
-			t.m++;
+			//t.m++;
 			//printf("%d\n",select_player);
 			//printf("%d\n",t.v++); debug
 		}
-		else
+	  else
 		{
 			select_player++;	
 			move = p2->play(move);
+			coloriate__graph_t(graph, 1, move);			
 			print_graph(graph, 'c');
 			select_player %=2;
 		}
@@ -131,8 +133,11 @@ int main(int argc,  char* argv[]){
 	  coloriate__graph_t(graph, current_player->color, t);
 	  t.v++;*/
 	  print_graph(graph, 'c');
+	  
 	  if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
-			break;
+	    
+	    break;
+	  
 	}
 	
 	if (is_winning(graph,0,move,'c')==0 )
