@@ -85,23 +85,66 @@ void initialize_color(enum color_t id){
     player2.color = id;
 }
 
-struct move_t play(struct move_t previous_move)
-{
+struct move_t play(struct move_t previous_move){
+
+  
   struct move_t next;
   int id = player2.color;
   gsl_spmatrix *o = player2.graph->o;
   size_t vertices = size__graph_t(player2.graph);
-  size_t move = rand()%vertices;
+  size_t width = width__graph_t(player2.graph);
   
-  while((gsl_spmatrix_get(o, 0, move) == 1) || (gsl_spmatrix_get(o, 1, move) == 1))
-	
-	move = rand()%vertices;
+  size_t a = gsl_spmatrix_get(o, 1 - id, 0) * width + (gsl_spmatrix_get(o, id, 0));
+
+  if((a <= 2 * width && (gsl_spmatrix_get(o, 0, a + width) == 1 || gsl_spmatrix_get(o, 1, a + width) == 1)) ||
+     (a>= vertices - 2*vertices && (gsl_spmatrix_get(o, 0, a - width) == 1 || gsl_spmatrix_get(o, 1, a - width) == 1)))
+
+    next.v = -1;
+
+  else {
+
+    if(gsl_spmatrix_get(o, 1, a - width) == 1 ||
+       gsl_spmatrix_get(o, 1, a - width) == 1 ||
+       gsl_spmatrix_get(o, 0, a + width) == 1 ||
+       gsl_spmatrix_get(o, 1, a + width) == 1)
+
+      next.v = -1;
+
+    else if((gsl_spmatrix_get(o, 1, a - width) == 1 ||
+	     gsl_spmatrix_get(o, 1, a - width) == 1) &&
+	    (gsl_spmatrix_get(o, 0, a + width) == 0 &&
+	     gsl_spmatrix_get(o, 1, a + width) == 0))
+
+      next.v = a + width;
+
+    else if((gsl_spmatrix_get(o, 1, a + width) == 1 ||
+	     gsl_spmatrix_get(o, 1, a + width) == 1) &&
+	    (gsl_spmatrix_get(o, 0, a - width) == 0 &&
+	     gsl_spmatrix_get(o, 1, a - width) == 0))
+
+      next.v = a - width;
+
+    else
+
+      next.v = a - width*(a <= vertices/2) + width*(a > vertices/2);
+
+  }
+
+  if (next.v == -1){
+
+     size_t mv = rand()%(vertices - 2*width) + width;
+     
+     while((gsl_spmatrix_get(o, 0, mv) == 1) || (gsl_spmatrix_get(o, 1, mv) == 1))
+      
+	mv = rand()%(vertices - 2*width) + width;
+
+     next.v = mv;
+
+  }
   
-  gsl_spmatrix_set(o, id, move, 1);
-  next.v = move;
-	
   return next;
-  
+    
+	
 }
 
 void finalize(){
