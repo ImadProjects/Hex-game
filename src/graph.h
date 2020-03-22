@@ -6,7 +6,9 @@
 #include <gsl/gsl_spmatrix.h>
 
 struct graph_t {
+  
   size_t num_vertices;  // Number of vertices in the graph
+
   gsl_spmatrix* t;      // Sparse matrix of size n*n,
                         // t[i][j] == 1 means there is an edge from i to j
   gsl_spmatrix* o;      // Sparse matrix of size 2*n, one line per player
@@ -15,6 +17,10 @@ struct graph_t {
 
 //ne marche pas bien pour les graphes triangulaires
 struct graph_t* new__graph_t(int n, char c);
+
+size_t size__graph_t(struct graph_t *graph);
+
+size_t width__graph_t(struct graph_t *graphe);
 
 void free__graph_t(struct graph_t* g);
 
