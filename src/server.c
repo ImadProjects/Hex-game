@@ -81,7 +81,7 @@ int main(int argc,  char* argv[]){
 	p1->finalize = dlsym(player1,"finalize");
 	p1->initialize_graph(graph);
 
-	struct player * p2 = dlsym(player2,"player1");
+	struct player * p2 = dlsym(player2,"player2");
 
 	p2->propose_opening = dlsym(player2,"propose_opening");
 	p2->accept_opening = dlsym(player2,"accept_opening");
@@ -101,9 +101,10 @@ int main(int argc,  char* argv[]){
 	
 	int select_player = 0;
 	struct move_t t ={1};
-	while (1)
-	{
+	while (1){
+
 	  srand(time(NULL));
+	  
 	  if (select_player==0)
 		{
 			select_player++;	
