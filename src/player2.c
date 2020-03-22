@@ -99,7 +99,7 @@ struct move_t play(struct move_t previous_move){
   if((a <= 2 * width && (gsl_spmatrix_get(o, 0, a + width) == 1 || gsl_spmatrix_get(o, 1, a + width) == 1)) ||
      (a>= vertices - 2*vertices && (gsl_spmatrix_get(o, 0, a - width) == 1 || gsl_spmatrix_get(o, 1, a - width) == 1)))
 
-    next.v = -1;
+    next.m = -1;
 
   else {
 
@@ -108,29 +108,29 @@ struct move_t play(struct move_t previous_move){
        gsl_spmatrix_get(o, 0, a + width) == 1 ||
        gsl_spmatrix_get(o, 1, a + width) == 1)
 
-      next.v = -1;
+      next.m = -1;
 
     else if((gsl_spmatrix_get(o, 1, a - width) == 1 ||
 	     gsl_spmatrix_get(o, 1, a - width) == 1) &&
 	    (gsl_spmatrix_get(o, 0, a + width) == 0 &&
 	     gsl_spmatrix_get(o, 1, a + width) == 0))
 
-      next.v = a + width;
+      next.m = a + width;
 
     else if((gsl_spmatrix_get(o, 1, a + width) == 1 ||
 	     gsl_spmatrix_get(o, 1, a + width) == 1) &&
 	    (gsl_spmatrix_get(o, 0, a - width) == 0 &&
 	     gsl_spmatrix_get(o, 1, a - width) == 0))
 
-      next.v = a - width;
+      next.m = a - width;
 
     else
 
-      next.v = a - width*(a <= vertices/2) + width*(a > vertices/2);
+      next.m = a - width*(a <= vertices/2) + width*(a > vertices/2);
 
   }
 
-  if (next.v == -1){
+  if (next.m == -1){
 
      size_t mv = rand()%(vertices - 2*width) + width;
      
@@ -138,7 +138,7 @@ struct move_t play(struct move_t previous_move){
       
 	mv = rand()%(vertices - 2*width) + width;
 
-     next.v = mv;
+     next.m = mv;
 
   }
   

@@ -98,7 +98,7 @@ struct move_t play(struct move_t previous_move)
 	move = rand()%vertices;
   
   gsl_spmatrix_set(o, id, move, 1);
-  next.v = move;
+  next.m = move;
 	
   return next;
   

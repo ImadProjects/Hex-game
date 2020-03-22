@@ -73,7 +73,7 @@ int test_pathfinding(void){
   print_graph(g, 'c');
   c += check(is_winning(g, 1, move, 'c'), 0);
 
-  move.v = 6;
+  move.m = 6;
   coloriate__graph_t(g, 1, move);
   print_graph(g, 'c');
   c += check(is_winning(g, 1, move, 'c'), 1);
@@ -81,27 +81,27 @@ int test_pathfinding(void){
 
   //hexa
   struct graph_t* gg = new__graph_t(5, 'h');
-  move.v  = 7;
+  move.m  = 7;
   coloriate__graph_t(gg, 0, move);
-  move.v  = 8;
+  move.m  = 8;
   coloriate__graph_t(gg, 0, move);
-  move.v  = 13;
+  move.m  = 13;
   coloriate__graph_t(gg, 1, move);
-  move.v  = 19;
+  move.m  = 19;
   coloriate__graph_t(gg, 1, move);
-  move.v  = 25;
+  move.m  = 25;
   coloriate__graph_t(gg, 0, move);
-  move.v  = 14;
+  move.m  = 14;
   coloriate__graph_t(gg, 0, move);
   print_graph(gg, 'h');
 
   c += check(is_winning(gg, 0, move, 'c'), 0);
 
-  move.v = 6;
+  move.m = 6;
   coloriate__graph_t(gg, 0, move);
 
 
-  move.v = 20;
+  move.m = 20;
   coloriate__graph_t(gg, 0, move); 
   c += check(is_winning(gg, 0, move, 'c'), 1);
   print_graph(gg, 'h');

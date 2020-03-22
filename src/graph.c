@@ -80,7 +80,7 @@ void print__mat(const struct graph_t* g){
 
 
 int coloriate__graph_t(struct graph_t* g, int color, struct move_t move){
-  int n = (int) move.v;
+  int n = (int) move.m;
   if ((gsl_spmatrix_get(g->o, 0, n)==0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
     gsl_spmatrix_set(g->o, color, n, 1);
     return 0;
@@ -220,7 +220,7 @@ int is_winning(struct graph_t* g, int color, struct move_t move, char c){
   char* tab = malloc(sizeof(char) * g->num_vertices); // indique si on a dejà visité un sommet
   int cond1 = 0;
   int cond2 = 0;
-  int s = (int) move.v;
+  int s = (int) move.m;
   for (int i = 0; i < g->num_vertices; i++){
     tab[i] = 0;
   }
