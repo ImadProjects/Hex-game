@@ -1,6 +1,7 @@
 #include <dlfcn.h>
 #include "graph.h"
 #include <getopt.h>
+#include <time.h>
 #include "player.h"
 
 
@@ -102,6 +103,7 @@ int main(int argc,  char* argv[]){
 	struct move_t t ={1};
 	while (1)
 	{
+	  srand(time(NULL));
 	  if (select_player==0)
 		{
 			select_player++;	
