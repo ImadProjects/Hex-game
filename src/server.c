@@ -138,6 +138,8 @@ int main(int argc,  char* argv[]){
       {
 	select_player++;	
 	move = p2->play(move);
+	coloriate__graph_t(graph, 1, t);
+
 	if(is_move_possible(graph,p2->color,move))
 	  {
 	    print_graph(graph, 'c');
