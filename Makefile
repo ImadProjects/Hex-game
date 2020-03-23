@@ -40,7 +40,7 @@ player1.so:
 	cc -std=c99  -fPIC -g -I ${GSL_PATH}/include -shared src/player1.c src/graph.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player1.so
 
 player2.so:
-	cc -std=c99  -fPIC -g -I${GSL_PATH}/include -shared src/player2.c src/graph.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player2.so
+	cc -std=c99  -fPIC -g -I${GSL_PATH}/include -shared src/player1.c src/graph.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player2.so
 
 
 

@@ -91,15 +91,16 @@ struct move_t play(struct move_t previous_move)
   int id = player1.color;
   gsl_spmatrix *o = player1.graph->o;
   size_t vertices = size__graph_t(player1.graph);
-  size_t move = rand()%vertices;
+  size_t width = width__graph_t(player1.graph);
+  size_t move = rand()%(vertices - 2*width) + width;
   
   while((gsl_spmatrix_get(o, 0, move) == 1) || (gsl_spmatrix_get(o, 1, move) == 1))
 	
-	move = rand()%vertices;
-  
-  gsl_spmatrix_set(o, id, move, 1);
+    move = rand()%(vertices - 2*width) + width;
+    
+
   next.m = move;
-	
+  next.c = id;
   return next;
   
 }

@@ -34,10 +34,10 @@ void parse_opts(int argc, char* argv[]) {
 
 int is_move_possible(struct graph_t* g, int color, struct move_t move){
   int n = (int) move.m;
-  if ((gsl_spmatrix_get(g->o, 0, n)==0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
-    return 0;
+  if ((gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
+    return 1;
   }
-  return 1;
+  return 0;
 }
 
 
@@ -59,7 +59,7 @@ struct player{
 struct player * compute_next_player(struct player *p1, struct player *p2, struct move_t *last_move)
 {
   
-  if(last_move->c == p1->color)
+  if(last_move->c == p1->color || last_move->c == -1)
     
     return p2;
   
@@ -90,7 +90,7 @@ int main(int argc,  char* argv[]){
   p1->finalize = dlsym(player1,"finalize");
   p1->initialize_graph(graph);
 
-  struct player * p2 = dlsym(player2,"player2");
+  struct player * p2 = dlsym(player2,"player1");
 
   p2->propose_opening = dlsym(player2,"propose_opening");
   p2->accept_opening = dlsym(player2,"accept_opening");
@@ -101,72 +101,42 @@ int main(int argc,  char* argv[]){
   p2->initialize_graph(graph);
 	
   struct move_t move = p1->propose_opening();
-  //struct col_move_t * last_move;
-  //last_move->m = move;
-  //last_move->c = 0;
 
   p1->initialize_color(1 - p2->accept_opening(move));
   p2->initialize_color(p2->accept_opening(move));
 	
-  int select_player = 0;
   int end_by_impossible_move = 1;
-  struct move_t t ={1};
+  struct move_t last_move ={.c = - p1->color};
+  struct player *p;
+  
   while (1){
 	  
     srand(time(NULL));
+    p = compute_next_player(p1, p2, &last_move);
+    move = p->play(move);
+
+    if(is_move_possible(graph, p->color, move)){
+      
+      coloriate__graph_t(graph, p->color, move);
+      print_graph(graph, 'c');
+      
+    }
+    else{
 	  
-    if (select_player==0)
-      {
-	select_player++;	
-	move = p1->play(move);
-	if(is_move_possible(graph,p1->color,move))
-	  {
-	    coloriate__graph_t(graph, 0, t);
-	    print_graph(graph, 'c');
-	    t.m++;
-	  }
-	else
-	  {
 	    printf("The winner is player 2, player 1 chose a wrong move\n");
 	    end_by_impossible_move = 0;
 	    break;
 	  }
-	//printf("%d\n",select_player);
-	//printf("%d\n",t.v++); debug
-      }
-    else
-      {
-	select_player++;	
-	move = p2->play(move);
-	coloriate__graph_t(graph, 1, t);
-
-	if(is_move_possible(graph,p2->color,move))
-	  {
-	    print_graph(graph, 'c');
-	    select_player %=2;
-	  }
-	else
-	  {
-	    printf("The winner is player 1, player 2 chose a wrong move\n");
-	    end_by_impossible_move = 0;
-	    break;
-	  }
-      }
-    //printf("%d\n",select_player); debug
-
-    /* struct player * current_player = compute_next_player(player1,player2,last_move);
-       move = current_player->play(move);
-       last_move->m = move;
-       last_move->c = current_player->color;
-       coloriate__graph_t(graph, current_player->color, t);
-       t.v++;*/
+    last_move = move;
+      
+    
     print_graph(graph, 'c');
     if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
       break;
   }
   if(end_by_impossible_move)
     {
-      if (is_winning(graph,0,move,'c')==0 )
+      if (is_winning(graph,0,move,'c') == 0 )
 	      
 	printf("The winner is the player 1\n");
 	    
