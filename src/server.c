@@ -114,6 +114,7 @@ int main(int argc,  char* argv[]){
     srand(time(NULL));
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
+    printf("move = %ld\n", move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
@@ -121,21 +122,25 @@ int main(int argc,  char* argv[]){
       print_graph(graph, 'c');
       
     }
+    
     else{
 	  
 	    printf("The winner is player 2, player 1 chose a wrong move\n");
 	    end_by_impossible_move = 0;
 	    break;
 	  }
-    last_move = move;
-      
     
+    last_move = move;
     print_graph(graph, 'c');
+    
     if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
+      
       break;
+    
   }
-  if(end_by_impossible_move)
-    {
+  
+  if(end_by_impossible_move){
+    
       if (is_winning(graph,0,move,'c') == 0 )
 	      
 	printf("The winner is the player 1\n");

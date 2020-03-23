@@ -1,5 +1,6 @@
 #include <string.h>
 #include "player.h"
+#include <time.h>
 #define MAX_STRING 20
 
 struct player{
@@ -55,11 +56,12 @@ struct move_t propose_opening(){
     gsl_spmatrix *o = player1.graph->o;
     size_t mv = rand()%(vertices - 2*width) + width;
     
-    while((gsl_spmatrix_get(o, 0, mv) == 1) || (gsl_spmatrix_get(o, 1, mv) == 1))
-      
-	mv = rand()%(vertices - 2*width) + width;
-     
-    struct move_t opening = {mv};
+    while((gsl_spmatrix_get(o, 0, mv) == 1) || (gsl_spmatrix_get(o, 1, mv) == 1)){
+      srand(time(NULL));
+      mv = rand()%(vertices - 2*width) + width;
+    }
+    
+    struct move_t opening = {.m = mv, .c = player1.color };
     
     return opening;
     
@@ -92,15 +94,22 @@ struct move_t play(struct move_t previous_move)
   gsl_spmatrix *o = player1.graph->o;
   size_t vertices = size__graph_t(player1.graph);
   size_t width = width__graph_t(player1.graph);
-  size_t move = rand()%(vertices - 2*width) + width;
+  size_t ran[vertices];
+  int a = 0;
   
-  while((gsl_spmatrix_get(o, 0, move) == 1) || (gsl_spmatrix_get(o, 1, move) == 1))
-	
-    move = rand()%(vertices - 2*width) + width;
-    
+  for(size_t i = 0; i< vertices; i++){
 
-  next.m = move;
+    if((gsl_spmatrix_get(o, 0, i) == 0) && (gsl_spmatrix_get(o, 1, i) == 0)){
+      
+    ran[a] = i;
+    a++;}
+    
+  }
+
+  int r = rand()%a;
+  next.m = ran[r];
   next.c = id;
+  
   return next;
   
 }
