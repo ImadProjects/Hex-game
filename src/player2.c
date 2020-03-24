@@ -16,7 +16,7 @@ struct player{
   
 };
 
-struct player player2;
+struct player player2 = {.name = "-player2-"};
 
 
 void initialize_player_functions(struct player* player){

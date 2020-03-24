@@ -17,7 +17,7 @@ struct player{
   
 };
 
-struct player player1;
+struct player player1 = {.name ="-random-"};
 
 
 void initialize_player_functions(struct player* player){

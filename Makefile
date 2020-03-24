@@ -46,7 +46,7 @@ player2.so:
 
 mem_check:
 	#valgrind  --leak-check=full  install/alltests 
-	valgrind  --leak-check=full  install/server
+	valgrind  --leak-check=full  install/server -m 8
 
 install: server players
 

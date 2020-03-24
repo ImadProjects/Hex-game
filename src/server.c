@@ -2,6 +2,7 @@
 #include "graph.h"
 #include <getopt.h>
 #include <time.h>
+#include <unistd.h>
 #include "player.h"
 
 // Global seed for the random number generator
@@ -109,17 +110,23 @@ int main(int argc,  char* argv[]){
 
   p1->initialize_color(1 - p2->accept_opening(move));
   p2->initialize_color(p2->accept_opening(move));
-	
+
   int end_by_impossible_move = 1;
   struct move_t last_move ={.c = - p1->color};
   struct player *p;
-  
   while (1){
-	  
+   if (show)
+   {
+    print_graph(graph, 'c');
+    sleep(1);
+    printf("\033[%dA",Length+3);
+
+     //printf("\033[10B"); // Move down X lines;
+  }
     srand(time(NULL));
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
-    printf("move = %ld\n", move.m);
+    //printf("Turn : player %s plays the box %ld\n", p->name, move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
@@ -137,26 +144,19 @@ int main(int argc,  char* argv[]){
     
     last_move = move;
 
-    
     if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
       
       break;
-    if (show)
-    {
-      print_graph(graph, 'c');
-    }
+
     
   }
-  
+  print_graph(graph, 'c');  
   if(end_by_impossible_move){
-    
+    printf("\033[10B");
       if (is_winning(graph,0,move,'c') == 0 )
-	      
-	printf("The winner is the player 1\n");
-	    
+	printf("The winner is: %s\n",p->name);
       else
-	      
-	printf("The winner is the player 2\n");
+	printf("The winner is: %s\n", p->name);
     }
   free__graph_t(graph);
   dlclose(player1);
