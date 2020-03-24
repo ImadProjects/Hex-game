@@ -1,15 +1,13 @@
 #include <dlfcn.h>
 #include "graph.h"
 #include <getopt.h>
-#include <unistd.h>
 #include <time.h>
 #include "player.h"
-#include<stdlib.h>
-
 
 // Global seed for the random number generator
 static int Length = 3;
 static char Shape = 'c';
+static int show = 0;
 
 ////////////////////////////////////////////////////////////////
 // Function for parsing the options of the program
@@ -17,7 +15,7 @@ static char Shape = 'c';
 // -s <seed> : sets the seed
 void parse_opts(int argc, char* argv[]) {
   int opt;
-  while ((opt = getopt(argc, argv, "m:t:")) != -1) {
+  while ((opt = getopt(argc, argv, "m:t:p:")) != -1) {
     switch (opt) {
     case 'm':
       Length = atoi(optarg);
@@ -25,8 +23,13 @@ void parse_opts(int argc, char* argv[]) {
     case 't':
       Shape = atoi(optarg);
       break;
+    case 'p':
+      show = atoi(optarg);
+      break;
     default: /* '?' */
       fprintf(stderr, "Usage: %s [-m Length] \n ",
+              argv[0]);
+      fprintf(stderr, "Usage: %s [-t Shape] \n ",
               argv[0]);
       fprintf(stderr, "Usage: %s [-t Shape] \n ",
               argv[0]);
@@ -116,14 +119,13 @@ int main(int argc,  char* argv[]){
     srand(time(NULL));
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
-    //printf("move = %ld\n", move.m);
+    printf("move = %ld\n", move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
       coloriate__graph_t(graph, p->color, move);
-      print_graph(graph, 'c');
-      //fflush( stdout );
-      printf("\033[%dA",Length+3); // Move up X lines;
+     //print_graph(graph, 'c');
+      
     }
     
     else{
@@ -132,20 +134,21 @@ int main(int argc,  char* argv[]){
 	    end_by_impossible_move = 0;
 	    break;
 	  }
-          sleep(1);
-    //fflush( stdout );
-
+    
     last_move = move;
-    //print_graph(graph, 'c');
+
     
     if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
       
       break;
+    if (show)
+    {
+      print_graph(graph, 'c');
+    }
     
   }
   
   if(end_by_impossible_move){
-    printf("\033[10B"); // Move down X lines;
     
       if (is_winning(graph,0,move,'c') == 0 )
 	      
@@ -155,8 +158,6 @@ int main(int argc,  char* argv[]){
 	      
 	printf("The winner is the player 2\n");
     }
-
-
   free__graph_t(graph);
   dlclose(player1);
   dlclose(player2);
