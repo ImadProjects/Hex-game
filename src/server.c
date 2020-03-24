@@ -31,7 +31,7 @@ void parse_opts(int argc, char* argv[]) {
               argv[0]);
       fprintf(stderr, "Usage: %s [-t Shape] \n ",
               argv[0]);
-      fprintf(stderr, "Usage: %s [-t Shape] \n ",
+      fprintf(stderr, "Usage: %s [-p show] = 1 to show \n ",
               argv[0]);
     }
   }
