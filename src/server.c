@@ -1,6 +1,7 @@
 #include <dlfcn.h>
 #include "graph.h"
 #include <getopt.h>
+#include <unistd.h>
 #include <time.h>
 #include "player.h"
 
@@ -114,13 +115,14 @@ int main(int argc,  char* argv[]){
     srand(time(NULL));
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
-    printf("move = %ld\n", move.m);
+    //printf("move = %ld\n", move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
       coloriate__graph_t(graph, p->color, move);
       print_graph(graph, 'c');
-      
+      //fflush( stdout );
+      printf("\033[%dA",Length+3); // Move up X lines;
     }
     
     else{
@@ -129,9 +131,11 @@ int main(int argc,  char* argv[]){
 	    end_by_impossible_move = 0;
 	    break;
 	  }
-    
+          sleep(3);
+    //fflush( stdout );
+
     last_move = move;
-    print_graph(graph, 'c');
+    //print_graph(graph, 'c');
     
     if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
       
@@ -140,6 +144,7 @@ int main(int argc,  char* argv[]){
   }
   
   if(end_by_impossible_move){
+    printf("\033[10B"); // Move down X lines;
     
       if (is_winning(graph,0,move,'c') == 0 )
 	      
@@ -149,6 +154,8 @@ int main(int argc,  char* argv[]){
 	      
 	printf("The winner is the player 2\n");
     }
+
+
   free__graph_t(graph);
   dlclose(player1);
   dlclose(player2);
