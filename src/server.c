@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <time.h>
 #include "player.h"
+#include<stdlib.h>
 
 
 // Global seed for the random number generator
@@ -131,7 +132,7 @@ int main(int argc,  char* argv[]){
 	    end_by_impossible_move = 0;
 	    break;
 	  }
-          sleep(3);
+          sleep(1);
     //fflush( stdout );
 
     last_move = move;
