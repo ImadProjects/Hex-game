@@ -114,6 +114,8 @@ int main(int argc,  char* argv[]){
   int end_by_impossible_move = 1;
   struct move_t last_move = {.c = 1 - p1->color, .m = move.m};
   struct player *p;
+  int count = width__graph_t(graph) * 4 ;
+  
   while (1){
    if (show)
    {
@@ -124,6 +126,15 @@ int main(int argc,  char* argv[]){
      //printf("\033[10B"); // Move down X lines;
   }
     srand(time(NULL));
+
+    if((Shape == 'c' || Shape == 't') && count == size__graph_t(graph)){
+
+      printf("Equality between players\n");
+      break;
+      
+    }
+
+    
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
     //printf("Turn : player %s plays the box %ld\n", p->name, move.m);
@@ -149,6 +160,7 @@ int main(int argc,  char* argv[]){
     }
     
     last_move = move;
+    count++;
 
     
   }
@@ -160,8 +172,10 @@ int main(int argc,  char* argv[]){
       else
 	printf("The winner is: %s\n", p->name);
     }
+  
   free__graph_t(graph);
   dlclose(player1);
   dlclose(player2);
+
   return 0;
 }
