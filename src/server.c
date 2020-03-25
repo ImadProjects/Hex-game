@@ -40,7 +40,7 @@ void parse_opts(int argc, char* argv[]) {
 
 int is_move_possible(struct graph_t* g, int color, struct move_t move){
   int n = (int) move.m;
-  if (move.m != -1 &&(gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
+  if (move.m != -1 && (gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
     return 1;
   }
   return 0;
@@ -130,23 +130,25 @@ int main(int argc,  char* argv[]){
 
     if(is_move_possible(graph, p->color, move)){
       
+      if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c')){
+
+	coloriate__graph_t(graph, p->color, move);
+	      
+	break;}
+
       coloriate__graph_t(graph, p->color, move);
-     //print_graph(graph, 'c');
+      //print_graph(graph, 'c');
       
     }
     
     else{
 	  
-	    printf("The winner is player 2, player 1 chose a wrong move\n");
-	    end_by_impossible_move = 0;
-	    break;
-	  }
+      printf("The winner is player %d, player %d chose a wrong move\n", p->color, 1 - p->color);
+      end_by_impossible_move = 0;
+      break;
+    }
     
     last_move = move;
-
-    if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c'))
-      
-      break;
 
     
   }
