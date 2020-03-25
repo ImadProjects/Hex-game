@@ -49,7 +49,7 @@ size_t width__graph_t(struct graph_t *graph){
   
   if (m == (float)floor(m))
 
-    return m - 1;
+    return m;
 
   return sqrt(n/6);
 

@@ -1,6 +1,5 @@
 #include <string.h>
 #include "player.h"
-#include <time.h>
 #define MAX_STRING 20
 
 struct player{

@@ -96,7 +96,7 @@ int main(int argc,  char* argv[]){
   p1->finalize = dlsym(player1,"finalize");
   p1->initialize_graph(graph);
 
-  struct player * p2 = dlsym(player2,"player1");
+  struct player * p2 = dlsym(player2,"player2");
 
   p2->propose_opening = dlsym(player2,"propose_opening");
   p2->accept_opening = dlsym(player2,"accept_opening");
@@ -114,7 +114,7 @@ int main(int argc,  char* argv[]){
   int end_by_impossible_move = 1;
   struct move_t last_move = {.c = 1 - p1->color, .m = move.m};
   struct player *p;
-  int count = width__graph_t(graph) * 4 ;
+  int count = width__graph_t(graph) * 4 - 4;
   
   while (1){
    if (show)
@@ -129,7 +129,7 @@ int main(int argc,  char* argv[]){
 
     if((Shape == 'c' || Shape == 't') && count == size__graph_t(graph)){
 
-      printf("Equality between players\n");
+      end_by_impossible_move = -1;
       break;
       
     }
@@ -154,7 +154,7 @@ int main(int argc,  char* argv[]){
     
     else{
 	  
-      printf("The winner is player %d, player %d chose a wrong move\n", p->color, 1 - p->color);
+      printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       end_by_impossible_move = 0;
       break;
     }
@@ -172,7 +172,12 @@ int main(int argc,  char* argv[]){
       else
 	printf("The winner is: %s\n", p->name);
     }
-  
+
+  else if(end_by_impossible_move = -1)
+
+    printf("Equality between players\n");
+
+
   free__graph_t(graph);
   dlclose(player1);
   dlclose(player2);
