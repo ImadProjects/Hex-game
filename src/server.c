@@ -40,7 +40,7 @@ void parse_opts(int argc, char* argv[]) {
 
 int is_move_possible(struct graph_t* g, int color, struct move_t move){
   int n = (int) move.m;
-  if ((gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
+  if (move.m != -1 &&(gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0)){
     return 1;
   }
   return 0;
@@ -65,7 +65,7 @@ struct player{
 struct player * compute_next_player(struct player *p1, struct player *p2, struct move_t *last_move)
 {
   
-  if(last_move->c == p1->color || last_move->c == -1)
+  if(last_move->c == 0)
     
     return p2;
   
@@ -112,7 +112,7 @@ int main(int argc,  char* argv[]){
   p2->initialize_color(p2->accept_opening(move));
 
   int end_by_impossible_move = 1;
-  struct move_t last_move ={.c = - p1->color};
+  struct move_t last_move = {.c = 1 - p1->color, .m = move.m};
   struct player *p;
   while (1){
    if (show)

@@ -56,12 +56,31 @@ struct move_t propose_opening(){
     gsl_spmatrix *o = player1.graph->o;
     size_t mv = rand()%(vertices - 2*width) + width;
     
-    while((gsl_spmatrix_get(o, 0, mv) == 1) || (gsl_spmatrix_get(o, 1, mv) == 1)){
-      srand(time(NULL));
-      mv = rand()%(vertices - 2*width) + width;
+    size_t ran[vertices];
+    int a = 0;
+  
+    for(size_t i = width - 1; i <= vertices - width; i++){
+      
+      if((gsl_spmatrix_get(o, 0, i) == 0) && (gsl_spmatrix_get(o, 1, i) == 0)){
+	
+	ran[a] = i;
+	a++;
+      }
+      
+    }
+
+    struct move_t opening = {.c = player1.color };
+
+    if(a == 0)
+
+      opening.m = -1;
+
+    else{
+      
+      int r = rand()%a;
+      opening.m = ran[r];
     }
     
-    struct move_t opening = {.m = mv, .c = player1.color };
     
     return opening;
     
@@ -106,8 +125,17 @@ struct move_t play(struct move_t previous_move)
     
   }
 
+  if(a == 0)
+
+    next.m = -1;
+
+  else{
+
   int r = rand()%a;
   next.m = ran[r];
+
+  }
+  
   next.c = id;
   
   return next;
