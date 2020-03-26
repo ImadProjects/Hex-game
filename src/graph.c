@@ -83,28 +83,49 @@ void print_graph(struct graph_t* g, char c){//pour graphe hexa ou carré
       ss[0] = '\n';
     }
     if (c == 'h'){
-      printf("%s(", ss);
+      printf("%s", ss);
     }
     else{
-      printf("\n(");
+      printf("\n");
     }
+    if (c == 'h')
+    {
     for (int j = 0; j < m; j++){
       int s = (int) gsl_spmatrix_get(g->o, 0, j + i*m);
       int ss = (int) gsl_spmatrix_get(g->o, 1, j + i*m);
       if (s > ss){
-	printf("\033[0;31m");
+  printf("\033[0;31m");
       }
       if (s < ss){
-	printf("\033[0;32m");
+  printf("\033[0;32m");
       }
-      printf(" o ");
+      printf(" ⬡ ");
       printf("\033[0m");
     }
-    printf(")");
+    //printf(")");
   }
+
+  if (c == 'c')
+  {
+    for (int j = 0; j < m; j++){
+      int s = (int) gsl_spmatrix_get(g->o, 0, j + i*m);
+      int ss = (int) gsl_spmatrix_get(g->o, 1, j + i*m);
+      if (s > ss){
+  printf("\033[0;31m");
+      }
+      if (s < ss){
+  printf("\033[0;32m");
+      }
+      printf("  o ");
+      printf("\033[0m");
+    }
+    //printf(")");
+  }
+}
   printf("\n");
   free(s);
 }
+
 
 void assign_links(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un graphe no triangulaire
   for (int i = 0; i < n; i++){

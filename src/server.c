@@ -22,7 +22,7 @@ void parse_opts(int argc, char* argv[]) {
       Length = atoi(optarg);
       break;
     case 't':
-      Shape = atoi(optarg);
+      Shape = optarg[0];
       break;
     case 'p':
       show = atoi(optarg);
@@ -115,12 +115,13 @@ int main(int argc,  char* argv[]){
 
   struct move_t last_move = {.c = 1 - p1->color, .m = move.m};
   struct player *p;
-  
+  int winner = 0;
+  int equal = 0;
   while (1){
     
    if (show){
      
-    print_graph(graph, 'c');
+    print_graph(graph, Shape);
     sleep(1);
     printf("\033[%dA",Length+3);
 
@@ -130,8 +131,7 @@ int main(int argc,  char* argv[]){
     srand(time(NULL));
 
     if((Shape == 'c' || Shape == 't') && count == size__graph_t(graph)){
-
-      printf("Equality between players\n");
+      equal = 1;
       break;
       
     }
@@ -143,12 +143,13 @@ int main(int argc,  char* argv[]){
 
     if(is_move_possible(graph, p->color, move)){
       
-      if (is_winning(graph, p->color, move, 'c')){
+      if (is_winning(graph, p->color, move, Shape)){
 
-	coloriate__graph_t(graph, p->color, move);
-	printf("The winner in %s\n", p->name);
-	      
-	break;}
+  coloriate__graph_t(graph, p->color, move);
+  winner=1;
+  //printf("The winner is %s\n", p->name);
+        
+  break;}
 
       else
 
@@ -159,7 +160,7 @@ int main(int argc,  char* argv[]){
     }
     
     else{
-	  
+    
       printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
@@ -170,7 +171,12 @@ int main(int argc,  char* argv[]){
     
   }
   
-  print_graph(graph, 'c');  
+  print_graph(graph, Shape);  
+  if (winner)
+  printf("The winner is %s\n", p->name);
+  else
+    if (equal)
+      printf("Equality between players\n");
 
   free__graph_t(graph);
   dlclose(player1);
