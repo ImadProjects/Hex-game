@@ -111,25 +111,27 @@ int main(int argc,  char* argv[]){
   p1->initialize_color(1 - p2->accept_opening(move));
   p2->initialize_color(p2->accept_opening(move));
 
-  int end_by_impossible_move = 1;
+  int count = width__graph_t(graph) * 4 - 4;
+
   struct move_t last_move = {.c = 1 - p1->color, .m = move.m};
   struct player *p;
-  int count = width__graph_t(graph) * 4 - 4;
   
   while (1){
-   if (show)
-   {
+    
+   if (show){
+     
     print_graph(graph, 'c');
     sleep(1);
     printf("\033[%dA",Length+3);
 
      //printf("\033[10B"); // Move down X lines;
   }
+   
     srand(time(NULL));
 
     if((Shape == 'c' || Shape == 't') && count == size__graph_t(graph)){
 
-      end_by_impossible_move = -1;
+      printf("Equality between players\n");
       break;
       
     }
@@ -141,13 +143,17 @@ int main(int argc,  char* argv[]){
 
     if(is_move_possible(graph, p->color, move)){
       
-      if (is_winning(graph,0,move,'c') || is_winning(graph,1,move,'c')){
+      if (is_winning(graph, p->color, move, 'c')){
 
 	coloriate__graph_t(graph, p->color, move);
+	printf("The winner in %s\n", p->name);
 	      
 	break;}
 
+      else
+
       coloriate__graph_t(graph, p->color, move);
+      
       //print_graph(graph, 'c');
       
     }
@@ -155,7 +161,6 @@ int main(int argc,  char* argv[]){
     else{
 	  
       printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
-      end_by_impossible_move = 0;
       break;
     }
     
@@ -164,19 +169,8 @@ int main(int argc,  char* argv[]){
 
     
   }
+  
   print_graph(graph, 'c');  
-  if(end_by_impossible_move){
-    printf("\033[10B");
-      if (is_winning(graph,0,move,'c') == 0 )
-	printf("The winner is: %s\n",p->name);
-      else
-	printf("The winner is: %s\n", p->name);
-    }
-
-  else if(end_by_impossible_move = -1)
-
-    printf("Equality between players\n");
-
 
   free__graph_t(graph);
   dlclose(player1);
