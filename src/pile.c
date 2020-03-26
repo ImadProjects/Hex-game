@@ -31,3 +31,50 @@ int depiler(struct pile* p){
 int est_vide(struct pile* p){
   return p->size == 0;
 }
+
+
+
+//////////////////////////////// graph part //////////////////////////
+
+size_t size__graph_t(struct graph_t *graph){
+
+  return graph->num_vertices;
+
+}
+
+
+size_t width__graph_t(struct graph_t *graph){
+  
+  size_t n = size__graph_t(graph);
+  float m = sqrt(n);
+  
+  if (m == (float)floor(m))
+
+    return m;
+
+  return sqrt(n/6);
+
+}
+
+
+char type__graph_t(struct graph_t *graph){
+
+  int n = size__graph_t(graph);
+  int d = width__graph_t(graph);
+  int m = floor(n / 2);
+  printf("n = %d\n", n);
+  printf("d = %d\n", d);
+  printf("m = %d\n", m);
+  if(gsl_spmatrix_get(graph->t, m, m + 1) && gsl_spmatrix_get(graph->t, m, m - 1) && gsl_spmatrix_get(graph->t, m, m + d) && gsl_spmatrix_get(graph->t, m, m - d))
+
+     return 'c';
+
+  else if(gsl_spmatrix_get(graph->t, m, m + 1) &&
+	  gsl_spmatrix_get(graph->t, m, m - 1)
+	  && (gsl_spmatrix_get(graph->t, m, m + d) + gsl_spmatrix_get(graph->t, m, m - d) == 1))
+
+    return 't';
+
+  return 'h';
+
+}

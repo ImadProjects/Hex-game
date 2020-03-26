@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include "move.h"
-#include "graph.h"
+#include "pile.h"
 
 /* Access to player informations
  * RETURNS:

@@ -18,10 +18,6 @@ struct graph_t {
 //ne marche pas bien pour les graphes triangulaires
 struct graph_t* new__graph_t(int n, char c);
 
-size_t size__graph_t(struct graph_t *graph);
-
-size_t width__graph_t(struct graph_t *graphe);
-
 void free__graph_t(struct graph_t* g);
 
 void print__mat(const struct graph_t* g);
