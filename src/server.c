@@ -155,7 +155,7 @@ int main(int argc,  char* argv[]){
 
       coloriate__graph_t(graph, p->color, move);
       
-      //print_graph(graph, 'c');
+      print_graph(graph, Shape);
       
     }
     

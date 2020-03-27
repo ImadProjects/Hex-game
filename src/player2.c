@@ -106,7 +106,7 @@ void initialize_color(enum color_t id){
     player2.color = id;
 }
 
-struct move_t play(struct move_t previous_move){
+struct move_t play__c(struct move_t previous_move){
 
   
   struct move_t next;
@@ -116,22 +116,105 @@ struct move_t play(struct move_t previous_move){
   size_t width = width__graph_t(player2.graph);
   
   size_t move = previous_move.m;
+  size_t side = (id == 1) ;
+  
+  if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - width * side - (1 - side)) == 0 &&
+			   gsl_spmatrix_get(o, 1, move - width * side - (1 - side)) == 0))
+    
+    next.m = move - width * side - (1 - side) ;
 
-  if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - width) == 0 && gsl_spmatrix_get(o, 1, move - width) == 0))
+  else if(move < vertices - 2 * width && (gsl_spmatrix_get(o, 0, move + width * side + (1 - side)) == 0 &&
+					  gsl_spmatrix_get(o, 1, move + width * side + (1 - side)) == 0))
 
-    next.m = move - width ;
+    next.m = move + width * side + (1 - side);
 
-  else if(move < vertices - 2 * width && (gsl_spmatrix_get(o, 0, move + width) == 0 && gsl_spmatrix_get(o, 1, move + width) == 0))
+  else if((move - 1) % width != 0 && (gsl_spmatrix_get(o, 0, move - side - width * (1 - side)) == 0 &&
+				      gsl_spmatrix_get(o, 1, move - side - width * (1 - side)) == 0))
 
-    next.m = move + width;
+    next.m = move - side - width * (1 - side);
 
-  else if((move - 1) % width != 0 && (gsl_spmatrix_get(o, 0, move - 1) == 0 && gsl_spmatrix_get(o, 1, move - 1) == 0))
+  else if((move + 2) % width != 0 && (gsl_spmatrix_get(o, 0, move + side + width * (1 - side)) == 0 &&
+				      gsl_spmatrix_get(o, 1, move + side + width * (1 - side)) == 0))
 
-    next.m = move - 1;
+    next.m = move + side + width * (1 - side);
 
-  else if((move + 2) % width != 0 && (gsl_spmatrix_get(o, 0, move + 1) == 0 && gsl_spmatrix_get(o, 1, move + 1) == 0))
+  else{
 
-    next.m = move + 1;
+    size_t ran[vertices];
+    int a = 0;
+    
+    for(size_t i = 0; i< vertices; i++){
+      
+      if((gsl_spmatrix_get(o, 0, i) == 0) && (gsl_spmatrix_get(o, 1, i) == 0)){
+	
+	ran[a] = i;
+	a++;}
+      
+    }
+    
+    if(a == 0)
+      
+      next.m = -1;
+    
+    else{
+      
+      int r = rand()%a;
+      next.m = ran[r];
+      
+    }
+  
+  }
+
+  next.c = player2.color;
+
+  return next;
+
+}
+
+
+struct move_t play__h(struct move_t previous_move){
+
+  
+  struct move_t next;
+  int id = player2.color;
+  gsl_spmatrix *o = player2.graph->o;
+  size_t vertices = size__graph_t(player2.graph);
+  size_t width = width__graph_t(player2.graph);
+  
+  size_t move = previous_move.m;
+  size_t side = (id == 1) ;
+
+  
+  if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - (width - 1) * side - (1 - side)) == 0 &&
+			   gsl_spmatrix_get(o, 1, move - (width - 1)* side - (1 - side)) == 0))
+
+    next.m = move - (width - 1) * side - (1 - side);
+  
+  else if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - width * side - (1 - side)) == 0 &&
+			   gsl_spmatrix_get(o, 1, move - width * side - (1 - side)) == 0))
+    
+    next.m = move - width * side - (1 - side) ;
+
+  else if(move < vertices - 2 * width && (gsl_spmatrix_get(o, 0, move + width * side + (1 - side)) == 0 &&
+					  gsl_spmatrix_get(o, 1, move + width * side + (1 - side)) == 0))
+
+    next.m = move + width * side + (1 - side);
+
+  else if(move < vertices - 2 * width && (gsl_spmatrix_get(o, 0, move + (width - 1) * side + (1 - side)) == 0 &&
+					  gsl_spmatrix_get(o, 1, move + (width - 1) * side + (1 - side)) == 0))
+
+    next.m = move + (width - 1) * side + (1 - side);
+
+  
+  else if((move - 1) % width != 0 && (gsl_spmatrix_get(o, 0, move - side - width * (1 - side)) == 0 &&
+				      gsl_spmatrix_get(o, 1, move - side - width * (1 - side)) == 0))
+
+    next.m = move - side - width * (1 - side);
+
+  else if((move + 2) % width != 0 && (gsl_spmatrix_get(o, 0, move + side + width * (1 - side)) == 0 &&
+				      gsl_spmatrix_get(o, 1, move + side + width * (1 - side)) == 0))
+
+    next.m = move + side + width * (1 - side);
 
   else{
 
@@ -168,7 +251,20 @@ struct move_t play(struct move_t previous_move){
 
 }
 
-  
+
+struct move_t play(struct move_t previous_move){
+
+  char c = type__graph_t(player2.graph);
+
+  if(c == 'h')
+
+    return play__h(previous_move);
+
+  return play__c(previous_move);
+
+}
+
+
 void finalize(){
   
   free__graph_t(player2.graph);

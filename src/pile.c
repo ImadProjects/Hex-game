@@ -59,12 +59,8 @@ size_t width__graph_t(struct graph_t *graph){
 
 char type__graph_t(struct graph_t *graph){
 
-  int n = size__graph_t(graph);
   int d = width__graph_t(graph);
   int m = floor((d * 2) - ( d / 2));
-  printf("n = %d\n", n);
-  printf("d = %d\n", d);
-  printf("m = %d\n", m);
 
   if(gsl_spmatrix_get(graph->t, m, m + 1) &&
 	  gsl_spmatrix_get(graph->t, m, m - 1) &&
