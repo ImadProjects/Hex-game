@@ -38,6 +38,7 @@ int test_graph(void){
   c += check(gsl_spmatrix_get(g->o, 1, 2), 0);
   c += check(gsl_spmatrix_get(g->o, 0, 2), 3);
   //  print__mat(g);
+  //  print_tr(g);
   //  print_graph(g, 'c');
   //  print_graph(g, 'h');
   free__graph_t(g);
