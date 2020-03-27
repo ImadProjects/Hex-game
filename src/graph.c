@@ -161,7 +161,7 @@ void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un
   int checkp = !(n==1) * 1;
   int inc = 2;
   for (i = 0; i < 6*n*n; i++){
-    //    printf("%d, %d, %d, %d\n", ligne, nb_elem, i, checkm);
+    printf("%d, %d, %d, %d\n", ligne, nb_elem, i, inc);
     if (nb_elem != nb_elem2){
       gsl_spmatrix_set(t, i, i-1, 1);
     }
@@ -170,25 +170,33 @@ void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un
       gsl_spmatrix_set(t, i, i+1, 1);
     }
 
-
-    if (((((i % 2) == (ligne % 2)) && (i < 3*n*n))
+    if ((((nb_elem % 2) && (i < 3*n*n)) ||
+	 ((!(nb_elem % 2)) && ( i >= 3*n*n)))
+	&& (ligne < 2*n - 1)){
+	
+      /*    if (((((i % 2) == (ligne % 2)) && (i < 3*n*n))
 	 || (((i % 2) != (ligne % 2)) && (i >= 3*n*n)))
-	&& (ligne < 2*n - 1)){      	
+	 && (ligne < 2*n - 1)){      	*/
+      printf("1\n");
       gsl_spmatrix_set(t, i, i + nb_elem2 - (i >= 3*n*n), 1);
     }
 
-    
-    if (((((i % 2) != (ligne % 2)) && (i < 3*n*n))
-	 || (((i % 2) == (ligne % 2)) && (i >= 3*n*n)))
+    if ((((!(nb_elem % 2)) && (i < 3*n*n)) ||
+	((nb_elem % 2) && (i >= 3*n*n)))
 	&& (ligne > 0)){
+  
+  /*    if (((((i % 2) != (ligne % 2)) && (i < 3*n*n))
+	 || (((i % 2) == (ligne % 2)) && (i >= 3*n*n)))
+	 && (ligne > 0)){*/
+      printf("2\n");
       gsl_spmatrix_set(t, i, i - nb_elem2 + (i < 3*n*n), 1);
     }
-
+    
     
     nb_elem--;
     if (nb_elem == 0){
       ligne++;
-      if (ligne == n/2){
+      if (ligne == n - 1){
 	checkp = 0;
 	inc = -2;
 	nb_elem2 += 2;

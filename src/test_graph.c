@@ -26,7 +26,7 @@ int check(int n,int att){
 
 int test_graph(void){
   int c = 0;
-  struct graph_t* g = new__graph_t(3, 'c');
+  struct graph_t* g = new__graph_t(3, 'h');
   //en vrai j'ai vérifié toutes les matrices a la main a coté pour etre sur
   c += check(g->num_vertices, 16);
   c += check(gsl_spmatrix_get(g->t, 0, 0), 0);
