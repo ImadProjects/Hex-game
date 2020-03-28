@@ -1,4 +1,4 @@
-#include <stddef.h>
+ #include <stddef.h>
 #include "graph.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +11,7 @@ void assign_links(gsl_spmatrix* t, char c, int n);
 void assign_tr(gsl_spmatrix* t, char c, int n);
 void assign_colors(gsl_spmatrix* o, int n);
 void assign_colors_tr(gsl_spmatrix* o, int n);
+void color_print(const gsl_spmatrix* o, int n);
 
 struct graph_t* new__graph_t(int n, char c){
   if (c != 't'){
@@ -71,19 +72,44 @@ int coloriate__graph_t(struct graph_t* g, int color, struct move_t move){
   return 1;
 }
 
-void print_graph(struct graph_t* g, char c){//pour graphe hexa ou carré
-  printf("\n");
+void color_print(const gsl_spmatrix* o, int n){
+  int s = (int) gsl_spmatrix_get(o, 0, n);
+  int ss = (int) gsl_spmatrix_get(o, 1, n);
+  if (s > ss){
+    printf("\033[0;31m");
+  }
+  if (s < ss){
+    printf("\033[0;32m");
+  } 
+}
+
+void print_graph(const struct graph_t* g, char c){//pour graphe hexa ou carr
   int m = sqrt(g->num_vertices);
-  char* s = malloc(sizeof(char) * (2*m+5));
-  char* ss = s + 2*m + 3;
-  ss[0] = '\n';
-  ss[1] = '\0';
+  printf("\n");
+  char* s;
+  char* ss;
+  if (c == 'h'){
+    s = malloc(sizeof(char) * (2*m+5));
+    ss = s + 2*m + 3;
+    ss[0] = '\n';
+    ss[1] = '\0';
+  }
+
+  char* str;
+  if (c == 'h'){
+    str = " ⬡ ";
+  }
+  else{
+    str = " o ";
+  }
   for (int i = 0; i < m; i++){
-    if (i != 0){
-      ss -= 2;
-      ss[2] = ' ';
-      ss[1] = ' ';
-      ss[0] = '\n';
+    if (c == 'h'){
+      if (i != 0){
+	ss -= 2;
+	ss[2] = ' ';
+	ss[1] = ' ';
+	ss[0] = '\n';
+      }
     }
     if (c == 'h'){
       printf("%s", ss);
@@ -91,42 +117,15 @@ void print_graph(struct graph_t* g, char c){//pour graphe hexa ou carré
     else{
       printf("\n");
     }
-    if (c == 'h')
-    {
     for (int j = 0; j < m; j++){
-      int s = (int) gsl_spmatrix_get(g->o, 0, j + i*m);
-      int ss = (int) gsl_spmatrix_get(g->o, 1, j + i*m);
-      if (s > ss){
-  printf("\033[0;31m");
-      }
-      if (s < ss){
-  printf("\033[0;32m");
-      }
-      printf(" ⬡ ");
+      color_print(g->o, j + i*m);
+      printf("%s", str);
       printf("\033[0m");
     }
-    //printf(")");
   }
-
-  if (c == 'c')
-  {
-    for (int j = 0; j < m; j++){
-      int s = (int) gsl_spmatrix_get(g->o, 0, j + i*m);
-      int ss = (int) gsl_spmatrix_get(g->o, 1, j + i*m);
-      if (s > ss){
-  printf("\033[0;31m");
-      }
-      if (s < ss){
-  printf("\033[0;32m");
-      }
-      printf("  o ");
-      printf("\033[0m");
-    }
-    //printf(")");
+  if (c == 'h'){
+    free(s);
   }
-}
-  printf("\n");
-  free(s);
 }
 
 
@@ -241,7 +240,7 @@ void assign_colors_tr(gsl_spmatrix* o, int n){
   }
 }
 
-int is_winning(struct graph_t* g, int color, struct move_t move, char c){
+int is_winning(const struct graph_t* g, int color, struct move_t move, char c){
   struct pile* p = pile_vide(g->num_vertices);
   char* tab = malloc(sizeof(char) * g->num_vertices); // indique si on a dejà visité un sommet
   int cond1 = 0;
@@ -297,15 +296,7 @@ void print_tr(struct graph_t* g){
       
     for (int j = 0; j < nb_elem2; j++){
       if (j%2){
-	int n = (int) gsl_spmatrix_get(g->o, 0, c2);
-	int nn = (int) gsl_spmatrix_get(g->o, 1, c2);
-
-	if (n > nn){
-	  printf("\033[0;31m");
-	}
-	if (n < nn){
-	  printf("\033[0;32m");
-	}
+	color_print(g->o, c2);
 	c2 += 2;
 	printf(" ▽ ");
 	printf("\033[0m");
@@ -316,14 +307,7 @@ void print_tr(struct graph_t* g){
     
     for (int j = 0; j < nb_elem2; j++){
       if (!(j%2)){
-	int n = (int) gsl_spmatrix_get(g->o, 0, c1);
-	int nn = (int) gsl_spmatrix_get(g->o, 1, c1);
-	if (n > nn){
-	  printf("\033[0;31m");
-	}
-	if (n < nn){
-	  printf("\033[0;32m");
-	}
+	color_print(g->o, c1);
 	c1 += 2;
 	printf(" △ ");
 	printf("\033[0m");
@@ -345,16 +329,7 @@ void print_tr(struct graph_t* g){
       
     for (int j = 0; j < nb_elem2 && c2 < g->num_vertices; j++){
       if (!(j%2)){
-
-	int n = (int) gsl_spmatrix_get(g->o, 0, c2);
-	int nn = (int) gsl_spmatrix_get(g->o, 1, c2);
-	if (n > nn){
-	  printf("\033[0;31m");
-	  //	  printf("c2 %d\n", c2);
-	}
-	if (n < nn){
-	  printf("\033[0;32m");
-	}
+	color_print(g->o, c2);
 	c2 += 2;
 	printf(" ▽ ");
 	printf("\033[0m");
@@ -366,16 +341,7 @@ void print_tr(struct graph_t* g){
     
     for (int j = 0; j < nb_elem2 && c1 < g->num_vertices; j++){
       if (j%2){
-
-	int n = (int) gsl_spmatrix_get(g->o, 0, c1);
-	int nn = (int) gsl_spmatrix_get(g->o, 1, c1);
-	if (n > nn){
-	  printf("\033[0;31m");
-	  //	  printf("%d\n", c1);
-	}
-	if (n < nn){
-	  printf("\033[0;32m");
-	}
+	color_print(g->o, c1);
 	c1 += 2;
 	printf(" △ ");
 	printf("\033[0m");

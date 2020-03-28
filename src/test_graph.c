@@ -42,6 +42,9 @@ int test_graph(void){
   //  print_graph(g, 'c');
   //  print_graph(g, 'h');
   free__graph_t(g);
+  /*  struct graph_t* gg = new__graph_t(4, 't');
+  print_tr(gg);
+  free__graph_t(gg);*/
   return c;
 }
 
@@ -73,7 +76,7 @@ int test_pathfinding(void){
   coloriate__graph_t(g, 1, move);
   print_graph(g, 'c');
   c += check(is_winning(g, 1, move, 'c'), 0);
-
+  
   move.m = 6;
   coloriate__graph_t(g, 1, move);
   print_graph(g, 'c');
