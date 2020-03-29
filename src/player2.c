@@ -89,7 +89,8 @@ struct move_t propose_opening(){
 
 int accept_opening(const struct move_t opening){
   
-    (void)opening;
+  (void)opening;
+    
     return 1;
     
 }
@@ -185,15 +186,15 @@ struct move_t play__h(struct move_t previous_move){
   size_t side = (id == 1) ;
 
   
-  if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - (width - 1) * side - (1 - side)) == 0 &&
-			   gsl_spmatrix_get(o, 1, move - (width - 1)* side - (1 - side)) == 0))
+  if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - (width ) * side - (1 - side)) == 0 &&
+			   gsl_spmatrix_get(o, 1, move - (width )* side - (1 - side)) == 0))
 
-    next.m = move - (width - 1) * side - (1 - side);
+    next.m = move - (width ) * side - (1 - side);
   
-  else if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - width * side - (1 - side)) == 0 &&
-			   gsl_spmatrix_get(o, 1, move - width * side - (1 - side)) == 0))
+  else if(move >= 2 * width && (gsl_spmatrix_get(o, 0, move - (width - 1) * side - (1 - side)) == 0 &&
+				gsl_spmatrix_get(o, 1, move - (width - 1) * side - (1 - side)) == 0))
     
-    next.m = move - width * side - (1 - side) ;
+    next.m = move - (width - 1) * side - (1 - side) ;
 
   else if(move < vertices - 2 * width && (gsl_spmatrix_get(o, 0, move + width * side + (1 - side)) == 0 &&
 					  gsl_spmatrix_get(o, 1, move + width * side + (1 - side)) == 0))
@@ -252,15 +253,134 @@ struct move_t play__h(struct move_t previous_move){
 }
 
 
+struct move_t play__t(struct move_t previous_move){
+
+  
+  struct move_t next;
+  int id = player2.color;
+  gsl_spmatrix *o = player2.graph->o;
+  gsl_spmatrix *t = player2.graph->t;
+  size_t vertices = size__graph_t(player2.graph);
+  size_t width = width__graph_t(player2.graph);
+  
+  size_t move = previous_move.m;
+  size_t side = (id == 1) ;
+  
+  size_t ran[vertices];
+  int a = 0;
+
+  for(size_t i = 0; i < vertices && a < 1; i++){
+
+    if(gsl_spmatrix_get(t, move, i) &&
+       i != move &&
+       i != move + 1 &&
+       i != move - 1){
+
+      ran[a] = i;
+      a++;
+
+    }
+  }
+
+  if(side){
+
+    if ((! gsl_spmatrix_get(o, 0, ran[0])) &&
+	(! gsl_spmatrix_get(o, 1, ran[0]) )){
+
+      next.m = ran[0];
+      return next;
+
+    }
+
+    else if((! gsl_spmatrix_get(o, 0, move + 1)) &&
+	    (! gsl_spmatrix_get(o, 1, move + 1) )){
+
+      next.m = move + 1;
+      return next;
+
+    }
+
+    else if((! gsl_spmatrix_get(o, 0, move - 1)) &&
+	    (! gsl_spmatrix_get(o, 1, move - 1) )){
+
+      next.m = move - 1;
+      return next;
+
+    }
+
+  }
+
+  else{
+
+    if((! gsl_spmatrix_get(o, 0, move + 1)) &&
+	    (! gsl_spmatrix_get(o, 1, move + 1) )){
+
+      next.m = move + 1;
+      return next;
+
+    }
+
+    else if((! gsl_spmatrix_get(o, 0, move - 1)) &&
+	    (! gsl_spmatrix_get(o, 1, move - 1) )){
+
+      next.m = move - 1;
+      return next;
+
+    }
+
+    else if ((! gsl_spmatrix_get(o, 0, ran[0])) &&
+	(! gsl_spmatrix_get(o, 1, ran[0]) )){
+
+      next.m = ran[0];
+      return next;
+
+    }
+
+  }
+    
+  a = 0;
+  for(size_t i = 0; i< vertices; i++){
+      
+    if((gsl_spmatrix_get(o, 0, i) == 0) &&
+       (gsl_spmatrix_get(o, 1, i) == 0)){
+      
+      ran[a] = i;
+      a++;}
+    
+  }
+  
+    if(a == 0)
+      
+      next.m = -1;
+    
+    else{
+      
+      int r = rand()%a;
+      next.m = ran[r];
+      
+    }
+    
+    next.c = player2.color;
+    
+    return next;
+    
+}
+
+
+
 struct move_t play(struct move_t previous_move){
 
   char c = type__graph_t(player2.graph);
 
   if(c == 'h')
 
-    return play__h(previous_move);
+    return play__c(previous_move);
 
-  return play__c(previous_move);
+  else if (c == 'c')
+
+    return play__c(previous_move);
+
+  return play__t(previous_move);
 
 }
 
