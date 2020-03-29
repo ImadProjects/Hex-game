@@ -4,6 +4,8 @@
 #include <time.h>
 #include <unistd.h>
 #include "player.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 // Global seed for the random number generator
 static int Length = 3;
@@ -65,19 +67,29 @@ struct player{
 struct player * compute_next_player(struct player *p1, struct player *p2, struct move_t *last_move)
 {
   
-  if(last_move->c == 0)
-    
+  if(last_move->c == 0){
     return p2;
-  
+  }
   return p1;
   
 }
 
+void  moves_player(struct graph_t *graph, int *t, int *size, struct player *p)
+{
+    int m = graph->num_vertices;
+    int j=0;
+      for (int i = 0; i < m; i++){
+        if (gsl_spmatrix_get(graph->o, 1-p->color, i)==0 ){
+          t[size[0]] = i;
+          size[0]++;
+        }
 
+        } 
+}
 
 int main(int argc,  char* argv[]){
   
-	  printf("*********paramètres du jeu**********");
+    printf("*********paramètres du jeu**********");
   parse_opts(argc, argv);
   printf("\nLength : %d\n", Length);
   printf("shape : %d\n", Shape);
@@ -105,7 +117,7 @@ int main(int argc,  char* argv[]){
   p2->play = dlsym(player2,"play");
   p2->finalize = dlsym(player2,"finalize");
   p2->initialize_graph(graph);
-	
+
   struct move_t move = p1->propose_opening();
 
   p1->initialize_color(1 - p2->accept_opening(move));
@@ -117,6 +129,10 @@ int main(int argc,  char* argv[]){
   struct player *p;
   int winner = 0;
   int equal = 0;
+  int tab_moves_player1[10] = {22,10,11,18,13,26};
+  int tab_moves_player2[10] = {19,10,11,25,21,14};
+
+
   while (1){
     
    if (show){
@@ -139,6 +155,7 @@ int main(int argc,  char* argv[]){
     
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
+
     //printf("Turn : player %s plays the box %ld\n", p->name, move.m);
 
     if(is_move_possible(graph, p->color, move)){
@@ -178,9 +195,68 @@ int main(int argc,  char* argv[]){
     if (equal)
       printf("Equality between players\n");
 
-  free__graph_t(graph);
-  dlclose(player1);
-  dlclose(player2);
+
+
+     char ch, file_name[25];
+   FILE *fp;
+   FILE *fptr;
+
+
+
+   fp = fopen("test.js","r"); // read mode
+   fptr = fopen("draw.js","w"); // read mode
+
+   if (fp == NULL || fptr == NULL)
+   {
+      perror("Error while opening the file.\n");
+      exit(EXIT_FAILURE);
+   }
+
+   fprintf( fptr, "var p = new Object();\np.color = %d;\np.move = [",p1->color);//[4,1],[3,2],[3,3],[3,4],[3,5],[3,6]];\n");
+
+
+   int*  tableau1 = malloc(sizeof(int)*30);
+   int  size[1];
+   size[0]=0;
+   moves_player(graph,tableau1,size,p1);
+
+
+   int*  tableau2 = malloc(sizeof(int)*30);
+   int  size2[1];
+   size2[0]=0;
+   moves_player(graph,tableau2,size2,p2);
+
+
+   for (int k=0;k<size[0]-1;k++)
+     fprintf(fptr, "%d,",tableau1[k]);
+   fprintf(fptr, "%d];\n",tableau1[size[0]-1]);
+   
+
+
+  fprintf( fptr, "var pl = new Object();\npl.color = %d;\npl.move = [",p2->color);//[4,1],[3,2],[3,3],[3,4],[3,5],[3,6]];\n");
+
+   for (int k=0;k<size2[0]-1;k++)
+     fprintf(fptr, "%d,",tableau2[k]);
+   fprintf(fptr, "%d];\n",tableau2[size2[0]-1]);
+
+   while((ch = fgetc(fp)) != EOF){
+     fputc (ch, fptr);
+   }
+
+
+
+
+
+
+
+   free(tableau2);
+  free(tableau1);
+  fclose(fp);
+ free__graph_t(graph);
+ dlclose(player1);
+ dlclose(player2);
+
+
 
   return 0;
 }
