@@ -1,9 +1,9 @@
 var p = new Object();
 p.color = 0;
-p.move = [0,1,2,5,6,13,14,15];
+p.move = [0,1,2,6,9,13,14,15];
 var pl = new Object();
 pl.color = 1;
-pl.move = [3,4,7,8,9,10,11,12];
+pl.move = [3,4,5,7,8,10,11,12];
 /*var p = new Object();
 p.move = [0,1,2,6,9,13,14,15,15];
 var pl = new Object();

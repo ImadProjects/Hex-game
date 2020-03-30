@@ -242,20 +242,13 @@ int main(int argc,  char* argv[]){
      fputc (ch, fptr);
    }
 
-
-
-
-
-
-
+   fclose(fptr);
    free(tableau2);
-  free(tableau1);
-  fclose(fp);
- free__graph_t(graph);
- dlclose(player1);
- dlclose(player2);
+   free(tableau1);
+   fclose(fp);
+   free__graph_t(graph);
+   dlclose(player1);
+   dlclose(player2);
 
-
-
-  return 0;
+   return 0;
 }
