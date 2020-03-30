@@ -89,10 +89,10 @@ void  moves_player(struct graph_t *graph, int *t, int *size, struct player *p)
 
 int main(int argc,  char* argv[]){
   
-    printf("*********paramètres du jeu**********");
-  parse_opts(argc, argv);
-  printf("\nLength : %d\n", Length);
-  printf("shape : %d\n", Shape);
+    //printf("*********paramètres du jeu**********");
+//  parse_opts(argc, argv);
+  //printf("\nLength : %d\n", Length);
+  //printf("shape : %d\n", Shape);
 //-------------------------------------------
   struct graph_t *graph = new__graph_t(Length, Shape); 
   void * player1 = dlopen("install/player1.so",RTLD_NOW);
@@ -140,8 +140,7 @@ int main(int argc,  char* argv[]){
     print_graph(graph, Shape);
     sleep(1);
     printf("\033[%dA",Length+3);
-
-     //printf("\033[10B"); // Move down X lines;
+     printf("\033[10B"); // Move down X lines;
   }
    
     srand(time(NULL));
@@ -178,7 +177,7 @@ int main(int argc,  char* argv[]){
     
     else{
     
-      printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+    //  printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     
@@ -187,14 +186,14 @@ int main(int argc,  char* argv[]){
 
     
   }
-  
+  /*
   print_graph(graph, Shape);  
   if (winner)
   printf("The winner is %s\n", p->name);
   else
     if (equal)
       printf("Equality between players\n");
-
+*/
 
 
      char ch, file_name[25];
