@@ -123,11 +123,40 @@ void assign_colors_tr(gsl_spmatrix* o, int n){
   }
   for (int i = 0; i < n; i++){
     gsl_spmatrix_set(o, 1, s, 2);
+    gsl_spmatrix_set(o, 1, max - s - 1, 3);
     if (i){
       gsl_spmatrix_set(o, 1, s+1, 2);
+      gsl_spmatrix_set(o, 1, max - s - 1, 3);
+      gsl_spmatrix_set(o, 1, max - s - 2, 3);
     }
     s += last;
-    //gsl_spmatrix_set(o, 0, s - 1, 3);
-      last += 2;
+    last += 2;
   }
+  last -= 2;
+  int s_new = s;
+  //  s += last;
+  for (int i = 0; i < n; i++){
+    if (i < n/2){
+      gsl_spmatrix_set(o, 1, s, 2);
+      gsl_spmatrix_set(o, 1, s_new - 1, 3);
+      if (i < n/2 - 1+ (n%2)){
+	gsl_spmatrix_set(o, 1, s+1, 2);
+	gsl_spmatrix_set(o, 1, s_new - 2, 3);
+      }
+    }
+    if (i >= n/2 - 1 + (n%2)){
+      	gsl_spmatrix_set(o, 0, s + 1, 2);
+	gsl_spmatrix_set(o, 0, s_new - 2, 33);
+
+	if (i >= n/2){
+      gsl_spmatrix_set(o, 0, s, 2);
+      gsl_spmatrix_set(o, 0, s_new - 1, 3);
+      }
+    }
+    
+    s_new -= last;
+    s += last;
+    last -= 2;
+  }
+    
 }

@@ -110,6 +110,7 @@ void print_graph(const struct graph_t* g, char c){//pour graphe hexa ou carr
   if (c == 'h'){
     free(s);
   }
+  printf("\n");
 }
 
 
@@ -171,7 +172,7 @@ void print_tr(struct graph_t* g){
       if (j%2){
 	color_print(g->o, c2);
 	c2 += 2;
-	printf(" ▽ ");
+       	printf(" ▽ ");
 	printf("\033[0m");
       }
     }

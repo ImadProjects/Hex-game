@@ -42,9 +42,6 @@ int test_graph(void){
   //  print_graph(g, 'c');
   //  print_graph(g, 'h');
   free__graph_t(g);
-  /*  struct graph_t* gg = new__graph_t(4, 't');
-  print_tr(gg);
-  free__graph_t(gg);*/
   return c;
 }
 
@@ -113,11 +110,19 @@ int test_pathfinding(void){
   return c;
 }
 
+int test_tr(){
+  struct graph_t* gg = new__graph_t(5, 't');
+  print_tr(gg);
+  free__graph_t(gg);
+  return 0;
+}
+
+
 int main(void){
-  int n = test_graph();
-  recap_test("LE GRAPHE", n, N_GRAPH);
+  recap_test("LE GRAPHE", test_graph(), N_GRAPH);
   recap_test("LA PILE", test_pile(), N_PILE);
   recap_test("LE PATHFINDING", test_pathfinding(), N_PATH);
+  recap_test("LE TRIANGLE", test_tr(), 0);
   return 0;
 }
     
