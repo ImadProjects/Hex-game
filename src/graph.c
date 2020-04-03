@@ -67,11 +67,15 @@ int coloriate__graph_t(struct graph_t* g, int color, struct move_t move){
   return 1;
 }
 
-void print_graph(const struct graph_t* g, char c){//pour graphe hexa ou carr
+void print_graph(const struct graph_t* g, char c){//pour tout graphe
   int m = sqrt(g->num_vertices);
   printf("\n");
   char* s;
   char* ss;
+  if (c == 't'){
+    print_tr(g);
+  }
+  else{
   if (c == 'h'){
     s = malloc(sizeof(char) * (2*m+5));
     ss = s + 2*m + 3;
@@ -111,6 +115,7 @@ void print_graph(const struct graph_t* g, char c){//pour graphe hexa ou carr
     free(s);
   }
   printf("\n");
+  }
 }
 
 
@@ -151,7 +156,7 @@ int is_winning(const struct graph_t* g, int color, struct move_t move, char c){
   return 0;
 }
 
-void print_tr(struct graph_t* g){
+void print_tr(const struct graph_t* g){
   int m = sqrt(g->num_vertices / 6);
   char* s = malloc(sizeof(char) * (2*m+5));
   char* ss = s;
@@ -227,9 +232,7 @@ void print_tr(struct graph_t* g){
     c2 = c;
     nb_elem2--;
   }  
-    
-    
-    
+        
   printf("\n");
   free(ss);
 }
