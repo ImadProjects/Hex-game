@@ -124,6 +124,7 @@ int test_pathfinding(void){
   coloriate__graph_t(t, 1, move);
   print_graph(t, 't');
   c += check(is_winning(t, 0, move, 't'), 0);
+  free__graph_t(t);
   return c;
 }
 
