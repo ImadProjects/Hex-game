@@ -48,7 +48,7 @@ int test_graph(void){
 
 int test_pile(void){
   int c = 0;
-  struct pile* p = pile_vide(10);
+  struct pile* p = pile_vide();
     c += check(p->size, 0);    //
   for (int i = 0; i < 10; i++){
     empiler(p, i);

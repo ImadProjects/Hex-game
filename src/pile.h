@@ -7,9 +7,10 @@
 struct pile{
   int size;
   int* t;
+  int capacity;
 };
 
-struct pile* pile_vide(int n);
+struct pile* pile_vide();
 
 void pile_free(struct pile* p);
 

@@ -120,7 +120,7 @@ void print_graph(const struct graph_t* g, char c){//pour tout graphe
 
 
 int is_winning(const struct graph_t* g, int color, struct move_t move, char c){
-  struct pile* p = pile_vide(g->num_vertices);
+  struct pile* p = pile_vide();
   char* tab = malloc(sizeof(char) * g->num_vertices); // indique si on a dejà visité un sommet
   int cond1 = 0;
   int cond2 = 0;

@@ -1,11 +1,16 @@
 #include "pile.h"
 #include <stdlib.h>
 
-struct pile* pile_vide(int n){
+#define N_INIT 10
+
+void inc(struct pile* p);
+
+struct pile* pile_vide(){
   struct pile* p = malloc(sizeof(struct pile));
-  int* tab = malloc(sizeof(int) * (n + 1));
+  int* tab = malloc(sizeof(int) * (N_INIT));
   p->t = tab;
   p->size = 0;
+  p->capacity = N_INIT;
   return p;
 }
   
@@ -15,6 +20,9 @@ void pile_free(struct pile* p){
 }
 
 void empiler(struct pile* p, int n){
+  if (p->capacity == p->size){
+    inc(p);
+  }
   p->t[p->size] = n;
   p->size++;
 }    
@@ -32,7 +40,10 @@ int est_vide(struct pile* p){
   return p->size == 0;
 }
 
-
+void inc(struct pile* p){
+  p->capacity = p->capacity*2 + 1;
+  p->t = realloc(p->t, sizeof(int) * p->capacity*2);
+}
 
 //////////////////////////////// graph part //////////////////////////
 
@@ -79,3 +90,4 @@ char type__graph_t(struct graph_t *graph){
   return 't';
 
 }
+
