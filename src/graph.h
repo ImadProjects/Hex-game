@@ -15,19 +15,24 @@ struct graph_t {
                         // o[p][i] == 1 means that the vertex i is owned by p
 };
 
-//ne marche pas bien pour les graphes triangulaires
+//creates a new graph_t and returns its adress
 struct graph_t* new__graph_t(int n, char c);
 
+//frees a graph_t
 void free__graph_t(struct graph_t* g);
 
+//prints the adjacancy matrix of a graph_t
 void print__mat(const struct graph_t* g);
 
-//renvoie 0 si la case est libre, 1 sinon
+//coloriates the graph_t according to a move. returns 1 if the location is already colored
 int coloriate__graph_t(struct graph_t* g, int color, struct move_t move);
 
-//pour graphe carré ou hexa
+//prints the board 
 void print_graph(const struct graph_t* g, char c);
-void print_tr(const struct graph_t* g);//plutot utiliser print_graph
 
+//prefer the use of print_graph
+void print_tr(const struct graph_t* g);
+
+//returns 1 if the player wins with his last move
 int is_winning(const struct graph_t* g, int color, struct move_t move, char c);
 #endif // _HEX_GRAPH_H_
