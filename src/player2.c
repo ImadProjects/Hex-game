@@ -374,7 +374,7 @@ struct move_t play(struct move_t previous_move){
 
   if(c == 'h')
 
-    return play__c(previous_move);
+    return play__h(previous_move);
 
   else if (c == 'c')
 
