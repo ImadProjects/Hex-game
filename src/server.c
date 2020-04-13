@@ -8,8 +8,8 @@
 #include <stdio.h>
 
 // Global seed for the random number generator
-static int Length = 3;
-static char Shape = 'c';
+static int Length = 8;
+static char Shape = 'h';
 static int show = 0;
 
 ////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ void  moves_player(struct graph_t *graph, int *t, int *size, struct player *p)
 int main(int argc,  char* argv[]){
   
     //printf("*********paramètres du jeu**********");
-//  parse_opts(argc, argv);
+ parse_opts(argc, argv);
   //printf("\nLength : %d\n", Length);
   //printf("shape : %d\n", Shape);
 //-------------------------------------------
@@ -138,7 +138,7 @@ int main(int argc,  char* argv[]){
    if (show){
      
     print_graph(graph, Shape);
-    sleep(1);
+    //sleep(1);
     printf("\033[%dA",Length+3);
      printf("\033[10B"); // Move down X lines;
   }
@@ -214,13 +214,13 @@ int main(int argc,  char* argv[]){
    fprintf( fptr, "var p = new Object();\np.color = %d;\np.move = [",p1->color);//[4,1],[3,2],[3,3],[3,4],[3,5],[3,6]];\n");
 
 
-   int*  tableau1 = malloc(sizeof(int)*30);
+   int*  tableau1 = malloc(sizeof(int)*64);
    int  size[1];
    size[0]=0;
    moves_player(graph,tableau1,size,p1);
 
 
-   int*  tableau2 = malloc(sizeof(int)*30);
+   int*  tableau2 = malloc(sizeof(int)*64);
    int  size2[1];
    size2[0]=0;
    moves_player(graph,tableau2,size2,p2);
