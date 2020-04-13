@@ -89,10 +89,20 @@ void  moves_player(struct graph_t *graph, int *t, int *size, struct player *p)
 
 int main(int argc,  char* argv[]){
   
-    //printf("*********paramètres du jeu**********");
-//  parse_opts(argc, argv);
-  //printf("\nLength : %d\n", Length);
-  //printf("shape : %d\n", Shape);
+    printf("*********paramètres du jeu**********");
+  parse_opts(argc, argv);
+  printf("\nLength : %d\n", Length);
+  printf("shape : %d\n", Shape);
+
+  printf("   \t ");
+  printf("Commandes:\n ");
+
+  printf("make show: pour afficher\n");
+  printf("make mem_check: pour le leak check = full\n");
+
+
+
+
 //-------------------------------------------
   struct graph_t *graph = new__graph_t(Length, Shape); 
   void * player1 = dlopen("install/player1.so",RTLD_NOW);
@@ -132,13 +142,12 @@ int main(int argc,  char* argv[]){
   int tab_moves_player1[10] = {22,10,11,18,13,26};
   int tab_moves_player2[10] = {19,10,11,25,21,14};
 
-
   while (1){
     
    if (show){
-     
+    printf("Turn : player %s plays the box %ld\n", p->name, move.m);
     print_graph(graph, Shape);
-    sleep(1);
+    //sleep(1);
     printf("\033[%dA",Length+3);
      printf("\033[10B"); // Move down X lines;
   }
@@ -155,7 +164,6 @@ int main(int argc,  char* argv[]){
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
 
-    printf("Turn : player %s plays the box %ld\n", p->name, move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
@@ -163,15 +171,14 @@ int main(int argc,  char* argv[]){
 
   coloriate__graph_t(graph, p->color, move);
   winner=1;
-  printf("The winner is %s\n", p->name);
-        
+
   break;}
 
       else
 
       coloriate__graph_t(graph, p->color, move);
       
-      print_graph(graph, Shape);
+      //print_graph(graph, Shape);
       
     }
     
@@ -187,7 +194,7 @@ int main(int argc,  char* argv[]){
     
   }
   
-  print_graph(graph, Shape);  
+ // print_graph(graph, Shape);  
   if (winner)
   printf("The winner is %s\n", p->name);
   else

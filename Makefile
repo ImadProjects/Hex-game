@@ -52,6 +52,9 @@ mem_check:
 
 install: server players
 
+show:
+	install/server -p 1
+
 clean:	
 	rm -rf *.o server 
 	rm -f install/server
