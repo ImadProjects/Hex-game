@@ -214,13 +214,13 @@ int main(int argc,  char* argv[]){
    fprintf( fptr, "var p = new Object();\np.color = %d;\np.move = [",p1->color);//[4,1],[3,2],[3,3],[3,4],[3,5],[3,6]];\n");
 
 
-   int*  tableau1 = malloc(sizeof(int)*64);
+   int*  tableau1 = malloc(sizeof(int)*121);
    int  size[1];
    size[0]=0;
    moves_player(graph,tableau1,size,p1);
 
 
-   int*  tableau2 = malloc(sizeof(int)*64);
+   int*  tableau2 = malloc(sizeof(int)*121);
    int  size2[1];
    size2[0]=0;
    moves_player(graph,tableau2,size2,p2);
