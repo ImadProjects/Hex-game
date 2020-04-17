@@ -89,8 +89,8 @@ int main(int argc,  char* argv[]){
   void * player2 = dlopen(argv[argc-1],RTLD_NOW);
   
   struct player * p1 =malloc(sizeof(struct player));
+
   p1->get_player_name = dlsym(player1,"get_player_name");
-  
   p1->propose_opening = dlsym(player1,"propose_opening");
   p1->accept_opening = dlsym(player1,"accept_opening");
   p1->initialize_color = dlsym(player1,"initialize_color");
@@ -100,9 +100,8 @@ int main(int argc,  char* argv[]){
   p1->initialize_graph(graph);
 
   struct player * p2 =malloc(sizeof(struct player));
-  p1->get_player_name = dlsym(player2,"get_player_name");
 
-
+  p2->get_player_name = dlsym(player2,"get_player_name");
   p2->propose_opening = dlsym(player2,"propose_opening");
   p2->accept_opening = dlsym(player2,"accept_opening");
   p2->initialize_color = dlsym(player2,"initialize_color");
@@ -155,7 +154,7 @@ int main(int argc,  char* argv[]){
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
 
-    //printf("Turn : player %s plays the box %ld\n", p->name, move.m);
+    printf("Turn : player %s plays the box %ld\n", p->name, move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
@@ -163,7 +162,7 @@ int main(int argc,  char* argv[]){
 
   coloriate__graph_t(graph, p->color, move);
   winner=1;
-  //printf("The winner is %s\n", p->name);
+  printf("The winner is %s\n", p->name);
         
   break;}
 
@@ -171,13 +170,13 @@ int main(int argc,  char* argv[]){
 
       coloriate__graph_t(graph, p->color, move);
       
-      //print_graph(graph, Shape);
+      print_graph(graph, Shape);
       
     }
     
     else{
     
-     // printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+      printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     
@@ -187,13 +186,13 @@ int main(int argc,  char* argv[]){
     
   }
 
- //print_graph(graph, Shape);  
- /* if (winner)
+ print_graph(graph, Shape);  
+  if (winner)
   printf("The winner is");
   else
     if (equal)
       printf("Equality between players\n");
-*/
+
 
 
    free__graph_t(graph);
