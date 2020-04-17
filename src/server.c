@@ -95,8 +95,8 @@ int main(int argc,  char* argv[]){
   //printf("shape : %d\n", Shape);
 //-------------------------------------------
   struct graph_t *graph = new__graph_t(Length, Shape); 
-  void * player1 = dlopen("install/player1.so",RTLD_NOW);
-  void * player2 = dlopen("install/player2.so",RTLD_NOW);
+  void * player1 = dlopen(argv[1],RTLD_NOW);
+  void * player2 = dlopen(argv[2],RTLD_NOW);
   
   struct player * p1 = dlsym(player1,"player1");
   
