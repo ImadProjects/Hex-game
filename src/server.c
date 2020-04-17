@@ -98,7 +98,7 @@ int main(int argc,  char* argv[]){
   void * player1 = dlopen("install/player1.so",RTLD_NOW);
   void * player2 = dlopen("install/player2.so",RTLD_NOW);
   
-  struct player * p1 = dlsym(player1,"player1");
+  struct player * p1 = malloc(sizeof(struct player));
   
   p1->propose_opening = dlsym(player1,"propose_opening");
   p1->accept_opening = dlsym(player1,"accept_opening");
@@ -108,7 +108,7 @@ int main(int argc,  char* argv[]){
   p1->finalize = dlsym(player1,"finalize");
   p1->initialize_graph(graph);
 
-  struct player * p2 = dlsym(player2,"player2");
+  struct player * p2 = malloc(sizeof(struct player));
 
   p2->propose_opening = dlsym(player2,"propose_opening");
   p2->accept_opening = dlsym(player2,"accept_opening");
@@ -249,6 +249,8 @@ int main(int argc,  char* argv[]){
    free__graph_t(graph);
    dlclose(player1);
    dlclose(player2);
+   free(p1);
+   free(p2);
 
    return 0;
 }
