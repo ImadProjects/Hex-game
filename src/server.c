@@ -86,7 +86,7 @@ void  moves_player(struct graph_t *graph, int *t, int *size, struct player *p)
 
         } 
 }
-
+struct player player2 = {.name = "Nesmo"};
 int main(int argc,  char* argv[]){
   
     //printf("*********paramètres du jeu**********");

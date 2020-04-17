@@ -10,18 +10,11 @@ struct player{
   
 };
 
-struct player player2;
+struct player player2 = {.name = "Nesmo"};
 
 
-struct player get_player(){
-  
-  player2.name = "player2";
-  
-  return player2;
-  
-}
 
-char const* get_name(){
+char const* get_player_name(){
   
   return player2.name;
   

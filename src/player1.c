@@ -10,19 +10,10 @@ struct player{
   
 };
 
-struct player player1;
+struct player player1 = {.name = "Random"};
 
 
-
-struct player get_player(){
-  
-  player1.name = "player1";
-  
-  return player1;
-  
-}
-
-char const* get_name(){
+char const* get_player_name(){
   
   return player1.name;
   
