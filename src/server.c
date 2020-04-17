@@ -154,7 +154,7 @@ int main(int argc,  char* argv[]){
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
 
-    printf("Turn : player %s plays the box %ld\n", p->name, move.m);
+    // printf("Turn : player %s plays the box %ld\n", p->name, move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
