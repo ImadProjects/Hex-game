@@ -162,7 +162,7 @@ int main(int argc,  char* argv[]){
 
   coloriate__graph_t(graph, p->color, move);
   winner=1;
-  printf("The winner is %s\n", p->name);
+  //printf("The winner is %s\n", p->name);
         
   break;}
 
@@ -176,7 +176,7 @@ int main(int argc,  char* argv[]){
     
     else{
     
-      printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+      // printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     
