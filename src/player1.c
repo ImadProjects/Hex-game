@@ -102,7 +102,7 @@ struct move_t play(struct move_t previous_move){
 
   else{
 
-    int r = rand()%(a - 1);
+    int r = rand()%a;
     next.m = ran[r];
 
   }
