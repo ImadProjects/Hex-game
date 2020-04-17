@@ -105,8 +105,8 @@ void initialize_color(enum color_t id){
     player1.color = id;
 }
 
-struct move_t play(struct move_t previous_move)
-{
+struct move_t play(struct move_t previous_move){
+  
   struct move_t next;
   int id = player1.color;
   gsl_spmatrix *o = player1.graph->o;
@@ -130,8 +130,8 @@ struct move_t play(struct move_t previous_move)
 
   else{
 
-  int r = rand()%a;
-  next.m = ran[r];
+    int r = rand()%(a - 1);
+    next.m = ran[r];
 
   }
   
