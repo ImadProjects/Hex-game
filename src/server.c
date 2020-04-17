@@ -136,7 +136,7 @@ int main(int argc,  char* argv[]){
     
    if (show){
      
-    print_graph(graph, Shape);
+     //print_graph(graph, Shape);
     //sleep(1);
     printf("\033[%dA",Length+3);
      printf("\033[10B"); // Move down X lines;
@@ -170,7 +170,7 @@ int main(int argc,  char* argv[]){
 
       coloriate__graph_t(graph, p->color, move);
       
-      print_graph(graph, Shape);
+      //print_graph(graph, Shape);
       
     }
     
@@ -186,14 +186,14 @@ int main(int argc,  char* argv[]){
     
   }
 
- print_graph(graph, Shape);  
-  if (winner)
+  //print_graph(graph, Shape);  
+  /*if (winner)
   printf("The winner is");
   else
     if (equal)
       printf("Equality between players\n");
 
-
+  */
 
    free__graph_t(graph);
    dlclose(player1);
