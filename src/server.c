@@ -54,6 +54,7 @@ struct player{
   char const *name;
   struct graph_t *graph;
   enum color_t color;
+  char const* (*get_player_name)();
   struct move_t (*propose_opening)();
   int (*accept_opening)(const struct move_t opening);
   void (*initialize_color)(enum color_t id);
@@ -74,19 +75,7 @@ struct player * compute_next_player(struct player *p1, struct player *p2, struct
   
 }
 
-void  moves_player(struct graph_t *graph, int *t, int *size, struct player *p)
-{
-    int m = graph->num_vertices;
-    int j=0;
-      for (int i = 0; i < m; i++){
-        if (gsl_spmatrix_get(graph->o, 1-p->color, i)==0 ){
-          t[size[0]] = i;
-          size[0]++;
-        }
 
-        } 
-}
-struct player player2 = {.name = "Nesmo"};
 int main(int argc,  char* argv[]){
   
     //printf("*********paramètres du jeu**********");
@@ -95,10 +84,12 @@ int main(int argc,  char* argv[]){
   //printf("shape : %d\n", Shape);
 //-------------------------------------------
   struct graph_t *graph = new__graph_t(Length, Shape); 
-  void * player1 = dlopen(argv[1],RTLD_NOW);
-  void * player2 = dlopen(argv[2],RTLD_NOW);
+  char *v = argv[argc-2];
+  void * player1 = dlopen(argv[argc-2],RTLD_NOW);
+  void * player2 = dlopen(argv[argc-1],RTLD_NOW);
   
-  struct player * p1 = malloc(sizeof(struct player));
+  struct player * p1 =malloc(sizeof(struct player));
+  p1->get_player_name = dlsym(player1,"get_player_name");
   
   p1->propose_opening = dlsym(player1,"propose_opening");
   p1->accept_opening = dlsym(player1,"accept_opening");
@@ -108,7 +99,9 @@ int main(int argc,  char* argv[]){
   p1->finalize = dlsym(player1,"finalize");
   p1->initialize_graph(graph);
 
-  struct player * p2 = malloc(sizeof(struct player));
+  struct player * p2 =malloc(sizeof(struct player));
+  p1->get_player_name = dlsym(player2,"get_player_name");
+
 
   p2->propose_opening = dlsym(player2,"propose_opening");
   p2->accept_opening = dlsym(player2,"accept_opening");
@@ -117,11 +110,18 @@ int main(int argc,  char* argv[]){
   p2->play = dlsym(player2,"play");
   p2->finalize = dlsym(player2,"finalize");
   p2->initialize_graph(graph);
+    p2->get_player_name = dlsym(player2,"get_player_name");
+
 
   struct move_t move = p1->propose_opening();
 
   p1->initialize_color(1 - p2->accept_opening(move));
+  p1->color = 1 - p2->accept_opening(move);
+  p1->name = p1->get_player_name();
   p2->initialize_color(p2->accept_opening(move));
+    p2->color = p2->accept_opening(move);
+  p2->name = p2->get_player_name();
+
 
   int count = width__graph_t(graph) * 4 - 4;
 
@@ -177,7 +177,7 @@ int main(int argc,  char* argv[]){
     
     else{
     
-    //  printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+     // printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     
@@ -186,66 +186,16 @@ int main(int argc,  char* argv[]){
 
     
   }
-  /*
-  print_graph(graph, Shape);  
-  if (winner)
-  printf("The winner is %s\n", p->name);
+
+ //print_graph(graph, Shape);  
+ /* if (winner)
+  printf("The winner is");
   else
     if (equal)
       printf("Equality between players\n");
 */
 
 
-     char ch, file_name[25];
-   FILE *fp;
-   FILE *fptr;
-
-
-
-   fp = fopen("test.js","r"); // read mode
-   fptr = fopen("draw.js","w"); // read mode
-
-   if (fp == NULL || fptr == NULL)
-   {
-      perror("Error while opening the file.\n");
-      exit(EXIT_FAILURE);
-   }
-
-   fprintf( fptr, "var p = new Object();\np.color = %d;\np.move = [",p1->color);//[4,1],[3,2],[3,3],[3,4],[3,5],[3,6]];\n");
-
-
-   int*  tableau1 = malloc(sizeof(int)*121);
-   int  size[1];
-   size[0]=0;
-   moves_player(graph,tableau1,size,p1);
-
-
-   int*  tableau2 = malloc(sizeof(int)*121);
-   int  size2[1];
-   size2[0]=0;
-   moves_player(graph,tableau2,size2,p2);
-
-
-   for (int k=0;k<size[0]-1;k++)
-     fprintf(fptr, "%d,",tableau1[k]);
-   fprintf(fptr, "%d];\n",tableau1[size[0]-1]);
-   
-
-
-  fprintf( fptr, "var pl = new Object();\npl.color = %d;\npl.move = [",p2->color);//[4,1],[3,2],[3,3],[3,4],[3,5],[3,6]];\n");
-
-   for (int k=0;k<size2[0]-1;k++)
-     fprintf(fptr, "%d,",tableau2[k]);
-   fprintf(fptr, "%d];\n",tableau2[size2[0]-1]);
-
-   while((ch = fgetc(fp)) != EOF){
-     fputc (ch, fptr);
-   }
-
-   fclose(fptr);
-   free(tableau2);
-   free(tableau1);
-   fclose(fp);
    free__graph_t(graph);
    dlclose(player1);
    dlclose(player2);
