@@ -166,7 +166,12 @@ struct graph_t *copy_graph(struct graph_t *graph){
 
   struct graph_t *graph_copy = malloc(sizeof(struct graph_t));
   *graph_copy = *graph;
+  graph_copy->t = gsl_spmatrix_alloc(graph->num_vertices, graph->num_vertices);
+  graph_copy->o = gsl_spmatrix_alloc(2, graph->num_vertices);
 
+  gsl_spmatrix_memcpy(graph_copy->t, graph->t);
+  gsl_spmatrix_memcpy(graph_copy->o, graph->o);
+  
   return graph_copy;
 
 }
