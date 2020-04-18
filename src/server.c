@@ -49,10 +49,9 @@ int is_move_possible(struct graph_t* g, int color, struct move_t move){
 }
 
 
-struct player{
+struct player_server{
   
   char const *name;
-  struct graph_t *graph;
   enum color_t color;
   char const* (*get_player_name)();
   struct move_t (*propose_opening)();
@@ -65,7 +64,7 @@ struct player{
 };
 
 
-struct player * compute_next_player(struct player *p1, struct player *p2, struct move_t *last_move)
+struct player_server * compute_next_player(struct player_server *p1, struct player_server *p2, struct move_t *last_move)
 {
   
   if(last_move->c == 0){
@@ -83,12 +82,13 @@ int main(int argc,  char* argv[]){
   //printf("\nLength : %d\n", Length);
   //printf("shape : %d\n", Shape);
 //-------------------------------------------
-  struct graph_t *graph = new__graph_t(Length, Shape); 
+  struct graph_t *graph = new__graph_t(Length, Shape);
+
   char *v = argv[argc-2];
   void * player1 = dlopen(argv[argc-2],RTLD_NOW);
   void * player2 = dlopen(argv[argc-1],RTLD_NOW);
   
-  struct player * p1 =malloc(sizeof(struct player));
+  struct player_server * p1 =malloc(sizeof(struct player_server));
 
   p1->get_player_name = dlsym(player1,"get_player_name");
   p1->propose_opening = dlsym(player1,"propose_opening");
@@ -97,9 +97,9 @@ int main(int argc,  char* argv[]){
   p1->initialize_graph = dlsym(player1,"initialize_graph");
   p1->play = dlsym(player1,"play");
   p1->finalize = dlsym(player1,"finalize");
-  p1->initialize_graph(graph);
+  p1->initialize_graph(copy_graph(graph));
 
-  struct player * p2 =malloc(sizeof(struct player));
+  struct player_server * p2 =malloc(sizeof(struct player_server));
 
   p2->get_player_name = dlsym(player2,"get_player_name");
   p2->propose_opening = dlsym(player2,"propose_opening");
@@ -108,8 +108,8 @@ int main(int argc,  char* argv[]){
   p2->initialize_graph = dlsym(player2,"initialize_graph");
   p2->play = dlsym(player2,"play");
   p2->finalize = dlsym(player2,"finalize");
-  p2->initialize_graph(graph);
-    p2->get_player_name = dlsym(player2,"get_player_name");
+  p2->initialize_graph(copy_graph(graph));
+  p2->get_player_name = dlsym(player2,"get_player_name");
 
 
   struct move_t move = p1->propose_opening();
@@ -118,14 +118,14 @@ int main(int argc,  char* argv[]){
   p1->color = 1 - p2->accept_opening(move);
   p1->name = p1->get_player_name();
   p2->initialize_color(p2->accept_opening(move));
-    p2->color = p2->accept_opening(move);
+  p2->color = p2->accept_opening(move);
   p2->name = p2->get_player_name();
 
 
   int count = width__graph_t(graph) * 4 - 4;
 
   struct move_t last_move = {.c = 1 - p1->color, .m = move.m};
-  struct player *p;
+  struct player_server *p;
   int winner = 0;
   int equal = 0;
   int tab_moves_player1[10] = {22,10,11,18,13,26};
@@ -136,7 +136,7 @@ int main(int argc,  char* argv[]){
     
    if (show){
      
-     //print_graph(graph, Shape);
+     print_graph(graph, Shape);
     //sleep(1);
     printf("\033[%dA",Length+3);
      printf("\033[10B"); // Move down X lines;
@@ -154,7 +154,7 @@ int main(int argc,  char* argv[]){
     p = compute_next_player(p1, p2, &last_move);
     move = p->play(move);
 
-    // printf("Turn : player %s plays the box %ld\n", p->name, move.m);
+    //printf("Turn : player %s plays the box %ld\n", p->name, move.m);
 
     if(is_move_possible(graph, p->color, move)){
       
@@ -170,13 +170,13 @@ int main(int argc,  char* argv[]){
 
       coloriate__graph_t(graph, p->color, move);
       
-      //print_graph(graph, Shape);
+      print_graph(graph, Shape);
       
     }
     
     else{
     
-      // printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+      //printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     

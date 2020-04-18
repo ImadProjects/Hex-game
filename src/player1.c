@@ -22,13 +22,13 @@ char const* get_player_name(){
 
 struct move_t propose_opening(){
   
-    size_t vertices = size__graph_t(player1.graph);
-    size_t width =  width__graph_t(player1.graph);
-    gsl_spmatrix *o = player1.graph->o;
-    size_t mv = rand()%(vertices - 2*width) + width;
-    
-    size_t ran[vertices];
-    int a = 0;
+  size_t vertices = size__graph_t(player1.graph);
+  size_t width =  width__graph_t(player1.graph);
+  gsl_spmatrix *o = player1.graph->o;
+  size_t mv = rand()%(vertices - 2*width) + width;
+  
+  size_t ran[vertices];
+  int a = 0;
   
     for(size_t i = width - 1; i <= vertices - width; i++){
       
@@ -78,7 +78,8 @@ void initialize_color(enum color_t id){
 }
 
 struct move_t play(struct move_t previous_move){
-  
+
+  coloriate__graph_t(player1.graph, 1 - player1.color, previous_move);
   struct move_t next;
   int id = player1.color;
   gsl_spmatrix *o = player1.graph->o;
@@ -108,6 +109,7 @@ struct move_t play(struct move_t previous_move){
   }
   
   next.c = id;
+  coloriate__graph_t(player1.graph, player1.color, next);
   
   return next;
   

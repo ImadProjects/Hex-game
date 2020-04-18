@@ -140,7 +140,8 @@ struct move_t play__c(struct move_t previous_move){
   }
 
   next.c = player2.color;
-
+  coloriate__graph_t(player2.graph, player2.color, next);
+  
   return next;
 
 }
@@ -220,7 +221,8 @@ struct move_t play__h(struct move_t previous_move){
   }
 
   next.c = player2.color;
-
+  coloriate__graph_t(player2.graph, player2.color, next);
+  
   return next;
 
 }
@@ -334,7 +336,7 @@ struct move_t play__t(struct move_t previous_move){
     }
     
     next.c = player2.color;
-    
+    coloriate__graph_t(player2.graph, player2.color, next);
     return next;
     
 }
@@ -343,6 +345,7 @@ struct move_t play__t(struct move_t previous_move){
 
 struct move_t play(struct move_t previous_move){
 
+  coloriate__graph_t(player2.graph, 1 - player2.color, previous_move);
   char c = type__graph_t(player2.graph);
 
   if(c == 'h')

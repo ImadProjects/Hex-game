@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "move.h"
 #include "pile.h"
+#include "graph_aux.h"
 
 /* Access to player informations
  * RETURNS:
