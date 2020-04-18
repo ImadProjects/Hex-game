@@ -170,13 +170,13 @@ int main(int argc,  char* argv[]){
 
       coloriate__graph_t(graph, p->color, move);
       
-      print_graph(graph, Shape);
+      //print_graph(graph, Shape);
       
     }
     
     else{
     
-      //printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+      //  printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     
@@ -187,13 +187,13 @@ int main(int argc,  char* argv[]){
   }
 
   //print_graph(graph, Shape);  
-  /*if (winner)
+  /* if (winner)
   printf("The winner is");
   else
     if (equal)
       printf("Equality between players\n");
-
   */
+  
   
   p1->finalize();
   p2->finalize();
