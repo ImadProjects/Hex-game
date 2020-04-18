@@ -117,6 +117,6 @@ struct move_t play(struct move_t previous_move){
 
 void finalize(){
   
-  free__graph_t(player1.graph);
+  free(player1.graph);
   
 }

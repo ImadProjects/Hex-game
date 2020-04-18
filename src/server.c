@@ -194,7 +194,9 @@ int main(int argc,  char* argv[]){
       printf("Equality between players\n");
 
   */
-
+  
+  p1->finalize();
+  p2->finalize();
    free__graph_t(graph);
    dlclose(player1);
    dlclose(player2);
