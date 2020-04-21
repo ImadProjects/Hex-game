@@ -67,7 +67,7 @@ void initialize_graph(struct graph_t *graph)
 {
 
   //Copy is made by the server for this player
-  player1.graph = copy_graph(graph);
+  player1.graph = graph;
 }
 
 void initialize_color(enum color_t id)
