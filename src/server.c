@@ -67,10 +67,10 @@ struct player_server{
 struct player_server * compute_next_player(struct player_server *p1, struct player_server *p2, struct move_t *last_move)
 {
   
-  if(last_move->c == 0){
-    return p2;
+  if(last_move->c == p2->color){
+    return p1;
   }
-  return p1;
+  return p2;
   
 }
 
@@ -113,18 +113,22 @@ int main(int argc,  char* argv[]){
 
 
   struct move_t move = p1->propose_opening();
-
-  p1->initialize_color(1 - p2->accept_opening(move));
-  p1->color = 1 - p2->accept_opening(move);
+  int accept = p2->accept_opening(move);
+  
+  p1->initialize_color(1 - accept);
+  p1->color = 1 - accept;
   p1->name = p1->get_player_name();
-  p2->initialize_color(p2->accept_opening(move));
-  p2->color = p2->accept_opening(move);
+  
+  p2->initialize_color(accept);
+  p2->color = accept;
   p2->name = p2->get_player_name();
 
+  if(! accept)
+    move = p2->propose_opening();
 
   int count = width__graph_t(graph) * 4 - 4;
 
-  struct move_t last_move = {.c = 1 - p1->color, .m = move.m};
+  
   struct player_server *p;
   int winner = 0;
   int equal = 0;
@@ -151,7 +155,7 @@ int main(int argc,  char* argv[]){
     }
 
     
-    p = compute_next_player(p1, p2, &last_move);
+    p = compute_next_player(p1, p2, &move);
     move = p->play(move);
 
     //printf("Turn : player %s plays the box %ld\n", p->name, move.m);
@@ -170,30 +174,29 @@ int main(int argc,  char* argv[]){
 
       coloriate__graph_t(graph, p->color, move);
       
-      //print_graph(graph, Shape);
+      // print_graph(graph, Shape);
       
     }
     
     else{
     
-      //  printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+      //printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     
-    last_move = move;
     count++;
 
     
   }
 
-  //print_graph(graph, Shape);  
-  /* if (winner)
+  /* print_graph(graph, Shape);  
+  if (winner)
   printf("The winner is");
   else
     if (equal)
       printf("Equality between players\n");
-  */
   
+  */
   
   p1->finalize();
   p2->finalize();
