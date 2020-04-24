@@ -72,12 +72,12 @@ int test_pathfinding(void){
   struct graph_t* g = new__graph_t(3, 'c');
   struct move_t move  = {5};
   coloriate__graph_t(g, 1, move);
-  print_graph(g, 'c');
+  //  print_graph(g, 'c');
   c += check(is_winning(g, 1, move, 'c'), 0);
   
   move.m = 6;
   coloriate__graph_t(g, 1, move);
-  print_graph(g, 'c');
+  //print_graph(g, 'c');
   c += check(is_winning(g, 1, move, 'c'), 1);
   free__graph_t(g);
 
@@ -95,7 +95,7 @@ int test_pathfinding(void){
   coloriate__graph_t(gg, 0, move);
   move.m  = 14;
   coloriate__graph_t(gg, 0, move);
-  print_graph(gg, 'h');
+  //  print_graph(gg, 'h');
 
   c += check(is_winning(gg, 0, move, 'c'), 0);
 
@@ -106,7 +106,7 @@ int test_pathfinding(void){
   move.m = 20;
   coloriate__graph_t(gg, 0, move); 
   c += check(is_winning(gg, 0, move, 'c'), 1);
-  print_graph(gg, 'h');
+  //  print_graph(gg, 'h');
   free__graph_t(gg);
 
   //triangle
@@ -117,12 +117,12 @@ int test_pathfinding(void){
   }
   move.m = 41;
   coloriate__graph_t(t, 0, move);
-  print_graph(t, 't');
+  //  print_graph(t, 't');
   c += check(is_winning(t, 0, move, 't'), 0);
 
   move.m = 58;
   coloriate__graph_t(t, 1, move);
-  print_graph(t, 't');
+  //  print_graph(t, 't');
   c += check(is_winning(t, 0, move, 't'), 0);
   free__graph_t(t);
   return c;
