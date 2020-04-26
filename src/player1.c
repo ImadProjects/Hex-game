@@ -10,6 +10,8 @@ struct player{
   char *name;
   struct graph_t *graph;
   enum color_t color;
+  struct move_t last_move;
+  
 };
 
 struct player player1 = {.name = "Random"};
@@ -21,43 +23,30 @@ char const *get_player_name(){
 
 struct move_t propose_opening(){
 
-  size_t vertices = size__graph_t(player1.graph);
-  size_t width = width__graph_t(player1.graph);
+  struct move_t opening = {.m = 0, .c = 0};
   gsl_spmatrix *o = player1.graph->o;
-  size_t mv = rand() % (vertices - 2 * width) + width;
+  size_t vertices = size__graph_t(player1.graph);
+  
+  for(size_t i = 0; i < vertices; i++){
 
-  size_t ran[vertices];
-  int a = 0;
-
-  for (size_t i = width - 1; i <= vertices - width; i++){
-
-    if ((gsl_spmatrix_get(o, 0, i) == 0) && (gsl_spmatrix_get(o, 1, i) == 0)){
-
-      ran[a] = i;
-      a++;
+    if((gsl_spmatrix_get(o, 0, i) == 0) && (gsl_spmatrix_get(o, 1, i) == 0)){
+      
+      opening.m = i;
+      break;
     }
   }
 
-  struct move_t opening = {.c = 0};
-
-  if (a == 0)
-
-    opening.m = -1;
-
-  else{
-
-    int r = rand() % a;
-    opening.m = ran[r];
-  }
-
+  player1.last_move = opening;
+  
   return opening;
 }
 
 int accept_opening(const struct move_t opening){
 
-  return 1;
-  
+  player1.last_move = opening;
+  return 0;
 }
+
 
 void initialize_graph(struct graph_t *graph){
 
@@ -68,9 +57,7 @@ void initialize_graph(struct graph_t *graph){
 void initialize_color(enum color_t id){
 
   player1.color = id;
-
-  if(id == 0)
-    coloriate__graph_t(player1.graph, player1.color, propose_opening());
+  coloriate__graph_t(player1.graph, 0, player1.last_move);
   
 }
 
