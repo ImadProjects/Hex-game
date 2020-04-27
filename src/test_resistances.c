@@ -62,10 +62,10 @@ int test_gauss(){
   b[0] = 10;
   b[n*n - 1] = 10;
   struct move_t mv = {6, 0};
-    coloriate__graph_t(g, 0, mv);
+  coloriate__graph_t(g, 0, mv);
   mv.m = 10;
-    coloriate__graph_t(g, 0, mv);
-  float** mat = generate_meshes(g, 0);//
+  //  coloriate__graph_t(g, 0, mv);
+  float** mat = generate_meshes(g, 1);//
   gauss(mat, b, x, n*n);
   print_vect(x, n*n);
   print_graph(g, 'c');

@@ -162,7 +162,7 @@ void assign_colors_tr(gsl_spmatrix* o, int n){
 }
 
 
-struct graph_t *copy_graph(struct graph_t *graph){
+struct graph_t *copy_graph(const struct graph_t *graph){
 
   struct graph_t *graph_copy = malloc(sizeof(struct graph_t));
   *graph_copy = *graph;

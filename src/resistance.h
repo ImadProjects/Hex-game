@@ -14,4 +14,6 @@ void free_sys(float** mat, int n);
 
 void gauss(float** mat, float* b, float* x, int n);
 
+float get_ratio(const struct graph_t* g, struct move mec);
+
 #endif

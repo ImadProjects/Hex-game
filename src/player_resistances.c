@@ -1,7 +1,7 @@
 #include "player.h"
+#include "resistance.h"
 
 struct player{
-  
   char* name;
   struct graph_t *graph;
   enum color_t color;
@@ -10,8 +10,7 @@ struct player{
   void (*player_initialize_color)(enum color_t id);
   void (*player_initialize_graph)(struct graph_t* graph);
   struct move_t (*player_play)(struct move_t previous_move);
-  void (*finalize)();
-  
+  void (*finalize)(); 
 };
 
 void initialize_player_functions(struct player* player){
@@ -60,5 +59,39 @@ struct move_t propose_opening(){//temporaire
   opening.c = jeremy.color;
   move.m = size__graph_t(jeremy.graph) / 2;
   return opening;
+}
+
+struct move_t play(struct move_t previous_move){
+  struct move_t mec;
+  mec.c = jeremy.color;
+  int best = -1;
+  float sign = 1. - 2. * (mec.c != 1);
+  float best_ratio = (float) sign * 2000000000.;
+  for (int i = 0; i < (jeremy.graph_t)->num_vertices; i++){
+    mec.m = i;
+    if (is_move_possible(jeremy.graph_t, mec)){
+      float ratio = get_ratio(jeremy.graph_t, jeremy.color, mec);
+      if (!mec.c){
+	if (ratio < best_ratio){
+	  best = i;
+	  best_ratio = ratio;
+	}
+      }
+      else
+	{
+	  if (ratio > best_ratio){
+	    best = i;
+	    best_ratio = ratio;
+	  }	  
+	}
+    }
+  }
+  if (best < 0){
+    printf("=== error, jeremy can't find a proper place to play ===\n");
+    mec.m = best;
+    return mec.m;
+  }
+  mec.m = best;
+  return m;
 }
 
