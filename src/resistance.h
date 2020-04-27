@@ -5,15 +5,16 @@
 #include "move.h"
 #include "pile.h"
 #include "graph.h"
+#include "graph_aux.h"
 
-float get_resistance(struct graph_t* g, int color, int n);
+float get_resistance(const struct graph_t* g, int color, int n);
 
-float** generate_meshes(struct graph_t* g, int color);
+float** generate_meshes(const struct graph_t* g, int color);
 
 void free_sys(float** mat, int n);
 
 void gauss(float** mat, float* b, float* x, int n);
 
-float get_ratio(const struct graph_t* g, struct move mec);
+float get_ratio(const struct graph_t* g, struct move_t mec);
 
 #endif

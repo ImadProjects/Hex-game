@@ -1,6 +1,6 @@
 #include "resistance.h"
 
-float get_resistance(struct graph_t* g, int color, int n){
+float get_resistance(const struct graph_t* g, int color, int n){
   if (gsl_spmatrix_get(g->o, color == 0, n) > 0){
     return 5.;
   }
@@ -10,7 +10,7 @@ float get_resistance(struct graph_t* g, int color, int n){
   return 1.;
 }
 
-float** generate_meshes(struct graph_t* g, int color){
+float** generate_meshes(const struct graph_t* g, int color){
   int n = (sqrt(g->num_vertices) - 1);
   int mesh_nb = n*n;
   float** mat_sys = malloc(sizeof(float*) * mesh_nb);
@@ -146,7 +146,7 @@ void gauss(float** mat, float* b, float* x, int n){
   }
 }
       
-float get_ratio(const struct graph_t* g, struct move mec){
+float get_ratio(const struct graph_t* g, struct move_t mec){
   struct graph_t* g_copy = copy_graph(g);
   int n = sqrt(g_copy->num_vertices) - 1; 
   float* b = malloc(sizeof(float) * n * n);
@@ -155,11 +155,11 @@ float get_ratio(const struct graph_t* g, struct move mec){
     x[i] = 0.;
     b[i] = 0.;
   }
-  coloriate__graph_t(g_copy, move.c, move);
+  coloriate__graph_t(g_copy, mec.c, mec);
   float** mat_b = generate_meshes(g_copy, 0);//
   float** mat_w = generate_meshes(g_copy, 1);//
   float res_b = 1;// calcul? gauss(mat_b, b, x, n*n);
-  for (int i = 0; i < n*n = 0; x[i++] = 0);
+  for (int i = 0; i < n*n ; x[i++] = 0);
   float res_w = 1;// calcul? gauss(mat_w, b, x, n*n);
 
   free(g_copy);
