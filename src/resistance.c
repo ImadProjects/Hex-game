@@ -1,15 +1,16 @@
 #include "resistance.h"
 
-float get_resistance(const struct graph_t* g, int color, int n){
-  if (gsl_spmatrix_get(g->o, color == 0, n) > 0){
-    return 5.;
+float get_resistance(const struct graph_t* g, int color, int i, int j){
+  float res = 0.;
+  if (gsl_spmatrix_get(g->o, color == 0, i) > 0 || gsl_spmatrix_get(g->o, color == 0, j) > 0){
+    res += 1000.;
   }
-  if (gsl_spmatrix_get(g->o, color, n) > 0){
-    return 0.;
+  if (gsl_spmatrix_get(g->o, color == 0, i) <= 0.01 || gsl_spmatrix(g->o, colorn j) <= 0.01){
+    res += 1.;
   }
-  return 1.;
+  return res;
 }
-
+ 
 float** generate_meshes(const struct graph_t* g, int color){
   int n = (sqrt(g->num_vertices) - 1);
   int mesh_nb = n*n;
