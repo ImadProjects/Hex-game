@@ -1,11 +1,11 @@
 #include "resistance.h"
 
 float get_resistance(const struct graph_t* g, int color, int i, int j){
-  float res = 0.;
+  float res = 0.001;
   if (gsl_spmatrix_get(g->o, color == 0, i) > 0 || gsl_spmatrix_get(g->o, color == 0, j) > 0){
     res += 1000.;
   }
-  if (gsl_spmatrix_get(g->o, color == 0, i) <= 0.01 || gsl_spmatrix(g->o, colorn j) <= 0.01){
+  if (gsl_spmatrix_get(g->o, color == 0, i) <= 0.01 || gsl_spmatrix_get(g->o, color, j) <= 0.01){
     res += 1.;
   }
   return res;
@@ -37,7 +37,7 @@ float** generate_meshes(const struct graph_t* g, int color){
       mat_sys[position][position] += get_resistance(g, color, position + c + n + 1, position + c + n + 2);
       
       if (position >= n){ //pas première ligne
-	mat_sys[position][position - n] -= get_resistance(g, color, position + c, position + C + 1);
+	mat_sys[position][position - n] -= get_resistance(g, color, position + c, position + c + 1);
       }
 
       if (position < mesh_nb - n){ //pas dernière ligne
@@ -58,24 +58,22 @@ float** generate_meshes(const struct graph_t* g, int color){
       mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
       mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, (i+1)*(n+1) - 1, (i+2)*(n+1)-1);
       mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);
-      mat_sys[mesh_nb][(I+1)*n-1] -= get_resistance(g, color, (i+1)*(n+1)-1, (i+2)*(n+1)-1);
+      mat_sys[mesh_nb][(i+1)*n-1] -= get_resistance(g, color, (i+1)*(n+1)-1, (i+2)*(n+1)-1);
     }
-    else{
-	for(int i = 0; i < n; i++)
-	  {
-	    mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
-	    mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i*(n+1), (i+1)*(n+1));
-	    mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);
-	    mat_sys[mesh_nb][i*n] -= get_resistance(g, color, i*(n+1), (i+1)*(n+1));
-	  }
-      }
-      
-      
   }
-  /*
-  mat_sys[mesh_nb][1] = -get_resistance(g, color, 0);
-  mat_sys[mesh_nb][mesh_nb - 1] = -get_resistance(g, color, 0);
-  mat_sys[mesh_nb][mesh_nb] = 2 * get_resistance(g, color, 0);*/
+  else{
+    for(int i = 0; i < n; i++)
+      {
+	mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
+	mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i*(n+1), (i+1)*(n+1));
+	mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);
+	mat_sys[mesh_nb][i*n] -= get_resistance(g, color, i*(n+1), (i+1)*(n+1));
+      }
+  }
+  
+      
+
+
   return mat_sys;
 }
 
@@ -105,7 +103,6 @@ void gauss(float** mat, float* b, float* x, int n){
     min = mat[i][i];
     imin = i;
     for (int j = i+1; j < n; j++){
-      printf("m = %f, ", min);
       if (abs(min) > 0.001 ){
 	if ((abs(mat[j][i]) < abs(min)) && (abs(mat[j][i]) > 0.001)){
 	  min = mat[j][i];

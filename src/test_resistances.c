@@ -83,13 +83,10 @@ int test(){
   b[n*n] = 10;
 
   struct move_t mv = {6, 0};
-  //  coloriate__graph_t(g, 0, mv);
+  coloriate__graph_t(g, 1, mv);
   mv.m = 10;
-  //  coloriate__graph_t(g, 0, mv);
+  coloriate__graph_t(g, 0, mv);
   float** mat = generate_meshes(g, 1);//
-  print_m(mat, n*n+1);
-  printf("\n");
-  print_vect(b, n*n + 1);
   gauss(mat, b, x, n*n + 1);
   print_vect(x, n*n + 1);
 

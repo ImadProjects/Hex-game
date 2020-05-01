@@ -7,7 +7,7 @@
 #include "graph.h"
 #include "graph_aux.h"
 
-float get_resistance(const struct graph_t* g, int color, int n);
+float get_resistance(const struct graph_t* g, int color, int i, int j);
 
 float** generate_meshes(const struct graph_t* g, int color);
 
