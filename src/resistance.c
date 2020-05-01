@@ -28,57 +28,54 @@ float** generate_meshes(const struct graph_t* g, int color){
   for (int i = 0; i < n; i++){
     for (int j = 0; j < n; j++){
       position = n * i + j;
-      mat_sys[position][position] = get_resistance(g, color, position + c);
+      mat_sys[position][position] = get_resistance(g, color, position + c, position + c + 1);
 
-      mat_sys[position][position] += get_resistance(g, color, position + 1 + c);
+      mat_sys[position][position] += get_resistance(g, color, position + c, position + c + 1 + n);
 
-      mat_sys[position][position] += get_resistance(g, color, position + n + 1 + c);
+      mat_sys[position][position] += get_resistance(g, color, position + 1 + c, position + n + 2 + c);
 	     
-      mat_sys[position][position] += get_resistance(g, color, position + n + 2 + c);
-
-      //mat_sys[position][position] = mat_sys[position][position] * 2;
+      mat_sys[position][position] += get_resistance(g, color, position + c + n + 1, position + c + n + 2);
       
       if (position >= n){ //pas première ligne
-	mat_sys[position][position - n] -= get_resistance(g, color, position + c);
-	mat_sys[position][position - n] -= get_resistance(g, color, position + 1 + c);
+	mat_sys[position][position - n] -= get_resistance(g, color, position + c, position + C + 1);
       }
 
       if (position < mesh_nb - n){ //pas dernière ligne
-	mat_sys[position][position + n] -= get_resistance(g, color, position + c + n + 1);
-	mat_sys[position][position + n] -= get_resistance(g, color, position + c + n + 2);
+	mat_sys[position][position + n] -= get_resistance(g, color, position + c + n + 1, position + c + n + 2);
       }
-
       if (position % n){ //pas première col
-	mat_sys[position][position - 1] -= get_resistance(g, color, position + c);
-	mat_sys[position][position - 1] -= get_resistance(g, color, position + c + n + 1);
+	mat_sys[position][position - 1] -= get_resistance(g, color, position + c, position + c + n + 1);
       }
 
       if ((position + 1)%n){ //pas dernière col
-	mat_sys[position][position + 1] -= get_resistance(g, color, position + c + 1);
-	mat_sys[position][position + 1] -= get_resistance(g, color, position + c + n + 2);
-      }
-
-      if ((position >= n) && (position % n)){ //pas première ligne/col
-	mat_sys[position][position - n - 1] -= get_resistance(g, color, position + c);
-      }
-
-      if ((position >= n) && ((position + 1)%n)){ //pas première ligne/dernière col
-	mat_sys[position][position - n + 1] -= get_resistance(g, color, position + 1 + c);
-      }
-
-      if ((position < mesh_nb - n) && (position % n)){ //pas premmière col/première ligne
-	mat_sys[position][position + n - 1] -= get_resistance(g, color, position + c + n + 1);
-      }
-
-      if ((position < mesh_nb - n) && ((position + 1) % n)){
-	mat_sys[position][position + n + 1] -= get_resistance(g, color, position + c + n + 2);
-      }
+	mat_sys[position][position + 1] -= get_resistance(g, color, position + c + 1, position + c + n + 2);
+      } 
     }
     c++;
   }
+  if(color){
+    for(int i = 0; i < n; i++){
+      mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
+      mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, (i+1)*(n+1) - 1, (i+2)*(n+1)-1);
+      mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);
+      mat_sys[mesh_nb][(I+1)*n-1] -= get_resistance(g, color, (i+1)*(n+1)-1, (i+2)*(n+1)-1);
+    }
+    else{
+	for(int i = 0; i < n; i++)
+	  {
+	    mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
+	    mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i*(n+1), (i+1)*(n+1));
+	    mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);
+	    mat_sys[mesh_nb][i*n] -= get_resistance(g, color, i*(n+1), (i+1)*(n+1));
+	  }
+      }
+      
+      
+  }
+  /*
   mat_sys[mesh_nb][1] = -get_resistance(g, color, 0);
   mat_sys[mesh_nb][mesh_nb - 1] = -get_resistance(g, color, 0);
-  mat_sys[mesh_nb][mesh_nb] = 2 * get_resistance(g, color, 0);
+  mat_sys[mesh_nb][mesh_nb] = 2 * get_resistance(g, color, 0);*/
   return mat_sys;
 }
 
@@ -120,7 +117,7 @@ void gauss(float** mat, float* b, float* x, int n){
 	imin = i;
       }
     }
-    printf("\ni ok: %d\n", i);
+    //printf("\ni ok: %d\n", i);
     if (abs(min) < 0.01){
       printf("\n\n====== problème ======\n\n");
       //      exit;
