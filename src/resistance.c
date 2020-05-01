@@ -13,12 +13,12 @@ float get_resistance(const struct graph_t* g, int color, int n){
 float** generate_meshes(const struct graph_t* g, int color){
   int n = (sqrt(g->num_vertices) - 1);
   int mesh_nb = n*n;
-  float** mat_sys = malloc(sizeof(float*) * mesh_nb);
-  for (int i = 0; i < mesh_nb; i++){
-    mat_sys[i] = malloc(sizeof(float) * mesh_nb);
+  float** mat_sys = malloc(sizeof(float*) * (mesh_nb + 1));
+  for (int i = 0; i < mesh_nb + 1; i++){
+    mat_sys[i] = malloc(sizeof(float) * (mesh_nb + 1));
   }
-  for (int i = 0; i < mesh_nb; i++){
-    for (int j = 0; j < mesh_nb; j++){
+  for (int i = 0; i < mesh_nb + 1; i++){
+    for (int j = 0; j < mesh_nb + 1; j++){
       mat_sys[i][j] = 0.;
     }
   }
@@ -75,7 +75,9 @@ float** generate_meshes(const struct graph_t* g, int color){
     }
     c++;
   }
-  
+  mat_sys[mesh_nb][1] = -get_resistance(g, color, 0);
+  mat_sys[mesh_nb][mesh_nb - 1] = -get_resistance(g, color, 0);
+  mat_sys[mesh_nb][mesh_nb] = 2 * get_resistance(g, color, 0);
   return mat_sys;
 }
 
@@ -91,14 +93,23 @@ void gauss(float** mat, float* b, float* x, int n){
   int i, j, k ;
   int imin ;
   float p ;
-  float sum, min, tump1, tump2 ;
-     
+  float sum, min, s, ss ;
+  /*
+  for (int i = 0; i < n; i++){
+    printf("(");
+    for (int j = 0; j < n; j++){
+      printf("%f ",  mat[i][j]);
+    }
+    printf(")\n");
+  }
+  */
   for (int i = 0; i < n-1; i++){
     min = mat[i][i];
     imin = i;
     for (int j = i+1; j < n; j++){
+      printf("m = %f, ", min);
       if (abs(min) > 0.001 ){
-	if ((abs(mat[i][j]) < abs(min)) && (abs(mat[j][i]) > 0.001)){
+	if ((abs(mat[j][i]) < abs(min)) && (abs(mat[j][i]) > 0.001)){
 	  min = mat[j][i];
 	  imin = j;
 	}
@@ -108,35 +119,36 @@ void gauss(float** mat, float* b, float* x, int n){
 	imin = i;
       }
     }
+    printf("\ni ok: %d\n", i);
     if (abs(min) < 0.01){
       printf("\n\n====== problème ======\n\n");
-      exit;
+      //      exit;
     }
     for (int j = 0; j < n; j++){
-      tump1 = mat[imin][j];
+      s = mat[imin][j];
       mat[imin][j] = mat[i][j];
-      mat[i][j] = tump1;
+      mat[i][j] = s;
     }
-    tump2 = b[imin];
+    ss = b[imin];
     b[imin] = b[i];
-    b[i] = tump2;
+    b[i] = ss;
 
     for (j = i+1; j < n; j++){
       p = mat[j][i] / mat[i][i];
-      printf("division par: %f\n", mat[i][i]);
+      //      printf("division par: %f\n", mat[i][i]);
       for (int k = 0; k < n; k++){
-	mat[j][k] -= p * mat[i][i];
+	mat[j][k] -= p * mat[i][k];
       }
       b[j] -= p * b[i];
     }
     //    printf("x: %f\n", x[0]);
   }
-  printf("x_sortie: %f\n", x[0]);
+  //  printf("x_sortie: %f\n", x[0]);
   if (!mat[n-1][n-1]){
-    printf("\n\n====== problème_fin ======\n\n");
+    printf("\n\n====== dernier élément nul ======\n\n");
   }
-  printf("division_fin par: %f\n", mat[n-1][n-1]);
-  x[n-1] = b[n-1] / mat[n-1][n-1];
+  //  printf("division_fin par: %f\n", mat[n-1][n-1]);
+  x[n-1] = b[n-1] / (mat[n-1][n-1] + mat[n-1][n-1]);
   for (int i = n-2; i+1; i--){
     sum = 0;
     for (int j = n-1; j > i; j--){

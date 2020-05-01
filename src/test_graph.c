@@ -7,7 +7,7 @@
 #define N_PILE 7
 #define N_PATH 6
 #define N_TR 15
-
+/*
 void recap_test(char* s, int n, int expected){
   if (n == expected){
     printf("\033[0;32m");
@@ -19,7 +19,7 @@ void recap_test(char* s, int n, int expected){
     printf("========TESTS SUR %s: %d/%d REUSSIS=======\n",s, n , expected);
     printf("\033[0m");
   }
-}
+  }*/
 
 int check(int n,int att){
   return n == att;
@@ -151,12 +151,12 @@ int test_tr(){
   return c;
 }
 
-
+/*
 int main(void){
   recap_test("LE GRAPHE", test_graph(), N_GRAPH);
   recap_test("LA PILE", test_pile(), N_PILE);
   recap_test("LE PATHFINDING", test_pathfinding(), N_PATH);
   recap_test("LE TRIANGLE", test_tr(), N_TR);
   return 0;
-}
+  }*/
     
