@@ -57,44 +57,49 @@ int test_gauss(){
   gauss(mat, b, x, m);
   c += (x[1] > 0.99 && x[1] < 1.01);
   c += (x[0] > 1.99 && x[0] < 2.01);
-    
-    print_vect(x, m);
   
   free(b);
   free(x);
   free_sys(mat, 2);
-
   return c;
 }
  
-int test(){
-  int n = 3;
-
+int test_res(){
+  int n = 2;
+  int c = 0;
   struct graph_t* g = new__graph_t(n, 'c');
-
   float* b = malloc(sizeof(float) * (n * n + 1));
   float* x = malloc(sizeof(float) * (n * n + 1));
-
+  //
   for (int i = 0; i < n*n + 1; i++){
     x[i] = 0.;
     b[i] = 0.;
   }
-
   b[n*n] = 10;
 
-  struct move_t mv = {6, 0};
-  coloriate__graph_t(g, 1, mv);
-  mv.m = 10;
+  struct move_t mv = {4, 0};
   coloriate__graph_t(g, 0, mv);
-  float** mat = generate_meshes(g, 1);//
+  float** mat = generate_meshes(g, 1);
   gauss(mat, b, x, n*n + 1);
-  print_vect(x, n*n + 1);
+  c += (x[n*n] < 0.1 && x[n*n] >= 0);
+  free_sys(mat, n*n + 1);
+  //
+  for (int i = 0; i < n*n + 1; i++){
+    x[i] = 0.;
+    b[i] = 0.;
+  }
+  b[n*n] = 10;
 
-  print_graph(g, 'c');
+  float** matt = generate_meshes(g, 0);
+  gauss(matt, b, x, n*n + 1);
+  c += x[n*n] > 1000;
+  free_sys(matt, n*n + 1);
+  
+  //
   free(b);
   free(x);
-  free_sys(mat, n*n + 1);
   free__graph_t(g);
+  return c;
 }
 /*
 int main(){

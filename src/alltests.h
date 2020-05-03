@@ -6,4 +6,4 @@ int test_pathfinding();
 int test_tr();
 int test_sys();
 int test_gauss();
-int test();
+int test_res();
