@@ -3,7 +3,11 @@ COMP=cc
 GSL_PATH?=/usr/local/gsl
 
 
-build: server test players
+build: precommit server test players
+
+precommit: 
+	chmod +x ./src/scripts/install-hooks.bash
+	./src/scripts/install-hooks.bash
 
 server: server.o graph.o pile.o graph_aux.o
 	$(COMP) -std=c99 -I ${GSL_PATH}/include -rdynamic --coverage -g -O0 -L ${GSL_PATH}/lib -o install/server graph.o pile.o graph_aux.o server.o -lgsl -lgslcblas -lm -ldl
