@@ -14,15 +14,15 @@ server: server.o graph.o pile.o graph_aux.o
 
 
 
-test: test_graph.o graph.o pile.o graph_aux.o
-	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o test_graph.o pile.o graph_aux.o -lgsl -lgslcblas -lm -ldl
-	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/test_graph.c pile.o graph_aux.o -lgsl -lgslcblas -lm -ldl
+test: test_graph.o graph.o pile.o graph_aux.o resistance.o alltests.o test_resistances.o
+	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o test_graph.o pile.o graph_aux.o resistance.o alltests.o test_resistances.o -lgsl -lgslcblas -lm -ldl
+	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/test_graph.c src/pile.c src/graph_aux.c src/resistance.c src/alltests.c src/test_resistances.c -lgsl -lgslcblas -lm -ldl
 
 
 
-alltests: server.o graph.o pile.o graph_aux.o
-	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o server.o pile.o graph_aux.o -lgsl -lgslcblas -lm -ldl
-	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/server.c pile.o graph_aux.o -lgsl -lgslcblas -lm -ldl
+alltests: alltests.o graph.o pile.o graph_aux.o resistance.o test_graph.o test_resistances.o
+	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o alltests.o pile.o graph_aux.o test_graph.o test_resistances.o resistance.o -lgsl -lgslcblas -lm -ldl
+	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/alltests.c pile.o graph_aux.o test_graph.o test_resistances.o  resistance.o -lgsl -lgslcblas -lm -ldl
 
 server.o: src/server.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o server.o src/server.c
@@ -39,6 +39,16 @@ pile.o: src/pile.c
 
 test_graph.o: src/test_graph.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o test_graph.o src/test_graph.c
+
+
+test_resistances.o: src/test_resistances.c
+	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o test_resistances.o src/test_resistances.c
+
+alltests.o:
+	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o alltests.o src/alltests.c
+
+resistance.o:
+	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o resistance.o src/resistance.c
 
 players: player1.so player2.so
 
