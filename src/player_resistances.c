@@ -65,21 +65,21 @@ struct move_t play(struct move_t previous_move){
   struct move_t mec;
   mec.c = jeremy.color;
   int best = -1;
-  float sign = 1. - 2. * (mec.c != 1);
-  float best_ratio = (float) sign * 2000000000.;
+  double sign = 1. - 2. * (mec.c == 1);
+  double best_ratio = (double) sign * 2000000000.;
   for (int i = 0; i < (jeremy.graph_t)->num_vertices; i++){
     mec.m = i;
-    if (is_move_possible(jeremy.graph_t, mec)){
-      float ratio = get_ratio(jeremy.graph_t, jeremy.color, mec);
+    if (is_move_possible(jeremy.graph_t, mec.c, mec)){
+      double ratio = get_ratio(jeremy.graph_t, mec);
       if (!mec.c){
-	if (ratio < best_ratio){
+	if ((ratio < best_ratio) && (ratio >= 0)){
 	  best = i;
 	  best_ratio = ratio;
 	}
       }
       else
 	{
-	  if (ratio > best_ratio){
+	  if ((ratio > best_ratio) && (ratio >= 0)){
 	    best = i;
 	    best_ratio = ratio;
 	  }	  
@@ -94,4 +94,5 @@ struct move_t play(struct move_t previous_move){
   mec.m = best;
   return m;
 }
+
 

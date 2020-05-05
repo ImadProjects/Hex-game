@@ -20,7 +20,7 @@ void color_print(const gsl_spmatrix* o, int n){
 }
 
 
-void assign_links(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un graphe no triangulaire
+void assign_links(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un graphe non triangulaire
   for (int i = 0; i < n; i++){
     for (int j = 0; j < n; j++){
       int N = i*n + j;
@@ -55,7 +55,6 @@ void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un
   int checkp = !(n==1) * 1;
   int inc = 2;
   for (i = 0; i < 6*n*n; i++){
-    //    printf("%d, %d, %d, %d\n", ligne, nb_elem, i, inc);
     if (nb_elem != nb_elem2){
       gsl_spmatrix_set(t, i, i-1, 1);
     }
@@ -67,16 +66,12 @@ void assign_tr(gsl_spmatrix* t, char c, int n){//initialise la matrice t pour un
     if ((((nb_elem % 2) && (i < 3*n*n)) ||
 	 ((!(nb_elem % 2)) && ( i >= 3*n*n)))
 	&& (ligne < 2*n - 1)){
-	
-      //      printf("1\n");
       gsl_spmatrix_set(t, i, i + nb_elem2 - (i >= 3*n*n), 1);
     }
 
     if ((((!(nb_elem % 2)) && (i < 3*n*n)) ||
 	((nb_elem % 2) && (i >= 3*n*n)))
 	&& (ligne > 0)){
-  
-      //      printf("2\n");
       gsl_spmatrix_set(t, i, i - nb_elem2 + (i < 3*n*n), 1);
     }
     
@@ -134,7 +129,6 @@ void assign_colors_tr(gsl_spmatrix* o, int n){
   }
   last -= 2;
   int s_new = s;
-  //  s += last;
   for (int i = 0; i < n; i++){
     if (i < n/2){
       gsl_spmatrix_set(o, 1, s, 2);

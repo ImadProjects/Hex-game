@@ -15,8 +15,8 @@ server: server.o graph.o pile.o graph_aux.o
 
 
 test: test_graph.o graph.o pile.o graph_aux.o resistance.o alltests.o test_resistances.o
-	$(COMP) -std=c99  -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o test_graph.o pile.o graph_aux.o resistance.o alltests.o test_resistances.o -lgsl -lgslcblas -lm -ldl
-	$(COMP)  -std=c99 -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/test_graph.c src/pile.c src/graph_aux.c src/resistance.c src/alltests.c src/test_resistances.c -lgsl -lgslcblas -lm -ldl
+	$(COMP) -std=c99 -g -I ${GSL_PATH}/include -L ${GSL_PATH}/lib   -o install/alltests graph.o test_graph.o pile.o graph_aux.o resistance.o alltests.o test_resistances.o -lgsl -lgslcblas -lm -ldl
+	$(COMP)  -std=c99 -g -I ${GSL_PATH}/include  -L ${GSL_PATH}/lib  --coverage  src/graph.c src/test_graph.c src/pile.c src/graph_aux.c src/resistance.c src/alltests.c src/test_resistances.c -lgsl -lgslcblas -lm -ldl
 
 
 
@@ -38,14 +38,14 @@ pile.o: src/pile.c
 
 
 test_graph.o: src/test_graph.c
-	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o test_graph.o src/test_graph.c
+	$(COMP) $(CFLAGS) -g -I ${GSL_PATH}/include   -o test_graph.o src/test_graph.c
 
 
 test_resistances.o: src/test_resistances.c
-	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o test_resistances.o src/test_resistances.c
+	$(COMP) $(CFLAGS) -g -I ${GSL_PATH}/include   -o test_resistances.o src/test_resistances.c
 
 alltests.o:
-	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o alltests.o src/alltests.c
+	$(COMP) $(CFLAGS) -g -I ${GSL_PATH}/include   -o alltests.o src/alltests.c
 
 resistance.o:
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o resistance.o src/resistance.c

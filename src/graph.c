@@ -13,7 +13,7 @@ struct graph_t* new__graph_t(int n, char c){
     n++;
   }
   struct graph_t* g = malloc(sizeof(struct graph_t));
-  g->num_vertices = n*n * (1 + 5 * (c == 't'));//n² sauf si triangulaire auquel cas on a 6n²
+  g->num_vertices = n*n * (1 + 5 * (c == 't'));
   g->t = gsl_spmatrix_alloc(g->num_vertices, g->num_vertices);
   g->o = gsl_spmatrix_alloc(2, g->num_vertices);
   if (c != 't'){
@@ -22,14 +22,12 @@ struct graph_t* new__graph_t(int n, char c){
   else{
     assign_tr(g->t, c, n);
   }
-  //    printf("sortie1\n");
   if (c != 't'){
     assign_colors(g->o, n);
   }
   else{
     assign_colors_tr(g->o, n);
   }
-  //  printf("sortie2\n");
   return g;
 }
 
@@ -67,7 +65,7 @@ int coloriate__graph_t(struct graph_t* g, int color, struct move_t move){
   return 1;
 }
 
-void print_graph(const struct graph_t* g, char c){//pour tout graphe
+void print_graph(const struct graph_t* g, char c){
   int m = sqrt(g->num_vertices);
   printf("\n");
   char* s;
@@ -121,7 +119,7 @@ void print_graph(const struct graph_t* g, char c){//pour tout graphe
 
 int is_winning(const struct graph_t* g, int color, struct move_t move, char c){
   struct pile* p = pile_vide();
-  char* tab = malloc(sizeof(char) * g->num_vertices); // indique si on a dejà visité un sommet
+  char* tab = malloc(sizeof(char) * g->num_vertices); 
   int cond1 = 0;
   int cond2 = 0;
   int s = (int) move.m;

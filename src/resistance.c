@@ -1,10 +1,32 @@
 #include "resistance.h"
 
-float get_resistance(const struct graph_t* g, int color, int i, int j){
-  float res = 0.001;
+double custom_abs(double p){
+  return sqrt(p*p);
+}
+
+void print_vect(double* v, int n){
+  printf("(");
+  for (int i = 0; i < n; i++){
+    printf("%f, ", v[i]);
+  }
+  printf(")\n");
+}
+
+void print_m(double** mat, int n){
+  for (int i = 0; i < n; i++){
+    printf("(");
+    for (int j = 0; j < n; j++){
+      printf("%f ",  mat[i][j]);
+    }
+    printf(")\n");
+  }
+}
+
+double get_resistance(const struct graph_t* g, int color, int i, int j){
+  double res = 0.1;
   if (gsl_spmatrix_get(g->o, color == 0, i) > 0 ||
       gsl_spmatrix_get(g->o, color == 0, j) > 0){
-    res += 1000.;
+    res += 10.;
   }
   if ((gsl_spmatrix_get(g->o, color == 0, i) <= 0.01 &&
        gsl_spmatrix_get(g->o, color , i) <= 0.01 ) ||
@@ -12,16 +34,15 @@ float get_resistance(const struct graph_t* g, int color, int i, int j){
        gsl_spmatrix_get(g->o, color , j) <= 0.01)){
     res += 1.;
   }
-  // printf("resistance entre %d et %d: %f\n", i, j, res);
   return res;
 }
  
-float** generate_meshes(const struct graph_t* g, int color){
+double** generate_meshes(const struct graph_t* g, int color){
   int n = (sqrt(g->num_vertices) - 1);
   int mesh_nb = n*n;
-  float** mat_sys = malloc(sizeof(float*) * (mesh_nb + 1));
+  double** mat_sys = malloc(sizeof(double*) * (mesh_nb + 1));
   for (int i = 0; i < mesh_nb + 1; i++){
-    mat_sys[i] = malloc(sizeof(float) * (mesh_nb + 1));
+    mat_sys[i] = malloc(sizeof(double) * (mesh_nb + 1));
   }
   for (int i = 0; i < mesh_nb + 1; i++){
     for (int j = 0; j < mesh_nb + 1; j++){
@@ -51,7 +72,6 @@ float** generate_meshes(const struct graph_t* g, int color){
       
       if (position >= n){ //pas première ligne
 	mat_sys[position][position - n] -= get_resistance(g, color, position + c, position + c + 1);
-	//printf("%d, %d -> on écrit -%f en %d, %d\n", i, j, get_resistance(g, color, position + c, position + c + 1), position, position - n);
       }
 
       if (position < mesh_nb - n){ //pas dernière ligne
@@ -108,7 +128,7 @@ float** generate_meshes(const struct graph_t* g, int color){
   return mat_sys;
 }
 
-void free_sys(float** mat, int n){
+void free_sys(double** mat, int n){
   for (int i = 0; i < n; i++){
     free(mat[i]);
   }
@@ -116,26 +136,17 @@ void free_sys(float** mat, int n){
 }
 
 
-void gauss(float** mat, float* b, float* x, int n){
+void gauss(double** mat, double* b, double* x, int n){
   int i, j, k ;
   int imin ;
-  float p ;
-  float sum, min, s, ss ;
-  /*
-  for (int i = 0; i < n; i++){
-    printf("(");
-    for (int j = 0; j < n; j++){
-      printf("%f ",  mat[i][j]);
-    }
-    printf(")\n");
-  }
-  */
+  double p ;
+  double sum, min, s, ss ;
   for (int i = 0; i < n-1; i++){
     min = mat[i][i];
     imin = i;
     for (int j = i+1; j < n; j++){
-      if (abs(min) > 0.001 ){
-	if ((abs(mat[j][i]) < abs(min)) && (abs(mat[j][i]) > 0.001)){
+      if (custom_abs(min) > 0.001 ){
+	if ((custom_abs(mat[j][i]) < custom_abs(min)) && (custom_abs(mat[j][i]) > 0.001)){
 	  min = mat[j][i];
 	  imin = j;
 	}
@@ -145,10 +156,10 @@ void gauss(float** mat, float* b, float* x, int n){
 	imin = i;
       }
     }
-    //printf("\ni ok: %d\n", i);
-    if (abs(min) < 0.01){
-      printf("\n\n====== problème ======\n\n");
-      //      exit;
+    if (custom_abs(min) <= 0.001){
+      printf("\n\n====== problème gauss ======\n   Underflow probable  \n");
+      printf("%f <= 0\n", min);
+      printf("\n\n");
     }
     for (int j = 0; j < n; j++){
       s = mat[imin][j];
@@ -161,19 +172,15 @@ void gauss(float** mat, float* b, float* x, int n){
 
     for (j = i+1; j < n; j++){
       p = mat[j][i] / mat[i][i];
-      //      printf("division par: %f\n", mat[i][i]);
       for (int k = 0; k < n; k++){
 	mat[j][k] -= p * mat[i][k];
       }
       b[j] -= p * b[i];
     }
-    //    printf("x: %f\n", x[0]);
   }
-  //  printf("x_sortie: %f\n", x[0]);
   if (!mat[n-1][n-1]){
-    printf("\n\n====== dernier élément nul ======\n\n");
+    printf("\n\n====== Problème, dernier élément nul ======\n\n");
   }
-  //  printf("division_fin par: %f\n", mat[n-1][n-1]);
   x[n-1] = b[n-1] / (mat[n-1][n-1] + mat[n-1][n-1]);
   for (int i = n-2; i+1; i--){
     sum = 0;
@@ -184,32 +191,40 @@ void gauss(float** mat, float* b, float* x, int n){
   }
 }
       
-float get_ratio(const struct graph_t* g, struct move_t mec){
+double get_ratio(const struct graph_t* g, struct move_t mec){
   struct graph_t* g_copy = copy_graph(g);
   int n = sqrt(g_copy->num_vertices) - 1; 
-  float* b = malloc(sizeof(float) * n * n);
-  float* x = malloc(sizeof(float) * n * n);
-  for (int i = 0; i < n*n; i++){
+  double* b = malloc(sizeof(double) * (n * n + 1));
+  double* x = malloc(sizeof(double) * (n * n + 1));
+  for (int i = 0; i < n*n + 1; i++){
     x[i] = 0.;
     b[i] = 0.;
   }
+  b[n*n] = 10.;
   coloriate__graph_t(g_copy, mec.c, mec);
-  float** mat_b = generate_meshes(g_copy, 0);//
-  float** mat_w = generate_meshes(g_copy, 1);//
-  float res_b = 1;// calcul? gauss(mat_b, b, x, n*n);
-  for (int i = 0; i < n*n ; x[i++] = 0);
-  float res_w = 1;// calcul? gauss(mat_w, b, x, n*n);
+  double** mat_b = generate_meshes(g_copy, 0);
+  double** mat_w = generate_meshes(g_copy, 1);
 
-  free(g_copy);
+  gauss(mat_b, b, x, n*n + 1);
+  double res_b = (double) 10. / x[n*n];  
+
+  for (int i = 0; i < n*n + 1 ; x[i++] = 0);
+  for (int i = 0; i < n*n + 1; b[i++] = 0);
+  b[n*n] = 10;
+  
+  gauss(mat_w, b, x, n*n + 1);
+  double res_w = (double) 10. / x[n*n];
+  
   free(b);
   free(x);
-  free(mat_w);
-  free(mat_b);
+  free_sys(mat_w, n*n + 1);
+  free_sys(mat_b, n*n + 1);
   free__graph_t(g_copy);
 
   if (!res_w){
-    return 2000000000;
+    return 2000000000.;
   }
+
   return res_b/res_w;
 }
 
