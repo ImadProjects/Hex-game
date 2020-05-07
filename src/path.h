@@ -1,14 +1,14 @@
 #ifndef _PATH_H_
 #define _PATH_H_
+#include <stdlib.h>
 
-
-struct path{
+struct path
+{
 
   size_t *array;
   size_t size;
   size_t capacity;
 };
-
 
 struct path *empty__path();
 
