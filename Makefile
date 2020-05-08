@@ -31,7 +31,7 @@ graph.o: src/graph.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o graph.o src/graph.c 
 
 path: src/path.c
-	$(COMP)  -I ${GSL_PATH}/include  -Wall src/path.c -lgsl -lgslcblas -lm -ldl
+	$(COMP)  -I ${GSL_PATH}/include  -Wall src/graph.c src/graph_aux.c src/pile.c src/dynamic_array.c src/path.c -lgsl -lgslcblas -lm -ldl
 
 graph_aux.o: src/graph_aux.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o graph_aux.o src/graph_aux.c 

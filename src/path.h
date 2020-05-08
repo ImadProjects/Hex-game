@@ -3,21 +3,16 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "move.h"
+#include "dynamic_array.h"
+#include "path.h"
+#define INFINIT 100000
 
-struct path
-{
+int find_min_distance(int *distance, int *selected, int num_vertices);
 
-  size_t *array;
-  size_t size;
-  size_t capacity;
-};
+void compute_path(struct dynamic_array *path, int *previous, enum color_t color, int num_vertices);
 
-struct path *empty__path();
+struct dynamic_array *djikstra(struct graph_t *graph, int position, enum color_t color);
 
-void realloc__path(struct path *p);
-
-void add__to_path(struct path *p, size_t n);
-
-void free__path(struct path *p);
+struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move, enum color_t color);
 
 #endif

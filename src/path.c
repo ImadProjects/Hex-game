@@ -1,48 +1,6 @@
 #include "path.h"
 #define INFINIT 100000
 
-struct path *empty__path()
-{
-
-  struct path *p = malloc(sizeof(struct path));
-  p->array = malloc(sizeof(size_t));
-  p->capacity = 1;
-  p->size = 0;
-
-  return p;
-}
-
-void realloc__path(struct path *p)
-{
-
-  if (p->capacity == 0)
-  {
-    p->array = malloc(2 * sizeof(size_t));
-    p->capacity = 2;
-  }
-
-  else if (p->capacity == p->size)
-  {
-    p->array = realloc(p->array, 2 * p->capacity * sizeof(size_t));
-    p->capacity = 2 * p->capacity;
-  }
-}
-
-void add__to_path(struct path *p, size_t n)
-{
-
-  realloc__path(p);
-  p->array[p->size] = n;
-  p->size++;
-}
-
-void free__path(struct path *p)
-{
-
-  free(p->array);
-  free(p);
-}
-
 int find_min_distance(int *distance, int *selected, int num_vertices)
 {
   int min = INFINIT;
@@ -58,7 +16,7 @@ int find_min_distance(int *distance, int *selected, int num_vertices)
   return vertex;
 }
 
-void compute_path(struct path *path, int *previous, enum color_t color, int num_vertices)
+void compute_path(struct dynamic_array *path, int *previous, enum color_t color, int num_vertices)
 {
   int k;
   if (color == 0)
@@ -67,11 +25,11 @@ void compute_path(struct path *path, int *previous, enum color_t color, int num_
     k = 2 * (num_vertices - 1) * (num_vertices - 1);
   while (k != -1)
   {
-    add__to_path(path, k);
+    add__to_dynamic_array(path, k);
     k = previous[k];
   }
 }
-struct path *djikstra(struct graph_t *graph, int position, enum color_t color)
+struct dynamic_array *djikstra(struct graph_t *graph, int position, enum color_t color)
 {
   int distance[graph->num_vertices];
   int previous[graph->num_vertices];
@@ -106,11 +64,18 @@ struct path *djikstra(struct graph_t *graph, int position, enum color_t color)
       }
     }
   }
-  struct path *path = empty__path();
+  struct dynamic_array *path = empty__dynamic_array();
   compute_path(path, previous, color, graph->num_vertices);
   return path;
 }
 
+struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move, enum color_t color)
+{
+  struct graph_t *new_graph = malloc(sizeof(struct graph_t));
+  *new_graph = *graph;
+  coloriate__graph_t(new_graph, color, move);
+  return new_graph;
+}
 int main()
 {
   int distance[4] = {10, 7, 6, 10};
