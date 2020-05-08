@@ -1,6 +1,8 @@
 #ifndef _PATH_H_
 #define _PATH_H_
 #include <stdlib.h>
+#include "graph.h"
+#include "move.h"
 
 struct path
 {
