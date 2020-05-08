@@ -4,52 +4,29 @@
 int is_move_possible(struct graph_t* g, int color, struct move_t move);
 
 struct player{
-  char* name;
+
+  char *name;
   struct graph_t *graph;
   enum color_t color;
-  struct move_t (*player_propose_opening)();
-  int (*player_accept_opening)(const struct move_t opening);
-  void (*player_initialize_color)(enum color_t id);
-  void (*player_initialize_graph)(struct graph_t* graph);
-  struct move_t (*player_play)(struct move_t previous_move);
-  void (*finalize)(); 
+  struct move_t last_move;
+  
 };
-
-static int init = 0;
-
-void initialize_player_functions(struct player* player){
-  player->player_propose_opening = propose_opening;
-  player->player_accept_opening = accept_opening;
-  player->player_initialize_graph = initialize_graph;
-  player->player_initialize_color = initialize_color;
-  player->player_play = play;
-}
 
 struct player jeremy = {.name ="Xx_JérémY_xX"};
 
-struct player get_player(){  
-  initialize_player_functions(&jeremy);
-  jeremy.name = "Jeremy";
-  return jeremy;  
+char const *get_player_name(){
+
+  return jeremy.name;
 }
 
-
 void initialize_color(enum color_t id){
-  if (!init){
-    get_player(&jeremy);
-    init = 1;
-  }
 
   jeremy.color = id;
-
+  coloriate__graph_t(jeremy.graph, 0, jeremy.last_move);
 }
 
 
 void initialize_graph(struct graph_t* graph){
-  if (!init){
-    get_player(&jeremy);
-    init = 1;
-  }
 
 
   jeremy.graph = graph;   
@@ -59,35 +36,18 @@ void initialize_graph(struct graph_t* graph){
 
 
 int accept_opening(const struct move_t opening){
-  if (!init){
-    get_player(&jeremy);
-    init = 1;
-  }
+    jeremy.last_move = opening;
 
-
-  if(0){
-    printf("%zu\n", opening.m);
-  }
   return 1;
 }
 
 void finalize(){
-  if (!init){
-    get_player(&jeremy);
-    init = 1;
-  }
-
 
   free__graph_t(jeremy.graph);
 }
 
 
 struct move_t propose_opening(){//temporaire
-  if (!init){
-    get_player(&jeremy);
-    init = 1;
-  }
-
 
   struct move_t opening;
   opening.c = jeremy.color;
@@ -96,12 +56,6 @@ struct move_t propose_opening(){//temporaire
 }
 
 struct move_t play(struct move_t previous_move){
-  if (!init){
-    get_player(&jeremy);
-    init = 1;
-  }
-
-
   struct move_t mec;
   mec.c = jeremy.color;
   int best = -1;
