@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "move.h"
+#define INFINIT 100000
 
 struct dynamic_array
 {

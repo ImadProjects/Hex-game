@@ -5,7 +5,7 @@
 #include "move.h"
 #include "dynamic_array.h"
 #include "path.h"
-#define INFINIT 100000
+
 
 int find_min_distance(int *distance, int *selected, int num_vertices);
 
