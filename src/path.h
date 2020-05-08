@@ -15,4 +15,6 @@ struct dynamic_array *djikstra(struct graph_t *graph, int position, enum color_t
 
 struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move, enum color_t color);
 
+struct dynamic_array *neighbours(struct graph_t *graph, int position);
+
 #endif

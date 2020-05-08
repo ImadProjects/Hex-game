@@ -76,8 +76,23 @@ struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move, enum c
   coloriate__graph_t(new_graph, color, move);
   return new_graph;
 }
+
+struct dynamic_array *neighbours(struct graph_t *graph, int position)
+{
+  struct dynamic_array *neighbours = empty__dynamic_array();
+  for (int k = 0; k < graph->num_vertices; k++)
+  {
+    if (gsl_spmatrix_get(graph->t, position, graph->num_vertices - k - 1) == 1)
+      add__to_dynamic_array(neighbours, graph->num_vertices - k - 1);
+  }
+  return neighbours;
+}
+
+// l'étape suivante c'est l'algo du minimax
+
 int main()
 {
+  //tester avant de linker avec le projet
   int distance[4] = {10, 7, 6, 10};
   int previous[4] = {0, 0, 1, 0};
   int r = find_min_distance(distance, previous, 4);
