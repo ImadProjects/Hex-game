@@ -62,6 +62,8 @@ player2.so:
 	cc -std=c99  -fPIC -g -I${GSL_PATH}/include -shared src/graph_aux.c src/player2.c src/graph.c src/pile.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player2.so
 
 
+player3.so: #segmentation fault
+	cc -std=c99  -fPIC -g -I${GSL_PATH}/include -shared src/graph_aux.c src/player_resistances.c src/graph.c src/pile.c src/resistance.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player_resistance.so
 
 mem_check:
 	#valgrind  --leak-check=full  install/alltests 

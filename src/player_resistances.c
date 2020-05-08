@@ -1,6 +1,8 @@
 #include "player.h"
 #include "resistance.h"
 
+int is_move_possible(struct graph_t* g, int color, struct move_t move);
+
 struct player{
   char* name;
   struct graph_t *graph;
@@ -12,6 +14,8 @@ struct player{
   struct move_t (*player_play)(struct move_t previous_move);
   void (*finalize)(); 
 };
+
+static int init = 0;
 
 void initialize_player_functions(struct player* player){
   player->player_propose_opening = propose_opening;
@@ -25,24 +29,42 @@ struct player jeremy = {.name ="Xx_JérémY_xX"};
 
 struct player get_player(){  
   initialize_player_functions(&jeremy);
-  jeremy.name = "player1";
+  jeremy.name = "Jeremy";
   return jeremy;  
 }
 
 
-void initialize_color(enum color_t id){  
+void initialize_color(enum color_t id){
+  if (!init){
+    get_player(&jeremy);
+    init = 1;
+  }
+
   jeremy.color = id;
+
 }
 
 
 void initialize_graph(struct graph_t* graph){
-    jeremy.graph = graph;   
+  if (!init){
+    get_player(&jeremy);
+    init = 1;
+  }
+
+
+  jeremy.graph = graph;   
 }
 
 //struct move_t play(struct move_t previous_move){
 
 
 int accept_opening(const struct move_t opening){
+  if (!init){
+    get_player(&jeremy);
+    init = 1;
+  }
+
+
   if(0){
     printf("%zu\n", opening.m);
   }
@@ -50,27 +72,45 @@ int accept_opening(const struct move_t opening){
 }
 
 void finalize(){
+  if (!init){
+    get_player(&jeremy);
+    init = 1;
+  }
+
+
   free__graph_t(jeremy.graph);
 }
 
 
 struct move_t propose_opening(){//temporaire
-  struct move opening;
+  if (!init){
+    get_player(&jeremy);
+    init = 1;
+  }
+
+
+  struct move_t opening;
   opening.c = jeremy.color;
-  move.m = size__graph_t(jeremy.graph) / 2;
+  opening.m = size__graph_t(jeremy.graph) / 2;
   return opening;
 }
 
 struct move_t play(struct move_t previous_move){
+  if (!init){
+    get_player(&jeremy);
+    init = 1;
+  }
+
+
   struct move_t mec;
   mec.c = jeremy.color;
   int best = -1;
   double sign = 1. - 2. * (mec.c == 1);
   double best_ratio = (double) sign * 2000000000.;
-  for (int i = 0; i < (jeremy.graph_t)->num_vertices; i++){
+  for (int i = 0; i < (jeremy.graph)->num_vertices; i++){
     mec.m = i;
-    if (is_move_possible(jeremy.graph_t, mec.c, mec)){
-      double ratio = get_ratio(jeremy.graph_t, mec);
+    if (is_move_possible(jeremy.graph, mec.c, mec)){
+      double ratio = get_ratio(jeremy.graph, mec);
       if (!mec.c){
 	if ((ratio < best_ratio) && (ratio >= 0)){
 	  best = i;
@@ -89,10 +129,10 @@ struct move_t play(struct move_t previous_move){
   if (best < 0){
     printf("=== error, jeremy can't find a proper place to play ===\n");
     mec.m = best;
-    return mec.m;
+    return mec;
   }
   mec.m = best;
-  return m;
+  return mec;
 }
 
 
