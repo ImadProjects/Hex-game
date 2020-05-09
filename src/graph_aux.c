@@ -171,7 +171,7 @@ struct graph_t *copy_graph(const struct graph_t *graph){
 }
 
 
-int is_taken(cons gsl_spmatrix *o, int n){
+int is_taken(const gsl_spmatrix *o, int n){
 
   return (gsl_spmatrix_get(o, 0, n) == 0 && gsl_spmatrix_get(o, 1, n) == 0);
 

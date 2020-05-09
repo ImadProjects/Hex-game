@@ -39,7 +39,12 @@ graph_aux.o: src/graph_aux.c
 pile.o: src/pile.c
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o pile.o src/pile.c 
 
+path.o : src/path.c
+	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o path.o  src/path.c
 
+graph_minimax.o : src/graph_minimax.c
+	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include  -o graph_minimax.o 
+	
 test_graph.o: src/test_graph.c
 	$(COMP) $(CFLAGS) -g -I ${GSL_PATH}/include   -o test_graph.o src/test_graph.c
 
@@ -53,7 +58,7 @@ alltests.o:
 resistance.o:
 	$(COMP) $(CFLAGS) -I ${GSL_PATH}/include   -o resistance.o src/resistance.c
 
-players: player1.so player2.so
+players: player1.so player2.so Minimax.so
 
 player1.so: 
 	cc -std=c99  -fPIC -g -I ${GSL_PATH}/include -shared src/graph_aux.c src/player1.c src/graph.c src/pile.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player1.so
@@ -64,6 +69,9 @@ player2.so:
 
 player3.so: #segmentation fault
 	cc -std=c99  -fPIC -g -I${GSL_PATH}/include -shared src/graph_aux.c src/player_resistances.c src/graph.c src/pile.c src/resistance.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/player_resistance.so
+
+Minimax.so:
+	cc -std=c99  -fPIC -g -I ${GSL_PATH}/include -shared  src/graph.c src/graph_aux.c src/dynamic_array.c src/graph_minimax.c src/Minimax.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/Minimax.so
 
 mem_check:
 	#valgrind  --leak-check=full  install/alltests 

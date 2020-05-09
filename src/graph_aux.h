@@ -17,6 +17,6 @@ void assign_colors_tr(gsl_spmatrix* o, int n);
 
 void color_print(const gsl_spmatrix* o, int n);
 
-int is_taken(cons gsl_spmatrix *o, int n);
+int is_taken(const gsl_spmatrix *o, int n);
 
 struct graph_t *copy_graph(const struct graph_t *graph);
