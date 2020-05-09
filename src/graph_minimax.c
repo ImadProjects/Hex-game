@@ -62,7 +62,6 @@ struct dynamic_array* get__possible_moves(struct graph_t *G){
     if(! is_taken(G->o, i))
       add__to_dynamic_array(p, i);
 
-  free__dynamic_array(p);
   return p;
 
 }
