@@ -27,12 +27,12 @@ void recap_test(char* s, int n, int expected){
 int main(void){
   recap_test("LE GRAPHE", test_graph(), N_GRAPH);
   recap_test("LA PILE", test_pile(), N_PILE);
-  recap_test("LE PATHFINDING", test_pathfinding(), N_PATH);
-  recap_test("LE TRIANGLE", test_tr(), N_TR);
+  recap_test("LES CONDITIONS DE VICTOIRE", test_pathfinding(), N_PATH);
+  recap_test("LES GRAPHES TRIANGULAIRES", test_tr(), N_TR);
   recap_test("LA GENERATION DU SYSTEME", test_sys(), N_SYS);
   recap_test("LA RESOLUTION DU SYSTEME", test_gauss(), N_GAUSS);
-  recap_test("CALCUL D'INTENSITE POUR UN GRAPHE GAGNANT/PERDANT", test_res(), N_RES);
-  recap_test("CHOIX DE LA BONNE CASE", test_joueur_resistances(), N_JOUEUR);
+  recap_test("DES CALCULS D'INTENSITES POUR UN GRAPHE GAGNANT/PERDANT", test_res(), N_RES);
+  recap_test("LE CHOIX DE LA BONNE CASE", test_joueur_resistances(), N_JOUEUR);
   
   return 0;
 }

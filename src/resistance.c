@@ -1,7 +1,10 @@
 #include "resistance.h"
 
 double custom_abs(double p){
-  return sqrt(p*p);
+  if (p < 0){
+    return -p;
+  }
+  return p;
 }
 
 void print_vect(double* v, int n){
