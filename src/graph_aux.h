@@ -19,4 +19,8 @@ void color_print(const gsl_spmatrix *o, int n);
 
 int is_taken(const gsl_spmatrix *o, int n);
 
+int game_over(const struct graph_t *g, int color);
+
 struct graph_t *copy_graph(const struct graph_t *graph);
+
+struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move);

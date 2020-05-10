@@ -10,21 +10,24 @@
 #define N_RES 2
 #define N_JOUEUR 2
 
-void recap_test(char* s, int n, int expected){
-  if (n == expected){
+void recap_test(char *s, int n, int expected)
+{
+  if (n == expected)
+  {
     printf("\033[0;32m");
-    printf("========TESTS SUR %s: %d/%d REUSSIS=======\n",s, n , expected);
+    printf("========TESTS SUR %s: %d/%d REUSSIS=======\n", s, n, expected);
     printf("\033[0m");
   }
-  else{
+  else
+  {
     printf("\033[0;31m");
-    printf("========TESTS SUR %s: %d/%d REUSSIS=======\n",s, n , expected);
+    printf("========TESTS SUR %s: %d/%d REUSSIS=======\n", s, n, expected);
     printf("\033[0m");
   }
 }
 
-
-int main(void){
+int main(void)
+{
   recap_test("LE GRAPHE", test_graph(), N_GRAPH);
   recap_test("LA PILE", test_pile(), N_PILE);
   recap_test("LES CONDITIONS DE VICTOIRE", test_pathfinding(), N_PATH);

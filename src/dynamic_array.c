@@ -41,3 +41,4 @@ void free__dynamic_array(struct dynamic_array *p)
   free(p->array);
   free(p);
 }
+
