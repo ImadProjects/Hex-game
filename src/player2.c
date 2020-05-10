@@ -48,6 +48,7 @@ int accept_opening(const struct move_t opening)
 {
 
   player2.last_move = opening;
+  coloriate__graph_t(player2.graph, 0, player2.last_move);
   return 0;
 }
 
@@ -62,7 +63,6 @@ void initialize_color(enum color_t id)
 {
 
   player2.color = id;
-  coloriate__graph_t(player2.graph, 0, player2.last_move);
 }
 
 struct move_t play__c(struct move_t previous_move)
