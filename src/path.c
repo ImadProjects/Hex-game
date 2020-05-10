@@ -149,6 +149,8 @@ struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move, enum c
 {
   struct graph_t *new_graph = malloc(sizeof(struct graph_t));
   *new_graph = *graph;
+  new_graph->t = gsl_spmatrix_alloc(graph->num_vertices, graph->num_vertices);
+  new_graph->o = gsl_spmatrix_alloc(2, graph->num_vertices);
   coloriate__graph_t(new_graph, color, move);
   return new_graph;
 }

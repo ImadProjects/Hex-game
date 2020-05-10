@@ -69,7 +69,7 @@ struct move_t play(struct move_t previous_move){
   int values[n];
 
   for(int i = 0; i < n; i++)
-    values[i] = minimax(killer.graph, possible_moves->array[i], 1, 0, -INFINIT, INFINIT, killer.color);
+    values[i] = minimax(killer.graph, possible_moves->array[i], 1, 4, -INFINIT, INFINIT, killer.color);
 
   struct move_t next ={.c = killer.color, .m =  best_move(possible_moves, values)};
   free__dynamic_array(possible_moves);
