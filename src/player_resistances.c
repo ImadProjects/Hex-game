@@ -48,7 +48,8 @@ struct move_t propose_opening(){//temporaire
 
   struct move_t opening;
   opening.c = jeremy.color;
-  opening.m = 6; // sqrt(jeremy.graph->num_vertices) + 2;
+  int d = jeremy.graph->num_vertices;
+  opening.m = floor((d * 2) - ( d / 2)) - 1;
   return opening;
 }
 
