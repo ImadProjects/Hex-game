@@ -124,6 +124,11 @@ int test_tr()
   c += check(gsl_spmatrix_get(g->o, 0, 149), 0);
   c += check(gsl_spmatrix_get(g->o, 1, 148), 0);
   c += check(gsl_spmatrix_get(g->o, 0, 148), 2);
+
+  /*  print_graph(g, 't');
+  for (int i = 0; i < g->num_vertices; i++){
+    printf("\no[0][%d] = %f, o[1][%d] = %f\n", i, gsl_spmatrix_get(g->o, 0, i), i, gsl_spmatrix_get(g->o, 1, i));
+    }*/
   free__graph_t(g);
   return c;
 }

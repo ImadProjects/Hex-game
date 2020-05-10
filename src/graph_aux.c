@@ -170,7 +170,7 @@ void assign_colors_tr(gsl_spmatrix *o, int n)
     if (i >= n / 2 - 1 + (n % 2))
     {
       gsl_spmatrix_set(o, 0, s + 1, 2);
-      gsl_spmatrix_set(o, 0, s_new - 2, 33);
+      gsl_spmatrix_set(o, 0, s_new - 2, 3);
 
       if (i >= n / 2)
       {

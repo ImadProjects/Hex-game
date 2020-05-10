@@ -61,7 +61,6 @@ void initialize_graph(struct graph_t *graph)
 
 void initialize_color(enum color_t id)
 {
-
   player2.color = id;
 }
 
@@ -222,9 +221,12 @@ struct move_t play__t(struct move_t previous_move)
   size_t move = previous_move.m;
   size_t side = (id == 1);
 
+
+  
   size_t ran[vertices];
   int a = 0;
 
+    next.c = player2.color;
   for (size_t i = 0; i < vertices && a < 1; i++)
   {
 
@@ -319,7 +321,6 @@ struct move_t play__t(struct move_t previous_move)
     next.m = ran[r];
   }
 
-  next.c = player2.color;
   coloriate__graph_t(player2.graph, player2.color, next);
   return next;
 }
