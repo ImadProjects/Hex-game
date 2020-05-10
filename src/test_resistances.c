@@ -86,13 +86,6 @@ int test_res()
   }
   b[n * n] = 10;
 
-  double **matt = generate_meshes(g, 0);
-  gauss(matt, b, x, n * n + 1);
-  c += x[n * n] > 10;
-  printf("%f\n", x[n * n]);
-  free_sys(matt, n * n + 1);
-
-
   double** matt = generate_meshes(g, 0);
   gauss(matt, b, x, n*n + 1);
   c += x[n*n] > 10;

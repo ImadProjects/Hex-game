@@ -52,8 +52,8 @@ struct move_t propose_opening()
 
   struct move_t opening;
   opening.c = jeremy.color;
-  int d = jeremy.graph->num_vertices;
-  opening.m = floor((d * 2) - ( d / 2)) - 1;
+  opening.m = 9;
+
   return opening;
 }
 
