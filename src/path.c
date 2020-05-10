@@ -29,7 +29,83 @@ void compute_path(struct dynamic_array *path, int *previous, enum color_t color,
     k = previous[k];
   }
 }
-struct dynamic_array *djikstra(struct graph_t *graph, int position, enum color_t color)
+
+
+struct dynamic_array *djikstra(struct graph_t *G, int position, enum color_t color)
+{
+  int V = G->num_vertices;
+  int dist[V];// The output array.  dist[i] will hold the shortest 
+  // distance from src to i 
+  int parent[V];
+  int sptSet[V]; // sptSet[i] will be true if vertex i is included in shortest 
+  // path tree or shortest distance from src to i is finalized 
+  
+  // Initialize all distances as INFINITE and stpSet[] as false 
+  for (int i = 0; i < V; i++) 
+    dist[i] = INFINIT, sptSet[i] = 0, parent[i] = INFINIT; 
+  
+  // Distance of source vertex from itself is always 0 
+  dist[position] = 0;
+  parent[position] = -1;
+  
+  // Find shortest path for all vertices 
+  for (int count = 0; count < V - 1; count++) { 
+    // Pick the minimum distance vertex from the set of vertices not 
+    // yet processed. u is always equal to src in the first iteration. 
+    int u = find_min_distance(dist, sptSet, V);
+    
+    // Mark the picked vertex as processed 
+    sptSet[u] = 1; 
+  
+    // Update dist value of the adjacent vertices of the picked vertex. 
+    for (int v = 0; v < V; v++) {
+  
+      // Update dist[v] only if is not in sptSet, there is an edge from 
+      // u to v, and total weight of path from src to  v through u is 
+      // smaller than current value of dist[v]
+      int d = (int)(gsl_spmatrix_get(G->t,u,v)-gsl_spmatrix_get(G->o,color,v)*gsl_spmatrix_get(G->o,color,u));
+      if (!sptSet[v] &&
+	  gsl_spmatrix_get(G->t,u,v)  &&
+	  dist[u] != INFINIT &&
+	  dist[u] + d < dist[v]) {
+	dist[v] = dist[u] + d;
+	parent[v] = u;
+      }
+    }
+  }
+  
+  int M = width__graph_t(G);
+    struct dynamic_array* p= empty__dynamic_array();
+    if(color==BLACK){
+      int i=G->num_vertices-1;
+      while(i!=-1){
+	// if(i==INT_MA)
+	// break;
+	add__to_dynamic_array(p,i);
+	
+	i=parent[i];
+      }
+    }
+    else if(color==WHITE){
+      int i=2*M+1;
+      while(i!=-1){
+	//if(i==INT_MA)
+        //break;
+	add__to_dynamic_array(p,i);
+	
+	i=parent[i];
+      }
+    }
+    //printSolution(dist,parent,G->num_vertices); 
+    return p;
+    // print the constructed distance array 
+}
+
+
+
+
+
+struct dynamic_array *djikstra2(struct graph_t *graph, int position, enum color_t color)
 {
   int distance[graph->num_vertices];
   int previous[graph->num_vertices];
@@ -73,6 +149,8 @@ struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move, enum c
 {
   struct graph_t *new_graph = malloc(sizeof(struct graph_t));
   *new_graph = *graph;
+  new_graph->t = gsl_spmatrix_alloc(graph->num_vertices, graph->num_vertices);
+  new_graph->o = gsl_spmatrix_alloc(2, graph->num_vertices);
   coloriate__graph_t(new_graph, color, move);
   return new_graph;
 }
@@ -88,14 +166,3 @@ struct dynamic_array *neighbours(struct graph_t *graph, int position)
   return neighbours;
 }
 
-// l'étape suivante c'est l'algo du minimax
-
-int main()
-{
-  //tester avant de linker avec le projet
-  int distance[4] = {10, 7, 6, 10};
-  int previous[4] = {0, 0, 1, 0};
-  int r = find_min_distance(distance, previous, 4);
-  printf("%d \n", r);
-  return 0;
-}
