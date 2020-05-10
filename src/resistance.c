@@ -132,22 +132,7 @@ double** generate_meshes(const struct graph_t* g, int color){
 	}
     }
   
-    //DERNIERE COLONNE
-    
-    if (color){
-      for(int i = 0; i < n; i++)
-	{
-	  mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
-	  mat_sys[i*n][mesh_nb] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
-	}
-    }
-    else{
-      for(int i = 0; i < n; i++)
-	{	
-	  mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
-	  mat_sys[(i+1) * n - 1][mesh_nb] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
-	}
-    }
+
   }
   else{//hexa
 
