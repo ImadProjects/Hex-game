@@ -86,6 +86,8 @@ struct move_t play(struct move_t last_move)
   free__dynamic_array(player_path);
   free__dynamic_array(enemy_path);
 
+
+
   gsl_spmatrix_set(player1.graph->o, player1.color, m.m, 1);
   return m;
 }

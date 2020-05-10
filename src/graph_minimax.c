@@ -86,9 +86,6 @@ int minimax(struct graph_t *G, struct graph_t *graph_player, int maxminplayer, i
 
   else if (maxminplayer)
   {
-    struct dynamic_array *player_path = djikstra(graph_player, M, (1 - id) * (M + 1), (1 - id));
-    struct dynamic_array *enemy_path = djikstra(graph_player, M, ((1 - id) + 1) % 2 * (M + 1), ((1 - id) + 1) % 2);
-    struct dynamic_array *intersection = path_intesection(player_path, enemy_path);
     int max = -INFINIT, count = 0;
     for (size_t i = 0; i < intersection->size; i++)
     {
@@ -113,9 +110,6 @@ int minimax(struct graph_t *G, struct graph_t *graph_player, int maxminplayer, i
   }
   else
   {
-    struct dynamic_array *player_path = djikstra(graph_player, M, (1 - id) * (M + 1), (1 - id));
-    struct dynamic_array *enemy_path = djikstra(graph_player, M, ((1 - id) + 1) % 2 * (M + 1), ((1 - id) + 1) % 2);
-    struct dynamic_array *intersection = path_intesection(player_path, enemy_path);
     int min = INFINIT, count2 = 0;
     for (size_t i = 0; i < intersection->size; i++)
     {
