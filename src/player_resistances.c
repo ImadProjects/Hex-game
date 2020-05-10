@@ -14,7 +14,7 @@ struct player{
   
 };
 
-struct player jeremy = {.name ="Jérémy"};
+struct player jeremy = {.name ="Patrick Balkany"};
 char const *get_player_name(){
   return jeremy.name;
 }

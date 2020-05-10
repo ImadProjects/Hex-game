@@ -11,6 +11,7 @@ int test_sys(){
   int c = 0;
   struct graph_t* g = new__graph_t(n, 'c');
   double** mat = generate_meshes(g, 0);
+  print_m(mat, 5);
   c += (mat[0][0] >= 10.);
   c += (abs(mat[4][0]) < 0.2);
   c += (mat[2][0] <= 10);
@@ -19,6 +20,22 @@ int test_sys(){
   c += (mat[4][4] >= 10);
   free_sys(mat, 5);
   free__graph_t(g);
+
+  /*  struct graph_t* gg = new__graph_t(n, 'h');
+  double** matt = generate_meshes(g, 0);
+  /*  c += (mat[0][0] >= 10.);
+  c += (abs(mat[4][0]) < 0.2);
+  c += (mat[2][0] <= 10);
+  c += (mat[3][3] >= 10);
+  c += (mat[3][2] <= -1 && mat[3][2] >= -2);
+  c += (mat[4][4] >= 10);
+  print_m(matt, 9);
+  free_sys(matt, 9);
+  free__graph_t(gg);*/
+  
+
+  
+
   return c;
 }
 
@@ -64,6 +81,7 @@ int test_res(){
   double** mat = generate_meshes(g, 1);
   gauss(mat, b, x, n*n + 1);
   c += (x[n*n] < 1 && x[n*n] >= 0);
+  printf("%f\n", x[n*n]);
   free_sys(mat, n*n + 1);
   //
   for (int i = 0; i < n*n + 1; i++){
@@ -75,6 +93,7 @@ int test_res(){
   double** matt = generate_meshes(g, 0);
   gauss(matt, b, x, n*n + 1);
   c += x[n*n] > 10;
+  printf("%f\n", x[n*n]);
   free_sys(matt, n*n + 1);
   
   //
