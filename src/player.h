@@ -10,7 +10,7 @@
  * RETURNS:
  * - the player name as an [a-zA-Z0-9 -_]* string
  */
-char const* get_player_name();
+char const *get_player_name();
 
 /* Returns a single move for an opening
  * PRECOND:
@@ -39,7 +39,7 @@ int accept_opening(const struct move_t opening);
  *   played, that must be freed in the end
  * - initialize_graph has never been called before
  */
-void initialize_graph(struct graph_t* graph);
+void initialize_graph(struct graph_t *graph);
 
 /* Player color initialization
  * PARAM:
