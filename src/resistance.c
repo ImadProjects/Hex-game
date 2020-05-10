@@ -41,8 +41,9 @@ double get_resistance(const struct graph_t* g, int color, int i, int j){
 }
  
 double** generate_meshes(const struct graph_t* g, int color){
+  char type = type__graph_t(g);//
   int n = (sqrt(g->num_vertices) - 1);
-  int mesh_nb = n*n;
+  int mesh_nb = n*n * (1 + (type == 'h'));//
   double** mat_sys = malloc(sizeof(double*) * (mesh_nb + 1));
   for (int i = 0; i < mesh_nb + 1; i++){
     mat_sys[i] = malloc(sizeof(double) * (mesh_nb + 1));
@@ -52,81 +53,199 @@ double** generate_meshes(const struct graph_t* g, int color){
       mat_sys[i][j] = 0.;
     }
   }
-  int position = 0;
-  int c = 0;
-  for (int i = 0; i < n; i++){
-    for (int j = 0; j < n; j++){
-      position = n * i + j;
-      mat_sys[position][position] = get_resistance(g, color, position + c, position + c + 1);
+  mesh_nb = n*n;
 
-     
 
-      mat_sys[position][position] += get_resistance(g, color, position + c, position + c + 1 + n);
+  if (type == 'c'){//carré
+    int position = 0;
+    int c = 0;
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++){
+	position = n * i + j;
+	mat_sys[position][position] = get_resistance(g, color, position + c, position + c + 1);
+	
+	
+	mat_sys[position][position] += get_resistance(g, color, position + c, position + c + 1 + n);
 
-     
-	     
-      mat_sys[position][position] += get_resistance(g, color, position + 1 + c, position + n + 2 + c);
-		   
-     
-	     
-      mat_sys[position][position] += get_resistance(g, color, position + c + n + 1, position + c + n + 2);
-				
-     
+     	     
+	mat_sys[position][position] += get_resistance(g, color, position + 1 + c, position + n + 2 + c);
+	   
+		     
+	mat_sys[position][position] += get_resistance(g, color, position + c + n + 1, position + c + n + 2);
+		
       
-      if (position >= n){ //pas première ligne
-	mat_sys[position][position - n] -= get_resistance(g, color, position + c, position + c + 1);
-      }
+	if (position >= n){ //pas première ligne
+	  mat_sys[position][position - n] -= get_resistance(g, color, position + c, position + c + 1);
+	}
 
-      if (position < mesh_nb - n){ //pas dernière ligne
-	mat_sys[position][position + n] -= get_resistance(g, color, position + c + n + 1, position + c + n + 2);
+	if (position < mesh_nb - n){ //pas dernière ligne
+	  mat_sys[position][position + n] -= get_resistance(g, color, position + c + n + 1, position + c + n + 2);
+	}
+	if (position % n){ //pas première col
+	  mat_sys[position][position - 1] -= get_resistance(g, color, position + c, position + c + n + 1);
+	}
+	
+	if ((position + 1)%n){ //pas dernière col
+	  mat_sys[position][position + 1] -= get_resistance(g, color, position + c + 1, position + c + n + 2);
+	} 
       }
-      if (position % n){ //pas première col
-	mat_sys[position][position - 1] -= get_resistance(g, color, position + c, position + c + n + 1);
-      }
-
-      if ((position + 1)%n){ //pas dernière col
-	mat_sys[position][position + 1] -= get_resistance(g, color, position + c + 1, position + c + n + 2);
-      } 
+      c++;
     }
-    c++;
-  }
 
-  //DERNIERE LIGNE
-  if(color){
-    for(int i = 0; i < n; i++){
-      mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
-      mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i * (n+1), (i+1) * (n+1));
-
-      mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);      
-      mat_sys[mesh_nb][i*n] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+    //DERNIERE COLONNE
+    
+    if (color){
+      for(int i = 0; i < n; i++)
+	{
+	  mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
+	  mat_sys[i*n][mesh_nb] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+	}
     }
-  }
-  else{
-    for(int i = 0; i < n; i++)
-      {
+    else{
+      for(int i = 0; i < n; i++)
+	{	
+	  mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
+	  mat_sys[(i+1) * n - 1][mesh_nb] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	}
+    }
+
+
+
+
+    //DERNIERE LIGNE
+    if(color){
+      for(int i = 0; i < n; i++){
 	mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
-	mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
-	mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);
-	mat_sys[mesh_nb][(i+1) * n - 1] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+      
+	mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);      
+	mat_sys[mesh_nb][i*n] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
       }
+    }
+    else{
+      for(int i = 0; i < n; i++)
+	{
+	  mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
+	  mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	  mat_sys[mesh_nb][i] -= get_resistance(g, color, i, i+1);
+	  mat_sys[mesh_nb][(i+1) * n - 1] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	}
+    }
+  
+    //DERNIERE COLONNE
+    
+    if (color){
+      for(int i = 0; i < n; i++)
+	{
+	  mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
+	  mat_sys[i*n][mesh_nb] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+	}
+    }
+    else{
+      for(int i = 0; i < n; i++)
+	{	
+	  mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
+	  mat_sys[(i+1) * n - 1][mesh_nb] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	}
+    }
+  }
+  else{//hexa
+
+
+    
+    int position = 0;
+    int c = 0;
+    for (int i = 0; i < n; i++){
+      for (int j = 0; j < n; j++){
+	position = n * i + j;
+	//élément pair
+
+	mat_sys[position * 2][position * 2] = get_resistance(g, color, position + c, position + c + 1);//1er-suivant
+	
+	mat_sys[position * 2][position * 2] += get_resistance(g, color, position + c, position + c + 1 + n);//1er-dessous
+	
+	mat_sys[position * 2][position * 2] += get_resistance(g, color, position + 1 + c, position + n + 1 + c);//suivant-dessous
+
+	//élément impair
+
+	mat_sys[position * 2 + 1][position * 2 + 1] = get_resistance(g, color, position + c + 1, position + c + n + 1);//dessus-gauche
+	
+	mat_sys[position * 2 + 1][position * 2 + 1] += get_resistance(g, color, position + c + 1, position + c + n + 2);//dessus-droit
+	
+	mat_sys[position * 2 + 1][position * 2 + 1] += get_resistance(g, color, position + c + n + 1, position + c + n + 2);//gauche-droit
+	
+	
+	if (position >= n){ //pas première ligne
+	  mat_sys[2 * position][2 * position - 2*n + 1] -= get_resistance(g, color, position + c, position + c + 1);//pair
+	}
+	if (position < mesh_nb - n){ //pas dernière ligne
+	  mat_sys[2 * position + 1][2 * position + 1 - 2*n + 1] -= get_resistance(g, color, position + c + n + 1, position + c + n + 2);//impair
+	}	
+	if (position % n){ //pas première col
+	  mat_sys[2 * position][2 * position - 2] -= get_resistance(g, color, position + c, position + c + 1 + n);//pair
+	  mat_sys[2 * position + 1][2 * position + 1 - 2] -= get_resistance(g, color, position + c + 1, position + c + n + 1);;//impair
+	}
+	if ((position + 1)%n){ //pas dernière col
+	  mat_sys[2 * position][2 * position + 2] -= get_resistance(g, color, position + 1 + c, position + n + 1 + c);//pair
+	  mat_sys[2 * position + 1][2 * position + 1 + 2] -= get_resistance(g, color, position + c + 1, position + c + n + 2);//impair
+	} 
+      }
+      c++;
+    }
+
+
+    //DERNIERE LIGNE
+    if(color){
+      for(int i = 0; i < n; i++){
+	mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
+	mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+	
+	mat_sys[mesh_nb][2 * i] -= get_resistance(g, color, i, i+1);      
+	mat_sys[mesh_nb][2 * i * n] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+      }
+    }
+    else{
+      for(int i = 0; i < n; i++)
+	{
+	  mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, i, i+1);
+	  mat_sys[mesh_nb][mesh_nb] += get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	  mat_sys[mesh_nb][2 * i] -= get_resistance(g, color, i, i+1);
+	  mat_sys[mesh_nb][(i+1) * 2 *n - 1] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	}
+  }
+    
+    //DERNIERE COLONNE
+    
+    if (color){
+      for(int i = 0; i < n; i++)
+	{
+	  mat_sys[2 * i][mesh_nb] -= get_resistance(g, color, i, i+1);
+	  mat_sys[2 * i * n][mesh_nb] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+	}
+    }
+    else{
+      for(int i = 0; i < n; i++)
+	{	
+	  mat_sys[2 * i][mesh_nb] -= get_resistance(g, color, i, i+1);
+	  mat_sys[(i+1) * 2 * n - 1][mesh_nb] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
+	}
+    }
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
-  //DERNIERE COLONNE
 
-  if (color){
-    for(int i = 0; i < n; i++)
-      {
-	mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
-	mat_sys[i*n][mesh_nb] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
-      }
-  }
-  else{
-    for(int i = 0; i < n; i++)
-      {	
-	mat_sys[i][mesh_nb] -= get_resistance(g, color, i, i+1);
-	mat_sys[(i+1) * n - 1][mesh_nb] -= get_resistance(g, color, (i+1) * (n+1) - 1, (i+2) * (n+1) - 1);
-      }
-  }
+
   
   return mat_sys;
 }

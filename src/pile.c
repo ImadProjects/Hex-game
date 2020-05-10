@@ -47,14 +47,14 @@ void inc(struct pile* p){
 
 //////////////////////////////// graph part //////////////////////////
 
-size_t size__graph_t(struct graph_t *graph){
+size_t size__graph_t(const struct graph_t *graph){
 
   return graph->num_vertices;
 
 }
 
 
-size_t width__graph_t(struct graph_t *graph){
+size_t width__graph_t(const struct graph_t *graph){
   
   size_t n = size__graph_t(graph);
   float m = sqrt(n);
@@ -68,10 +68,10 @@ size_t width__graph_t(struct graph_t *graph){
 }
 
 
-char type__graph_t(struct graph_t *graph){
+char type__graph_t(const struct graph_t *graph){
 
   int d = width__graph_t(graph);
-  int m = floor((d * 2) - ( d / 2));
+  int m = floor((d * 2) - ( d / 2)) - 1;
 
   if(gsl_spmatrix_get(graph->t, m, m + 1) &&
 	  gsl_spmatrix_get(graph->t, m, m - 1) &&
