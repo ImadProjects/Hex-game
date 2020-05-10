@@ -205,3 +205,56 @@ int is_taken(const gsl_spmatrix *o, int n){
 
   return   (gsl_spmatrix_get(o, 0, n) != 0 || gsl_spmatrix_get(o, 1, n) != 0);
 }
+
+
+int game_over(const struct graph_t* g, int color){
+  struct pile* p = pile_vide();
+  char* tab = malloc(sizeof(char) * g->num_vertices); 
+  int cond1 = 0;
+  int cond2 = 0;
+    int s ;
+  if (color==0)
+    s = g->num_vertices-1;
+  else
+    s = 0;
+
+  for (int i = 0; i < g->num_vertices; i++){
+    tab[i] = 0;
+  }
+  tab[s] = 1;
+  empiler(p, s);
+  
+  while (!est_vide(p)){
+    s = depiler(p);
+    if (gsl_spmatrix_get(g->o, color, s) == 3){//bord 1
+      cond1 = 1;
+    }
+    if (gsl_spmatrix_get(g->o, color, s) == 2){//bord 2
+      cond2 = 1;
+    }
+    if (cond1 && cond2){
+      pile_free(p);
+      free(tab);
+      return 1;
+    }
+    for (int i = 0; i < g->num_vertices; i++){
+      if((gsl_spmatrix_get(g->o, color, i) > 0) && (gsl_spmatrix_get(g->t, s, i)) && tab[i] == 0){
+  empiler(p, i);
+  tab[i] = 1;
+      }
+    }
+  }
+  pile_free(p);
+  free(tab);
+  return 0;
+}
+
+struct graph_t *copy_new_graph(struct graph_t *graph, struct move_t move)
+{
+  struct graph_t *new_graph = malloc(sizeof(struct graph_t));
+  *new_graph = *graph;
+  new_graph->t = gsl_spmatrix_alloc(graph->num_vertices, graph->num_vertices);
+  new_graph->o = gsl_spmatrix_alloc(2, graph->num_vertices);
+  coloriate__graph_t(new_graph, move.c, move);
+  return new_graph;
+}

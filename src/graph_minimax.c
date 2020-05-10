@@ -2,180 +2,151 @@
 #include "path.h"
 #include "graph_aux.h"
 
-int DFSutil(struct graph_t* G,size_t n,size_t* visited,enum color_t id){
-  size_t M=(int)sqrt(G->num_vertices)-1;
-  //mark the current vertex as visited
-  visited[n]=1;
-  struct dynamic_array* nb=neighbours(G,n);
-  //recur for all the adjacent vertices of n
-  for(size_t i=0;i<nb->size;i++){
-    if(gsl_spmatrix_get(G->o,id,nb->array[i])==1 && !visited[nb->array[i]]){
-      if((id==BLACK && nb->array[i]>=G->num_vertices-M) || (id==WHITE && nb->array[i]%(M+1)==M)){
-        //there's a winner
-        free__dynamic_array(nb);
-        return 1;
-      }
-      else{
-        if(DFSutil(G,nb->array[i],visited,id)){
-          //there's a winner
-          free__dynamic_array(nb);
-          return 1;
+
+
+struct dynamic_array *neighbours(struct graph_t *graph, int position)
+{
+  struct dynamic_array *neighbours = empty__dynamic_array();
+  for (int k = 0; k < graph->num_vertices; k++)
+  {
+    if (gsl_spmatrix_get(graph->t, position, graph->num_vertices - k - 1) == 1)
+      add__to_dynamic_array(neighbours, graph->num_vertices - k - 1);
+  }
+  return neighbours;
+}
+
+
+
+int max_a_b(int a,int b){
+  if(a>=b)
+    return a;
+  else
+    return b;
+}
+
+int min_a_b(int a,int b){
+  if(a<=b)
+    return a;
+  else
+    return b;
+}
+
+
+
+struct dynamic_array* path_intesection(struct dynamic_array* p1,struct dynamic_array* p2){
+  struct dynamic_array* inter=empty__dynamic_array();
+  size_t i=0;
+  if(p1->size<p2->size){
+    for(i=0;i<p1->size;i++){
+      for(size_t j=0;j<p2->size;j++){
+        if(p1->array[i]==p2->array[j]){
+          add__to_dynamic_array(inter,p1->array[i]);
+          continue;
         }
       }
     }
   }
-  //it's a draw
-  free__dynamic_array(nb);
-  return 0;
-}
-
-
-int over(struct graph_t* G,enum color_t id){
-  size_t M=(int)sqrt(G->num_vertices)-1;
-  size_t* visited=malloc(G->num_vertices*sizeof(size_t));
-  // Mark all the vertices as not visited
-  for(size_t i=0;i<G->num_vertices;i++){
-    visited[i]=0;
-  }
-  //Determine the start vertex of the DFS
-  int a=0,b=0;
-  if(id==BLACK){
-    a=DFSutil(G,0,visited,id);
-  }else if(id==WHITE){
-    b=DFSutil(G,M+1,visited,id);
-  }
-  free(visited);
-  if(a==1 || b==1)
-    return 1;
-  else
-    return 0;
-}
-
-
-
-struct dynamic_array* get__possible_moves(struct graph_t *G){
-
-  size_t vertices = size__graph_t(G);
-  struct dynamic_array *p = empty__dynamic_array();
-  
-  for(size_t i = 0; i < vertices; i++)
-    if(! is_taken(G->o, i))
-      add__to_dynamic_array(p, i);
-
-
-  return p;
-
-}
-
-
-size_t best_move(struct dynamic_array *moves, int values[]){
-
-  int n = moves->size;
-  int min = INFINIT;
-  size_t min_index = -1;
-
-  for(int i = 0; i < n; i++)
-    if(values[i] <= min)
-      min = values[i], min_index = moves->array[i];
-
-  return min_index;
-
-}
-
-
-int min(int a, int b){
-
-  return (a <= b) ? a: b;
-
-}
-
-
-int max(int a, int b){
-
-  return (a >= b) ? a: b;
-
-}
-
-
-void change_value(int *a, int b){
-
-  *a = b;
-
-}
-
-
-int path_score(struct graph_t *G, struct dynamic_array *p){
-
-  int score = 0;
-
-  for(int i = 0; i < p->size; i++)
-    if(is_taken(G->o, p->array[i]))
-      score++;
-
-  return score;
-
-}
-
-
-int how__good_is(struct graph_t *G, int move, enum color_t color){
-
-  if(over(G, color))
-    return -INFINIT;
-
-  else if(over(G, 1 - color))
-    return INFINIT;
-
-  struct dynamic_array *p1 = djikstra(G, move, color);
-  struct dynamic_array *p2 = djikstra(G, move, 1 - color);
-
-  int d = path_score(G, p1) - path_score(G, p2);
-  free__dynamic_array(p1);
-  free__dynamic_array(p2);
-
-  return d;
-
-}
-
-
-int minimax(struct graph_t *G, int move, int MaxMin, int depth, int alpha, int beta, enum color_t color){
-
-  if(depth == 0 || over(G, color) || over(G, 1 - color))
-    return how__good_is(G, move, color);
-
-  else if(MaxMin){
-    int maxvalue = - INFINIT;
-    struct dynamic_array *p = neighbours(G, move);
-    for(int i = 0; i < p->size; i++){
-      struct move_t new_move = {.c = color, .m = p->array[i]};
-      struct graph_t *G1 = copy_new_graph(G, new_move, color);
-      int value = minimax(G1, new_move.m, 1 - MaxMin, depth - 1, alpha, beta, color);
-      maxvalue = max(maxvalue, value);
-      change_value(&alpha, max(alpha, value));
-      free__graph_t(G1);
-      if(beta <= alpha)
-	break;
-    }
-
-    free__dynamic_array(p);
-    return maxvalue;
-  }
-
   else{
-
-    int minvalue = INFINIT;
-    struct dynamic_array *p2 = neighbours(G, move);
-    for(int i = 0; i < p2->size; i++){
-      struct move_t new_move2 = {.c = color, .m = p2->array[i]};
-      struct graph_t *G2 = copy_new_graph(G, new_move2, color);
-      int value2 = minimax(G2, new_move2.m, MaxMin, depth - 1, alpha, beta, color);
-      minvalue = min(minvalue, value2);
-      change_value(&beta, min(beta, value2));
-      free__graph_t(G2);
-      if(beta <= alpha)
-	break;
+    for(i=0;i<p2->size;i++){
+      for(size_t j=0;j<p1->size;j++){
+        if(p2->array[i]==p1->array[j]){
+          add__to_dynamic_array(inter,p2->array[i]);
+          continue;
+        }
+      }
     }
-
-    free__dynamic_array(p2);
-    return minvalue;
   }
+  return inter;
+}
+
+
+struct dynamic_array* path_union(struct dynamic_array* p1,struct dynamic_array* p2){
+  for(size_t i=0;i<p2->size;i++){
+    add__to_dynamic_array(p1,p2->array[i]);
+  }
+  return p1;
+}
+
+
+int minimax(struct graph_t* G, struct graph_t *graph_player, int maxminplayer, int depth, int alpha, int beta,enum color_t id,int M){
+  struct dynamic_array* player_path=djikstra(graph_player,M,(1-id)*(M+1),(1-id));
+  struct dynamic_array* enemy_path=djikstra(graph_player,M,((1-id)+1)%2*(M+1),((1-id)+1)%2);
+  struct dynamic_array* intersection=path_intesection(player_path,enemy_path);
+  if(depth==0 || intersection->size==0 || game_over(G,id) || game_over(G,1-id) ){
+    int h=path_quality(G,M,(1-id)); 
+    return h;
+  }
+
+  else if(maxminplayer){
+    struct dynamic_array* player_path=djikstra(graph_player,M,(1-id)*(M+1),(1-id));
+    struct dynamic_array* enemy_path=djikstra(graph_player,M,((1-id)+1)%2*(M+1),((1-id)+1)%2);
+    struct dynamic_array* intersection=path_intesection(player_path,enemy_path);
+    int max=-INFINIT,count=0;
+    for(size_t i=0;i<intersection->size;i++){
+      if(!is_taken(G->o,intersection->array[i]) ){
+          count++;
+          struct move_t move;
+          move.m=intersection->array[i];
+          move.c=id;
+          struct graph_t*copy=copy_new_graph(G,move);
+          max=max_a_b(max,minimax(copy,graph_player,0,depth-1,alpha,beta,1-id,M));
+          free__graph_t(copy);
+          alpha=max_a_b(alpha,max);
+          if(beta <= alpha)
+            break;
+      }
+    }
+    free__dynamic_array(player_path);
+    free__dynamic_array(enemy_path);
+    free__dynamic_array(intersection);
+    return max;
+  }
+  else{
+    struct dynamic_array* player_path=djikstra(graph_player,M,(1-id)*(M+1),(1-id));
+    struct dynamic_array* enemy_path=djikstra(graph_player,M,((1-id)+1)%2*(M+1),((1-id)+1)%2);
+    struct dynamic_array* intersection=path_intesection(player_path,enemy_path);
+    int min=INFINIT,count2=0;
+    for(size_t i=0;i<intersection->size;i++){
+      if(!is_taken(G->o,intersection->array[i])){
+        count2++;
+        struct move_t move;
+        move.m=intersection->array[i];
+        move.c=id;
+        struct graph_t*copy=copy_new_graph(G,move);
+        min=min_a_b(min,minimax(copy,graph_player,1,depth-1,alpha,beta,1-id,M));
+        free__graph_t(copy);
+        beta=min_a_b(beta,min);
+        if(beta <= alpha)
+          break;
+      }
+    }
+    free__dynamic_array(player_path);
+    free__dynamic_array(enemy_path);
+    free__dynamic_array(intersection);
+    return min;
+  }
+}
+
+
+struct move_t best_move(struct graph_t *graph_player,enum color_t id, int M,struct dynamic_array* inter){
+  int bestval=INFINIT;
+  struct move_t m;
+  m.c=id;
+
+  for(size_t i=0;i<inter->size;i++){
+      if(!is_taken(graph_player->o,inter->array[i])){
+          struct move_t move;
+          move.m=inter->array[i];
+          move.c=id;
+          struct graph_t*copy=copy_new_graph(graph_player,move);
+          int val=minimax(copy,graph_player,1,50,-INFINIT,INFINIT,1-id,M);
+          free__graph_t(copy);
+          if(val<bestval){
+            bestval=val;
+            m.m=inter->array[i];
+          }
+
+      }
+    }
+  return m;
 }

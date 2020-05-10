@@ -138,13 +138,7 @@ int main(int argc,  char* argv[]){
 
   while (1){
     
-   if (show){
-     
-     print_graph(graph, Shape);
-    //sleep(1);
-    printf("\033[%dA",Length+3);
-     printf("\033[10B"); // Move down X lines;
-  }
+
    
     srand(time(NULL));
 
@@ -166,7 +160,7 @@ int main(int argc,  char* argv[]){
 
   coloriate__graph_t(graph, p->color, move);
   winner=1;
-  //printf("The winner is %s\n", p->name);
+  printf("The winner is %s\n", p->name);
         
   break;}
 
@@ -174,29 +168,33 @@ int main(int argc,  char* argv[]){
 
       coloriate__graph_t(graph, p->color, move);
       
-      // print_graph(graph, Shape);
+       //print_graph(graph, Shape);
       
     }
     
     else{
     
-      //printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
+      printf("The winner is player %d, player %d chose a wrong move\n", 1 - p->color, p->color);
       break;
     }
     
     count++;
 
+
+   if (show){
+     
+     print_graph(graph, Shape);
+    //sleep(1);
+    printf("\033[%dA",Length+3);
+     printf("\033[10B"); // Move down X lines;
+  }
     
   }
-
-  /* print_graph(graph, Shape);  
-  if (winner)
-  printf("The winner is");
+   if (show)
+     print_graph(graph, Shape);  
   else
     if (equal)
       printf("Equality between players\n");
-  
-  */
   
   p1->finalize();
   p2->finalize();
