@@ -19,7 +19,7 @@ players: player1.so player2.so player3.so player4.so
 clean:	
 	rm -rf *.o *.gcda *.gcno *.gcda server 
 	rm -f install/server install/test*
-	rm -f install/alltests install/*.so 
+	rm -f install/alltest* install/*.so 
 	rm  -f *gcov
 	rm -f *gcno
 	rm -f *gcda
@@ -39,7 +39,7 @@ graph_aux.o:src/graph_aux.c
 
 
 player1.o: src/player1.c 
-	$(CC) $(CFLAGS) -c -fPIC src/player1.c
+	$(CC) $(CFLAGS) -c  src/player1.c
 
 player-load.o: src/player-load.c src/player-load.h
 	$(CC) $(CFLAGS) -c -g src/player-load.c
@@ -48,7 +48,7 @@ server.o: src/server.c
 	$(CC) $(CFLAGS) -c src/server.c
 
 player1.so: player1.o pile.o graph.o graph_aux.o
-	$(CC) $(CFLAGS) -shared player1.o pile.o graph.o graph_aux.o -o install/vrandom.so $(LDFLAGS)
+	$(CC) $(CFLAGS) -fPIC -shared player1.o pile.o graph.o graph_aux.o -o install/vrandom.so $(LDFLAGS)
 
 player2.so:
 	cc -std=c99  -fPIC -g -I${GSL_PATH}/include -shared src/graph_aux.c src/player2.c src/graph.c src/pile.c -lm -lgsl -lgslcblas -ldl -L${GSL_PATH}/lib -L${GSL_PATH}/lib64 -o install/bloker.so
