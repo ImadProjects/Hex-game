@@ -192,9 +192,6 @@ int test_ratio_hex()
   //  coloriate__graph_t(g, 0, mv);
   struct move_t gagnant = {4,1};
   struct move_t gagnant_2 = {4,0};
-  print_graph(g, 'h');
-  printf("Ratio = %f", get_ratio(g,gagnant));
-  printf("Ratio = %f\n", get_ratio(g,gagnant_2)); 
   //
   free(b);
   free(x);

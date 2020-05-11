@@ -34,11 +34,11 @@ void print_m(double **mat, int n)
 
 double get_resistance(const struct graph_t *g, int color, int i, int j)
 {
-  double res = 0.1;
+  double res = 0.5;
   if (gsl_spmatrix_get(g->o, color == 0, i) > 0 ||
       gsl_spmatrix_get(g->o, color == 0, j) > 0)
   {
-    res += 10.;
+    res += 2.;
   }
   if ((gsl_spmatrix_get(g->o, color == 0, i) <= 0.01 &&
        gsl_spmatrix_get(g->o, color, i) <= 0.01) ||
@@ -199,13 +199,12 @@ double **generate_meshes(const struct graph_t *g, int color)
 
     //DERNIERE LIGNE
     if(color){
-
       for(int i = 0; i < n; i++){
 	mat_sys[2 * mesh_nb][2 * mesh_nb] += get_resistance(g, color, i, i+1);
 	mat_sys[2 * mesh_nb][2 * mesh_nb] += get_resistance(g, color, i * (n+1), (i+1) * (n+1));
 	
-	mat_sys[mesh_nb][2 * i] -= get_resistance(g, color, i, i+1);      
-	mat_sys[mesh_nb][2 * i * n] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
+	mat_sys[2*mesh_nb][2 * i] -= get_resistance(g, color, i, i+1);      
+	mat_sys[2*mesh_nb][2 * i * n] -= get_resistance(g, color, i * (n+1), (i+1) * (n+1));
       }
     }
     else{
@@ -337,11 +336,12 @@ double get_ratio(const struct graph_t* g, struct move_t mec){
   gauss(mat_b, b, x, size + 1);
   double res_b = (double) 10. / x[size];  
 
+  //  print_m(mat_w, size + 1);
   for (int i = 0; i < size + 1 ; x[i++] = 0);
   for (int i = 0; i < size + 1; b[i++] = 0);
   //  printf("size = %d, type = %c\n", size, type);
   b[size] = 10;
-  
+
   gauss(mat_w, b, x, size + 1);
   //  printf("I = %f\n", x[size]);
   double res_w = (double) 10. / x[size];
@@ -352,12 +352,12 @@ double get_ratio(const struct graph_t* g, struct move_t mec){
   free_sys(mat_b, size + 1);
   free__graph_t(g_copy);
     
-  //printf("type %c: Rw = %f, Rb = %f\n", type, res_w, res_b);
+  //  printf("type %c: Rw = %f, Rb = %f\n", type, res_w, res_b);
 
   if (!res_w)
   {
     return 2000000000.;
   }
   
-  return res_b / res_w;
+  return custom_abs(res_b / res_w);
 }
