@@ -172,3 +172,31 @@ int test_joueur_resistances()
 
   return c;
 }
+
+int test_ratio_hex()
+{
+  int n = 2;
+  int c = 0;
+  struct graph_t *g = new__graph_t(n, 'h');
+  double *b = malloc(sizeof(double) * 9);
+  double *x = malloc(sizeof(double) * 9);
+  //
+  for (int i = 0; i < 9; i++)
+  {
+    x[i] = 0.;
+    b[i] = 0.;
+  }
+  b[8] = 10;
+
+  struct move_t mv = {4, 1};
+  coloriate__graph_t(g, 0, mv);
+  struct move_t gagnant = {3,1};
+  struct move_t gagnant_2 = {3,1};
+  printf("Ratio = %f", get_ratio(g,gagnant));
+  printf("Ratio = %f", get_ratio(g,gagnant_2)); 
+  //
+  free(b);
+  free(x);
+  free__graph_t(g);
+  return c;
+}
