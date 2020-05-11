@@ -9,8 +9,8 @@ build: server test
 
 test:  alltests.o test_graph.o test_resistances.o alltests_resistance.o alltests_graph.o 
 		$(CC) $(CFLAGS) -rdynamic --coverage -g -O0   alltests.o test_resistances.o resistance.o test_graph.o graph.o pile.o graph_aux.o -o install/alltests $(LDFLAGS)
-		$(CC) $(CFLAGS) -rdynamic --coverage -g -O0   alltests_resistance.o test_resistances.o resistance.o  graph.o pile.o graph_aux.o -o install/test_resistance $(LDFLAGS)
-		$(CC) $(CFLAGS) -rdynamic --coverage -g -O0   alltests_graph.o test_graph.o  graph.o pile.o graph_aux.o -o install/test_graph $(LDFLAGS)
+		$(CC) $(CFLAGS) -rdynamic --coverage -g -O0   alltests_resistance.o test_resistances.o resistance.o  graph.o pile.o graph_aux.o -o install/alltests_resistance $(LDFLAGS)
+		$(CC) $(CFLAGS) -rdynamic --coverage -g -O0   alltests_graph.o test_graph.o  graph.o pile.o graph_aux.o -o install/alltests_graph $(LDFLAGS)
 
 install: server players
 

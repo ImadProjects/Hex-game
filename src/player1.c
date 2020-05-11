@@ -73,7 +73,6 @@ struct move_t play(struct move_t previous_move)
   int id = player1.color;
   gsl_spmatrix *o = player1.graph->o;
   size_t vertices = size__graph_t(player1.graph);
-  size_t width = width__graph_t(player1.graph);
   size_t ran[vertices];
   int a = 0;
 
