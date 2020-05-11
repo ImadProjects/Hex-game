@@ -94,11 +94,11 @@ struct move_t play(struct move_t previous_move)
   double sign = 1. - 2. * (mec.c == 1);
   double best_ratio = (double)sign * 2000000000.;
   int* voisin = voisins(jeremy.graph , previous_move.m, type);
-    printf("previous: %ld\n", previous_move.m);
+  //    printf("previous: %ld\n", previous_move.m);
   
   for (int i = 0; i < 4 + 2*(type == 'h'); i++) { //cases proches
     mec.m = voisin[i];
-    printf("%d -> %d\n", voisin[i], is_possible(jeremy.graph, mec.c, mec));
+    //    printf("%d -> %d\n", voisin[i], is_possible(jeremy.graph, mec.c, mec));
     if (is_possible(jeremy.graph, mec.c, mec)){
       double ratio = get_ratio(jeremy.graph, mec);
       if (!mec.c){
@@ -121,7 +121,7 @@ struct move_t play(struct move_t previous_move)
   if (best >= 0){
     mec.m = best;
     coloriate__graph_t(jeremy.graph, jeremy.color, mec);
-    printf("move: %ld\n", mec.m);
+    //    printf("move: %ld\n", mec.m);
     return mec;
   }
   if (best < 0){    //autres cases
@@ -132,14 +132,14 @@ struct move_t play(struct move_t previous_move)
 	if (!mec.c){
 	  if ((ratio < best_ratio) && (ratio >= 0)){
 	    coloriate__graph_t(jeremy.graph, jeremy.color, mec);
-	    printf("move: %ld\n", mec.m);
+	    //	    printf("move: %ld\n", mec.m);
 	    return mec;
 	  }
 	}
 	else{
 	  if ((ratio > best_ratio) && (ratio >= 0)){
 	    coloriate__graph_t(jeremy.graph, jeremy.color, mec);
-	    printf("move: %ld\n", mec.m);
+	    //	    printf("move: %ld\n", mec.m);
 	    return mec;
 	  }
 	}
@@ -150,6 +150,6 @@ struct move_t play(struct move_t previous_move)
   printf("=== error, jeremy can't find a proper place to play ===\n");
   mec.m = sqrt(jeremy.graph->num_vertices) + 1;
   coloriate__graph_t(jeremy.graph, jeremy.color, mec);
-  printf("move: %ld\n", mec.m);
+  //  printf("move: %ld\n", mec.m);
   return mec;
 }
