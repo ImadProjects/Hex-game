@@ -1,5 +1,5 @@
 GSL_PATH?=/opt/gsl-2.6/lib
-CFLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -ftest-coverage -lgcov -I $(GSL_PATH)/include
+CFLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -ftest-coverage   -I $(GSL_PATH)/include
 
 LDFLAGS=-L $(GSL_PATH)/lib -ldl -lgsl -lgslcblas -lm
 
@@ -41,8 +41,6 @@ graph_aux.o:src/graph_aux.c
 player1.o: src/player1.c 
 	$(CC) $(CFLAGS) -c  src/player1.c
 
-player-load.o: src/player-load.c src/player-load.h
-	$(CC) $(CFLAGS) -c -g src/player-load.c
 
 server.o: src/server.c 
 	$(CC) $(CFLAGS) -c src/server.c
@@ -69,7 +67,7 @@ test_graph.o: src/test_graph.c
 	$(CC) $(CFLAGS) -c src/test_graph.c
 
 test_resistances.o: src/test_resistances.c resistance.o
-	$(CC) $(CFLAGS) -lgcov -c src/test_resistances.c
+	$(CC) $(CFLAGS)   -c src/test_resistances.c
 
 
 alltests.o: src/alltests.c 
