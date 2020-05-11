@@ -37,6 +37,7 @@ int main(void)
   recap_test("DES CALCULS D'INTENSITES POUR UN GRAPHE GAGNANT/PERDANT", test_res(), N_RES);
   recap_test("LE CHOIX DE LA BONNE CASE", test_joueur_resistances(), N_JOUEUR);
   //  test_hexa();
+  test_ratio_hex();
   return 0;
 }
 //  printf("\033[00m");
