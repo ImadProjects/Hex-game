@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 // Global seed for the random number generator
-static int Length = 6;
+static int Length = 8;
 static char Shape = 'h';
 static int show = 0;
 
