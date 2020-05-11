@@ -1,5 +1,5 @@
 GSL_PATH?=/opt/gsl-2.6/lib
-CFLAGS=-Wall -Wextra -std=c99 -I $(GSL_PATH)/include
+CFLAGS=-Wall -Wextra -fPIC -std=c99 -I $(GSL_PATH)/include
 
 LDFLAGS=-L $(GSL_PATH)/lib -ldl -lgsl -lgslcblas -lm
 
