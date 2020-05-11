@@ -90,5 +90,5 @@ clean:
 	rm -f *gcno
 	rm -f *gcda
 	rm -f a.out
-	rm -rf install/*.dSYM
+	rm -rf install/*.dSYM *.dSYM
 	
