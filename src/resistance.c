@@ -337,10 +337,10 @@ double get_ratio(const struct graph_t* g, struct move_t mec){
   gauss(mat_b, b, x, size + 1);
   double res_b = (double) 10. / x[size];  
 
-  for (int i = 0; i < n*n + 1 ; x[i++] = 0);
-  for (int i = 0; i < n*n + 1; b[i++] = 0);
+  for (int i = 0; i < size + 1 ; x[i++] = 0);
+  for (int i = 0; i < size + 1; b[i++] = 0);
   //  printf("size = %d, type = %c\n", size, type);
-
+  b[size] = 10;
   
   gauss(mat_w, b, x, size + 1);
   //  printf("I = %f\n", x[size]);
@@ -352,12 +352,12 @@ double get_ratio(const struct graph_t* g, struct move_t mec){
   free_sys(mat_b, size + 1);
   free__graph_t(g_copy);
     
-  //  printf("type %c: Rw = %f, Rb = %f\n", type, res_w, res_b);
+  //printf("type %c: Rw = %f, Rb = %f\n", type, res_w, res_b);
 
   if (!res_w)
   {
     return 2000000000.;
   }
-
+  
   return res_b / res_w;
 }
