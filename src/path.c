@@ -5,24 +5,24 @@ int find_min_distance(int *distance, int *selected, int num_vertices)
 {
   int min = INFINIT;
   int min_index = -1;
-  
+
   for (int k = 0; k < num_vertices; k++)
     if (distance[k] <= min && selected[k] == 0)
       min = distance[k], min_index = k;
-   
+
   return min_index;
 }
 
 struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_t color)
 {
-  int vertices = G->num_vertices;
+  size_t vertices = G->num_vertices;
   int distance[vertices];
   int parent[vertices];
   int selected[vertices];
-  
+
   for (size_t i = 0; i < vertices; i++)
     parent[i] = INFINIT, distance[i] = INFINIT, selected[i] = 0;
-      
+
   distance[src] = 0;
   parent[src] = -1;
 
@@ -35,10 +35,10 @@ struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_
     {
       int d = (int)(gsl_spmatrix_get(G->t, u, v) - gsl_spmatrix_get(G->o, color, v) * gsl_spmatrix_get(G->o, color, u));
       if (!selected[v] &&
-	  gsl_spmatrix_get(G->t, u, v) &&
-	  distance[u] != INFINIT &&
-	  !gsl_spmatrix_get(G->o, (color + 1) % 2, v) &&
-	  distance[u] + d  <= distance[v])
+          gsl_spmatrix_get(G->t, u, v) &&
+          distance[u] != INFINIT &&
+          !gsl_spmatrix_get(G->o, (color + 1) % 2, v) &&
+          distance[u] + d <= distance[v])
       {
         distance[v] = distance[u] + d;
         parent[v] = u;
@@ -55,7 +55,6 @@ struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_
 
   while (i != -1)
     add__to_dynamic_array(p, i), i = parent[i];
- 
 
   return p;
 }
@@ -63,11 +62,11 @@ struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_
 int path_score(struct dynamic_array *path, struct graph_t *G)
 {
   size_t score = 0, i = 0;
-  
+
   for (i = 0; i < path->size; i++)
     if ((gsl_spmatrix_get(G->o, 0, path->array[i]) == 0) && ((gsl_spmatrix_get(G->o, 1, path->array[i]) == 0)))
       score++;
-  
+
   return score;
 }
 
@@ -75,16 +74,16 @@ int path_quality(struct graph_t *G, int M, int color)
 {
   if (game_over(G, color))
     return -INFINIT;
-  
+
   if (game_over(G, (color + 1) % 2))
     return INFINIT;
-  
+
   struct dynamic_array *p_path = djikstra(G, M, color * (M + 1), color);
   struct dynamic_array *op_path = djikstra(G, M, (color + 1) % 2 * (M + 1), (color + 1) % 2);
 
-  int d = path_score(p_path, G) - path_score(op_path, G); 
+  int d = path_score(p_path, G) - path_score(op_path, G);
   free__dynamic_array(p_path);
   free__dynamic_array(op_path);
-  
+
   return d;
 }

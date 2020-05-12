@@ -5,50 +5,46 @@
 struct dynamic_array *neighbours(struct graph_t *graph, int position)
 {
   struct dynamic_array *neighbours = empty__dynamic_array();
-  
+
   for (int k = 0; k < graph->num_vertices; k++)
     if (gsl_spmatrix_get(graph->t, position, graph->num_vertices - k - 1) == 1)
       add__to_dynamic_array(neighbours, graph->num_vertices - k - 1);
-  
+
   return neighbours;
 }
 
 int max_a_b(int a, int b)
 {
-  
-    return (a >= b)? a: b;
+  return (a >= b) ? a : b;
 }
 
 int min_a_b(int a, int b)
 {
-
-    return (a <= b)? a: b;
+  return (a <= b) ? a : b;
 }
 
 struct dynamic_array *path_intesection(struct dynamic_array *p1, struct dynamic_array *p2)
 {
-  
   struct dynamic_array *inter = empty__dynamic_array();
-  
-    for (size_t i = 0; i < p1->size; i++)
-      for (size_t j = 0; j < p2->size; j++)
-        if (p1->array[i] == p2->array[j])
-          add__to_dynamic_array(inter, p1->array[i]);
+
+  for (size_t i = 0; i < p1->size; i++)
+    for (size_t j = 0; j < p2->size; j++)
+      if (p1->array[i] == p2->array[j])
+        add__to_dynamic_array(inter, p1->array[i]);
 
   return inter;
 }
 
 struct dynamic_array *path_union(struct dynamic_array *p1, struct dynamic_array *p2)
 {
-  
- struct dynamic_array *unio = empty__dynamic_array();
+  struct dynamic_array *unio = empty__dynamic_array();
 
- for (size_t i = 0; i < p1->size; i++)
+  for (size_t i = 0; i < p1->size; i++)
     add__to_dynamic_array(unio, p1->array[i]);
- 
+
   for (size_t i = 0; i < p2->size; i++)
     add__to_dynamic_array(unio, p2->array[i]);
-  
+
   return unio;
 }
 
@@ -57,7 +53,7 @@ int minimax(struct graph_t *G, struct graph_t *graph_player, int maxminplayer, i
   struct dynamic_array *player_path = djikstra(graph_player, M, (1 - id) * (M + 1), (1 - id));
   struct dynamic_array *enemy_path = djikstra(graph_player, M, ((1 - id) + 1) % 2 * (M + 1), ((1 - id) + 1) % 2);
   struct dynamic_array *intersection = path_intesection(player_path, enemy_path);
-  
+
   if (depth == 0 || intersection->size == 0 || game_over(G, id) || game_over(G, 1 - id))
     return path_quality(G, M, (1 - id));
 
