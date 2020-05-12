@@ -7,7 +7,7 @@
 #define N_TR 15
 #define N_SYS 6
 #define N_GAUSS 2
-#define N_RES 2
+#define N_RES 3
 #define N_JOUEUR 2
 
 void recap_test(char *s, int n, int expected)
@@ -38,7 +38,6 @@ int main(void)
   recap_test("LE CHOIX DE LA BONNE CASE AVEC LES RESISTANCES", test_joueur_resistances(), N_JOUEUR);
   recap_test("path.c", test_all_array(), 3);
   //  test_hexa();
-  test_ratio_hex();
   return 0;
 }
 //  printf("\033[00m");

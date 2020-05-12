@@ -11,14 +11,19 @@ struct pile
   int capacity;
 };
 
+//creates an empty stack
 struct pile *pile_vide();
 
+//liberates the stack
 void pile_free(struct pile *p);
 
+//adds an element on the top of the stack
 void empiler(struct pile *p, int n);
 
+//removes and returns the element on the top of the stack
 int depiler(struct pile *p);
 
+//returns 1 if the stack is empty, 0 otherwise
 int est_vide(struct pile *p);
 
 ////// graph part //////

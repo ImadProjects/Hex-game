@@ -53,7 +53,7 @@ int test_pathfinding(void)
   int c = 0;
   //carré
   struct graph_t *g = new__graph_t(3, 'c');
-  struct move_t move = {5};
+  struct move_t move = {5, 1};
   coloriate__graph_t(g, 1, move);
   c += check(is_winning(g, 1, move, 'c'), 0);
 

@@ -167,7 +167,7 @@ struct move_t play(struct move_t previous_move)
     }
   }*/
          
-  printf("=== error, jeremy can't find a proper place to play ===\n");
+  //  printf("=== error, jeremy can't find a proper place to play ===\n");
   for(int i = sqrt(jeremy.graph->num_vertices); i < jeremy.graph->num_vertices; i++){
     mec.m = i;
     if (is_possible(jeremy.graph, mec.c, mec)){
