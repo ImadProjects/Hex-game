@@ -35,11 +35,6 @@ void print_m(double **mat, int n)
 double get_resistance(const struct graph_t *g, int color, int i, int j)
 {
   double res = 0.5;
-  if (gsl_spmatrix_get(g->o, color == 0, i) > 0 ||
-      gsl_spmatrix_get(g->o, color == 0, j) > 0)
-  {
-    res += 2.;
-  }
   if ((gsl_spmatrix_get(g->o, color == 0, i) <= 0.01 &&
        gsl_spmatrix_get(g->o, color, i) <= 0.01) ||
       (gsl_spmatrix_get(g->o, color == 0, j) <= 0.01 &&
@@ -47,7 +42,11 @@ double get_resistance(const struct graph_t *g, int color, int i, int j)
   {
     res += 1.;
   }
-  return res;
+  if (gsl_spmatrix_get(g->o, color == 0, i) > 0 ||
+      gsl_spmatrix_get(g->o, color == 0, j) > 0){
+    res = 3.;
+  }
+    return res;
 }
 
 double **generate_meshes(const struct graph_t *g, int color)
