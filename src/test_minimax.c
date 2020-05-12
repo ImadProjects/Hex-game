@@ -7,7 +7,11 @@ int test_empty_array()
 {
   struct dynamic_array *array = empty__dynamic_array();
   if (array->capacity == 1 && array->size == 0)
+  {
+    free__dynamic_array(array);
     return 1;
+  }
+  free__dynamic_array(array);
   return 0;
 }
 
@@ -26,10 +30,17 @@ int test_add_to_array()
   struct dynamic_array *array = empty__dynamic_array();
   add__to_dynamic_array(array, 1);
   if (array->size == 1 && array->array[0] == 1)
+  {
+    free__dynamic_array(array);
     return 1;
+  }
   add__to_dynamic_array(array, 2);
   if (array->capacity == 2 && array->size == 2 && array->array[0] == 1 && array->array[1] == 2)
+  {
+    free__dynamic_array(array);
     return 1;
+  }
+  free__dynamic_array(array);
   return 0;
 }
 
