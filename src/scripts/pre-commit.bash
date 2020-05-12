@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo "."
-echo "."
-echo "."
+echo ".."
+echo "... im cleaning your sources"
 
 echo "Running pre-commit hook"
 echo "."
@@ -20,6 +20,7 @@ echo ".."
  echo ".."
  echo "."
 
- make clean
  exit 1
 fi
+
+make clean
