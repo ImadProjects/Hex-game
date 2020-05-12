@@ -60,6 +60,7 @@ void assign_links(gsl_spmatrix *t, char c, int n)
 void assign_tr(gsl_spmatrix *t, char c, int n)
 { //initialise la matrice t pour un graphe triangulaire
   int i;
+  (void)c;
   int ligne = 0;
   int nb_elem = 2 * n + 1;  //décroit le long d'une ligne
   int nb_elem2 = 2 * n + 1; //constant le long d'une ligne
@@ -217,7 +218,7 @@ int game_over(const struct graph_t *g, int color)
   else
     s = 0;
 
-  for (int i = 0; i < g->num_vertices; i++)
+  for (size_t i = 0; i < g->num_vertices; i++)
   {
     tab[i] = 0;
   }
@@ -241,7 +242,7 @@ int game_over(const struct graph_t *g, int color)
       free(tab);
       return 1;
     }
-    for (int i = 0; i < g->num_vertices; i++)
+    for (size_t i = 0; i < g->num_vertices; i++)
     {
       if ((gsl_spmatrix_get(g->o, color, i) > 0) && (gsl_spmatrix_get(g->t, s, i)) && tab[i] == 0)
       {

@@ -128,11 +128,12 @@ void print_graph(const struct graph_t *g, char c)
 int is_winning(const struct graph_t *g, int color, struct move_t move, char c)
 {
   struct pile *p = pile_vide();
+  (void)c;
   char *tab = malloc(sizeof(char) * g->num_vertices);
   int cond1 = 0;
   int cond2 = 0;
   int s = (int)move.m;
-  for (int i = 0; i < g->num_vertices; i++)
+  for (size_t i = 0; i < g->num_vertices; i++)
     tab[i] = 0;
   tab[s] = 1;
   empiler(p, s);
@@ -154,7 +155,7 @@ int is_winning(const struct graph_t *g, int color, struct move_t move, char c)
       free(tab);
       return 1;
     }
-    for (int i = 0; i < g->num_vertices; i++)
+    for (size_t i = 0; i < g->num_vertices; i++)
     {
       if ((gsl_spmatrix_get(g->o, color, i) > 0) && (gsl_spmatrix_get(g->t, s, i)) && tab[i] == 0)
       {
@@ -175,8 +176,8 @@ void print_tr(const struct graph_t *g)
   char *ss = s;
   int ligne = 0;
   int nb_elem2 = 2 * m + 1;
-  int c1 = 0;
-  int c2 = 1;
+  size_t c1 = 0;
+  size_t c2 = 1;
   int c;
   for (int i = 0; i < m; i++)
     s[i] = ' ';

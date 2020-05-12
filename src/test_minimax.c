@@ -21,8 +21,12 @@ int test_array_realloc()
   array->size++;
   realloc__dynamic_array(array);
   if (array->capacity == 2)
-    return 1;
+  {
+      free__dynamic_array(array);
+      return 1;
+    }
   free__dynamic_array(array);
+  return 0;
 }
 
 int test_add_to_array()
@@ -44,11 +48,11 @@ int test_add_to_array()
   return 0;
 }
 
-int test_all()
+int test_all_array()
 {
   if (test_add_to_array() && test_empty_array() && test_array_realloc())
     return 3;
-  else if ((test_add_to_array() && test_empty_array() == 0 && test_array_realloc()) || (test_add_to_array() == 0 && test_empty_array() && test_array_realloc() || (test_add_to_array() && test_empty_array() && test_array_realloc() == 0)))
+  else if ((test_add_to_array() && test_empty_array() == 0 && test_array_realloc()) || (test_add_to_array() == 0 && test_empty_array() && test_array_realloc()) || (test_add_to_array() && test_empty_array() && test_array_realloc() == 0))
     return 2;
   else if ((test_add_to_array() == 0 && test_empty_array() == 0 && test_array_realloc()) || (test_add_to_array() == 0 && test_empty_array() && test_array_realloc() == 0) || (test_add_to_array() && test_empty_array() == 0 && test_array_realloc() == 0))
     return 1;

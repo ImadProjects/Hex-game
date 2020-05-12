@@ -10,3 +10,4 @@ int test_res();
 int test_joueur_resistances();
 int test_hexa();
 int test_ratio_hex();
+int test_all_array();

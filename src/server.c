@@ -46,7 +46,7 @@ void parse_opts(int argc, char *argv[])
 int is_move_possible(struct graph_t *g, int color, struct move_t move)
 {
   int n = (int)move.m;
-  if (move.m != -1 && (gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0))
+  if (n != -1 && (gsl_spmatrix_get(g->o, color, n) == 0) && (gsl_spmatrix_get(g->o, 1-color, n) == 0))
   {
     return 1;
   }
@@ -87,7 +87,6 @@ int main(int argc, char *argv[])
   //-------------------------------------------
   struct graph_t *graph = new__graph_t(Length, Shape);
 
-  char *v = argv[argc - 2];
   void *player1 = dlopen(argv[argc - 2], RTLD_NOW);
   void *player2 = dlopen(argv[argc - 1], RTLD_NOW);
 
@@ -128,13 +127,9 @@ int main(int argc, char *argv[])
   if (!accept)
     move = p2->propose_opening();
 
-  int count = width__graph_t(graph) * 4 - 4;
-
+  size_t count = width__graph_t(graph) * 4 - 4;
   struct player_server *p;
-  int winner = 0;
   int equal = 0;
-  int tab_moves_player1[10] = {22, 10, 11, 18, 13, 26};
-  int tab_moves_player2[10] = {19, 10, 11, 25, 21, 14};
 
   while (1)
   {
@@ -159,7 +154,6 @@ int main(int argc, char *argv[])
       {
 
         coloriate__graph_t(graph, p->color, move);
-        winner = 1;
         printf("The winner is %s\n", p->name);
         break;
       }
