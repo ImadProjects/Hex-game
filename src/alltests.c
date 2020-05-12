@@ -7,7 +7,7 @@
 #define N_TR 15
 #define N_SYS 6
 #define N_GAUSS 2
-#define N_RES 3
+#define N_RES 2
 #define N_JOUEUR 2
 
 void recap_test(char *s, int n, int expected)

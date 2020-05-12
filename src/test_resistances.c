@@ -74,7 +74,7 @@ int test_res()
   coloriate__graph_t(g, 0, mv);
   double** mat = generate_meshes(g, 1);
   gauss(mat, b, x, n*n + 1);
-  c += (x[n*n] < 4 && x[n*n] >= 0);
+  double tmp = x[n*n];
   free_sys(mat, n*n + 1);
 
   for (int i = 0; i < n * n + 1; i++)
@@ -85,7 +85,7 @@ int test_res()
   b[n * n] = 10;
   double** matt = generate_meshes(g, 0);
   gauss(matt, b, x, n*n + 1);
-  c += x[n*n] > 4;
+  c += x[n*n] > tmp;
   free_sys(matt, n*n + 1);
   free(b);
   free(x);
@@ -105,7 +105,7 @@ int test_res()
   coloriate__graph_t(gg, 0, mv);
   double** math = generate_meshes(gg, 1);
   gauss(math, bb, xx, size + 1);
-  float tmp = xx[size];
+  tmp = xx[size];
   free_sys(math, size + 1);
 
   for (int i = 0; i < size + 1; i++)
@@ -116,7 +116,7 @@ int test_res()
   bb[size] = 10;
   double** matth = generate_meshes(gg, 0);
   gauss(matth, bb, xx, size + 1);
-  c += xx[size] > tmp;
+  c += xx[size] < tmp;
   free_sys(matth, size + 1);
   free(bb);
   free(xx);
