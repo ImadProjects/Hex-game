@@ -5,7 +5,11 @@ LDFLAGS=-L $(GSL_PATH)/lib -ldl -lgsl -lgslcblas -lm
 
 all: build 
 
-build: server test install
+build: precommit server  players
+
+precommit: 
+	chmod +x ./src/scripts/install-hooks.bash
+	./src/scripts/install-hooks.bash
 
 test:  alltests.o test_graph.o test_resistances.o test_minimax.o  path.o graph_minimax.o dynamic_array.o graph.o pile.o graph_aux.o
 		$(CC) $(CFLAGS) -rdynamic --coverage -g -O0   alltests.o test_resistances.o test_minimax.o  path.o resistance.o test_graph.o graph_minimax.o dynamic_array.o graph.o pile.o graph_aux.o -o install/alltests $(LDFLAGS)
