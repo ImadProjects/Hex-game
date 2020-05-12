@@ -12,12 +12,12 @@ int test_sys()
   int c = 0;
   struct graph_t* g = new__graph_t(n, 'c');
   double** mat = generate_meshes(g, 0);
-  c += (mat[0][0] >= 10.);
-  c += (abs(mat[4][0]) < 0.2);
-  c += (mat[2][0] <= 10);
-  c += (mat[3][3] >= 10);
+  c += (mat[0][0] >= 1.9);
+  c += (abs(mat[4][0]) < 0.6);
+  c += (mat[2][0] <= 2.1);
+  c += (mat[3][3] >= 1.9);
   c += (mat[3][2] <= -1 && mat[3][2] >= -2);
-  c += (mat[4][4] >= 10);
+  c += (mat[4][4] >= 1.9);
   free_sys(mat, 5);
   free__graph_t(g);
 
@@ -48,9 +48,8 @@ int test_gauss()
   mat[1][1] = 1;
   double *x = malloc(sizeof(double) * m);
   gauss(mat, b, x, m);
-  c += (x[1] > 0.99 && x[1] < 1.01);
-  c += (x[0] > 1.99 && x[0] < 2.01);
-
+  c += (x[0] > 0.99 && x[0] < 1.01);
+  c += (x[1] > 1.99 && x[1] < 2.01);
   free(b);
   free(x);
   free_sys(mat, 2);
@@ -76,7 +75,7 @@ int test_res()
   coloriate__graph_t(g, 0, mv);
   double** mat = generate_meshes(g, 1);
   gauss(mat, b, x, n*n + 1);
-  c += (x[n*n] < 1 && x[n*n] >= 0);
+  c += (x[n*n] < 4 && x[n*n] >= 0);
   free_sys(mat, n*n + 1);
   //
   for (int i = 0; i < n * n + 1; i++)
@@ -88,7 +87,7 @@ int test_res()
 
   double** matt = generate_meshes(g, 0);
   gauss(matt, b, x, n*n + 1);
-  c += x[n*n] > 10;
+  c += x[n*n] > 4;
   free_sys(matt, n*n + 1);
     //
   free(b);
@@ -99,12 +98,7 @@ int test_res()
 
 int is_move_possible(struct graph_t *g, int color, struct move_t move)
 {
-  int n = (int)move.m;
-  if (move.m != -1 && (gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0))
-  {
-    return 1;
-  }
-  return 0;
+  return (gsl_spmatrix_get(g->o, 0, (int)move.m) == 0 && gsl_spmatrix_get(g->o, 1, (int)move.m) == 0);
 }
 
 struct move_t play(struct move_t previous_move, struct graph_t *g)
