@@ -40,7 +40,7 @@ double get_resistance(const struct graph_t *g, int color, int i, int j)
       (gsl_spmatrix_get(g->o, color == 0, j) <= 0.01 &&
        gsl_spmatrix_get(g->o, color, j) <= 0.01))
   {
-    res += 1.;
+    res = 1.;
   }
   if (gsl_spmatrix_get(g->o, color == 0, i) > 0 ||
       gsl_spmatrix_get(g->o, color == 0, j) > 0){
@@ -347,6 +347,5 @@ double get_ratio(const struct graph_t* g, struct move_t mec){
     {
       return 2000000000.;
     }
-  
   return custom_abs(res_b / res_w);
 }
