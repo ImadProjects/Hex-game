@@ -12,6 +12,9 @@ build: precommit server  players
 doc:
 	cd doc ; doxygen Doxyfile ; open html/index.html
 
+show:
+	open src/game.html
+
 precommit: 
 	chmod +x ./src/scripts/install-hooks.bash
 	./src/scripts/install-hooks.bash
