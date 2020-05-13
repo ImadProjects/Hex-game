@@ -35,19 +35,18 @@ void print_m(double **mat, int n)
 double get_resistance(const struct graph_t *g, int color, int i, int j)
 {
   double res = 0.5;
-  if (gsl_spmatrix_get(g->o, color == 0, i) > 0 ||
-      gsl_spmatrix_get(g->o, color == 0, j) > 0)
-  {
-    res += 2.;
-  }
   if ((gsl_spmatrix_get(g->o, color == 0, i) <= 0.01 &&
        gsl_spmatrix_get(g->o, color, i) <= 0.01) ||
       (gsl_spmatrix_get(g->o, color == 0, j) <= 0.01 &&
        gsl_spmatrix_get(g->o, color, j) <= 0.01))
   {
-    res += 1.;
+    res = 1.;
   }
-  return res;
+  if (gsl_spmatrix_get(g->o, color == 0, i) > 0 ||
+      gsl_spmatrix_get(g->o, color == 0, j) > 0){
+    res = 2.;
+  }
+    return res;
 }
 
 double **generate_meshes(const struct graph_t *g, int color)
@@ -250,7 +249,7 @@ void free_sys(double **mat, int n)
 
 void gauss(double **mat, double *b, double *x, int n)
 {
-  int i, j, k;
+  //  int i, j, k;
   int imin;
   double p;
   double sum, min, s, ss;
@@ -289,7 +288,7 @@ void gauss(double **mat, double *b, double *x, int n)
     b[imin] = b[i];
     b[i] = ss;
 
-    for (j = i + 1; j < n; j++)
+    for (int j = i + 1; j < n; j++)
     {
       p = mat[j][i] / mat[i][i];
       for (int k = 0; k < n; k++)
@@ -304,14 +303,11 @@ void gauss(double **mat, double *b, double *x, int n)
     printf("\n\n====== Problème, dernier élément nul ======\n\n");
   }
   x[n-1] = b[n-1] / mat[n-1][n-1];
-  //  print_vect(b, n);
-  //  printf("\nmat[n-1][n-1] = %f, b[n-1] = %f\n", mat[n-1][n-1], b[n-1]);
   for (int i = n-2; i+1; i--){
    sum = 0;
     for (int j = n - 1; j > i; j--)
     {
       sum += mat[i][j] * x[j];
-      //printf("i=%d, j=%d, mat[i][j] = %f\n", i, j, mat[i][j]);
     }
     x[i] = (b[i] - sum) / mat[i][i];
   }
@@ -336,14 +332,10 @@ double get_ratio(const struct graph_t* g, struct move_t mec){
   gauss(mat_b, b, x, size + 1);
   double res_b = (double) 10. / x[size];  
 
-  //  print_m(mat_w, size + 1);
   for (int i = 0; i < size + 1 ; x[i++] = 0);
   for (int i = 0; i < size + 1; b[i++] = 0);
-  //  printf("size = %d, type = %c\n", size, type);
   b[size] = 10;
-
   gauss(mat_w, b, x, size + 1);
-  //  printf("I = %f\n", x[size]);
   double res_w = (double) 10. / x[size];
   
   free(b);
@@ -351,13 +343,9 @@ double get_ratio(const struct graph_t* g, struct move_t mec){
   free_sys(mat_w, size + 1);
   free_sys(mat_b, size + 1);
   free__graph_t(g_copy);
-    
-  //  printf("type %c: Rw = %f, Rb = %f\n", type, res_w, res_b);
-
   if (!res_w)
-  {
-    return 2000000000.;
-  }
-  
+    {
+      return 2000000000.;
+    }
   return custom_abs(res_b / res_w);
 }

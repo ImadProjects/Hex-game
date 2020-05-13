@@ -12,12 +12,12 @@ int test_sys()
   int c = 0;
   struct graph_t* g = new__graph_t(n, 'c');
   double** mat = generate_meshes(g, 0);
-  c += (mat[0][0] >= 10.);
-  c += (abs(mat[4][0]) < 0.2);
-  c += (mat[2][0] <= 10);
-  c += (mat[3][3] >= 10);
+  c += (mat[0][0] >= 1.9);
+  c += (abs(mat[4][0]) < 0.6);
+  c += (mat[2][0] <= 2.1);
+  c += (mat[3][3] >= 1.9);
   c += (mat[3][2] <= -1 && mat[3][2] >= -2);
-  c += (mat[4][4] >= 10);
+  c += (mat[4][4] >= 1.9);
   free_sys(mat, 5);
   free__graph_t(g);
 
@@ -48,9 +48,8 @@ int test_gauss()
   mat[1][1] = 1;
   double *x = malloc(sizeof(double) * m);
   gauss(mat, b, x, m);
-  c += (x[1] > 0.99 && x[1] < 1.01);
-  c += (x[0] > 1.99 && x[0] < 2.01);
-
+  c += (x[0] > 0.99 && x[0] < 1.01);
+  c += (x[1] > 1.99 && x[1] < 2.01);
   free(b);
   free(x);
   free_sys(mat, 2);
@@ -64,7 +63,6 @@ int test_res()
   struct graph_t *g = new__graph_t(n, 'c');
   double *b = malloc(sizeof(double) * (n * n + 1));
   double *x = malloc(sizeof(double) * (n * n + 1));
-  //
   for (int i = 0; i < n * n + 1; i++)
   {
     x[i] = 0.;
@@ -76,35 +74,59 @@ int test_res()
   coloriate__graph_t(g, 0, mv);
   double** mat = generate_meshes(g, 1);
   gauss(mat, b, x, n*n + 1);
-  c += (x[n*n] < 1 && x[n*n] >= 0);
+  double tmp = x[n*n];
   free_sys(mat, n*n + 1);
-  //
+
   for (int i = 0; i < n * n + 1; i++)
   {
     x[i] = 0.;
     b[i] = 0.;
   }
   b[n * n] = 10;
-
   double** matt = generate_meshes(g, 0);
   gauss(matt, b, x, n*n + 1);
-  c += x[n*n] > 10;
+  c += x[n*n] > tmp;
   free_sys(matt, n*n + 1);
-    //
   free(b);
   free(x);
   free__graph_t(g);
+
+  int size = 2 * n*n;
+  struct graph_t* gg = new__graph_t(n, 'h');
+  double *bb = malloc(sizeof(double) * (size + 1));
+  double *xx = malloc(sizeof(double) * (size + 1));
+  for (int i = 0; i < size + 1; i++)
+    {
+      xx[i] = 0.;
+      bb[i] = 0.;
+    }
+  bb[size] = 10;
+
+  coloriate__graph_t(gg, 0, mv);
+  double** math = generate_meshes(gg, 1);
+  gauss(math, bb, xx, size + 1);
+  tmp = xx[size];
+  free_sys(math, size + 1);
+
+  for (int i = 0; i < size + 1; i++)
+  {
+    xx[i] = 0.;
+    bb[i] = 0.;
+  }
+  bb[size] = 10;
+  double** matth = generate_meshes(gg, 0);
+  gauss(matth, bb, xx, size + 1);
+  c += xx[size] < tmp;
+  free_sys(matth, size + 1);
+  free(bb);
+  free(xx);
+  free__graph_t(gg);
   return c;
 }
 
-int is_move_possible(struct graph_t *g, int color, struct move_t move)
+int is_move_possible(struct graph_t *g, struct move_t move)
 {
-  int n = (int)move.m;
-  if (move.m != -1 && (gsl_spmatrix_get(g->o, 0, n) == 0) && (gsl_spmatrix_get(g->o, 1, n) == 0))
-  {
-    return 1;
-  }
-  return 0;
+  return (gsl_spmatrix_get(g->o, 0, (int)move.m) == 0 && gsl_spmatrix_get(g->o, 1, (int)move.m) == 0);
 }
 
 struct move_t play(struct move_t previous_move, struct graph_t *g)
@@ -114,10 +136,10 @@ struct move_t play(struct move_t previous_move, struct graph_t *g)
   int best = -1;
   double sign = 1. - 2. * (mec.c == 1);
   double best_ratio = (double)sign * 2000000000.;
-  for (int i = 0; i < g->num_vertices; i++)
+  for (int i = 0; i < (int) g->num_vertices; i++)
   {
     mec.m = i;
-    if (is_move_possible(g, mec.c, mec))
+    if (is_move_possible(g, mec))
     {
       double ratio = get_ratio(g, mec);
       if (!mec.c)
@@ -156,7 +178,7 @@ int test_joueur_resistances()
   struct graph_t *g = new__graph_t(n, 'c');
   coloriate__graph_t(g, 0, mv);
   struct graph_t *g_copy = copy_graph(g);
-  c += (play(mv, g_copy).m == -1);
+  c += ((int) play(mv, g_copy).m == -1);
   free__graph_t(g_copy);
   free__graph_t(g);
 
@@ -173,28 +195,3 @@ int test_joueur_resistances()
   return c;
 }
 
-int test_ratio_hex()
-{
-  int n = 2;
-  int c = 0;
-  struct graph_t *g = new__graph_t(n, 'h');
-  double *b = malloc(sizeof(double) * 9);
-  double *x = malloc(sizeof(double) * 9);
-  //
-  for (int i = 0; i < 9; i++)
-  {
-    x[i] = 0.;
-    b[i] = 0.;
-  }
-  b[8] = 10;
-
-  struct move_t mv = {4, 1};
-  //  coloriate__graph_t(g, 0, mv);
-  struct move_t gagnant = {4,1};
-  struct move_t gagnant_2 = {4,0};
-  //
-  free(b);
-  free(x);
-  free__graph_t(g);
-  return c;
-}

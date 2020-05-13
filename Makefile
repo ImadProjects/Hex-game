@@ -1,6 +1,6 @@
 GSL_PATH?=/opt/gsl-2.6/lib
-CFLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -ftest-coverage   -I $(GSL_PATH)/include
-FLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -I $(GSL_PATH)/include
+CFLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -ftest-coverage -g   -I $(GSL_PATH)/include
+FLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -g  -I $(GSL_PATH)/include
 LDFLAGS=-L $(GSL_PATH)/lib -ldl -lgsl -lgslcblas -lm
 
 all: build 
@@ -44,7 +44,7 @@ player1.o: src/player1.c
 
 
 server.o: src/server.c 
-	$(CC) $(FLAGS) -c src/server.c
+	$(CC) $(FLAGS) -g -c src/server.c
 
 player1.so: player1.o pile.o graph.o graph_aux.o
 	$(CC) $(FLAGS) -fPIC -shared player1.o pile.o graph.o graph_aux.o -o install/vrandom.so $(LDFLAGS)

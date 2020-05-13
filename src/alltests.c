@@ -30,10 +30,10 @@ int main(void)
 {
   recap_test("LE GRAPHE", test_graph(), N_GRAPH);
   recap_test("LA PILE", test_pile(), N_PILE);
-  recap_test("LES CONDITIONS DE VICTOIRE", test_pathfinding(), N_PATH);
+  recap_test("IS_WINNING", test_pathfinding(), N_PATH);
   recap_test("LES GRAPHES TRIANGULAIRES", test_tr(), N_TR);
-  recap_test("LA GENERATION DU SYSTEME", test_sys(), N_SYS);
-  recap_test("LA RESOLUTION DU SYSTEME", test_gauss(), N_GAUSS);
+  recap_test("LA GENERATION DU SYSTEME DE RESISTANCES", test_sys(), N_SYS);
+  recap_test("LES PIVOTS DE GAUSS", test_gauss(), N_GAUSS);
   recap_test("DES CALCULS D'INTENSITES POUR UN GRAPHE GAGNANT/PERDANT", test_res(), N_RES);
   recap_test("LE CHOIX DE LA BONNE CASE", test_joueur_resistances(), N_JOUEUR);
   recap_test("test de path add realloc empty", test_all_array(), 3);
@@ -41,7 +41,6 @@ int main(void)
   recap_test("test de path score", test_path_score(), 1);
 
   //  test_hexa();
-  test_ratio_hex();
   return 0;
 }
 //  printf("\033[00m");
