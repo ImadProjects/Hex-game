@@ -1,17 +1,32 @@
 \begin{theindex}
 
-  \item {dynamic\+\_\+array}, \hyperpage{3}
+  \item {dynamic\+\_\+array}, \hyperpage{5}
 
   \indexspace
 
-  \item {graph\+\_\+t}, \hyperpage{3}
+  \item {graph\+\_\+t}, \hyperpage{5}
+    \subitem {o}, \hyperpage{5}
+    \subitem {t}, \hyperpage{5}
 
   \indexspace
 
-  \item {move\+\_\+t}, \hyperpage{3}
+  \item {move\+\_\+t}, \hyperpage{6}
 
   \indexspace
 
-  \item {pile}, \hyperpage{4}
+  \item {o}
+    \subitem {graph\+\_\+t}, \hyperpage{5}
+
+  \indexspace
+
+  \item {person}, \hyperpage{6}
+  \item {pile}, \hyperpage{6}
+  \item {player}, \hyperpage{6}
+  \item {player\+\_\+server}, \hyperpage{7}
+
+  \indexspace
+
+  \item {t}
+    \subitem {graph\+\_\+t}, \hyperpage{5}
 
 \end{theindex}
