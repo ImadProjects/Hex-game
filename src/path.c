@@ -13,6 +13,31 @@ int find_min_distance(int *distance, int *selected, int num_vertices)
   return min_index;
 }
 
+struct dynamic_array *path_intesection(struct dynamic_array *p1, struct dynamic_array *p2)
+{
+  struct dynamic_array *inter = empty__dynamic_array();
+
+  for (size_t i = 0; i < p1->size; i++)
+    for (size_t j = 0; j < p2->size; j++)
+      if (p1->array[i] == p2->array[j])
+        add__to_dynamic_array(inter, p1->array[i]);
+
+  return inter;
+}
+
+struct dynamic_array *path_union(struct dynamic_array *p1, struct dynamic_array *p2)
+{
+  struct dynamic_array *unio = empty__dynamic_array();
+
+  for (size_t i = 0; i < p1->size; i++)
+    add__to_dynamic_array(unio, p1->array[i]);
+
+  for (size_t i = 0; i < p2->size; i++)
+    add__to_dynamic_array(unio, p2->array[i]);
+
+  return unio;
+}
+
 struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_t color)
 {
   size_t vertices = G->num_vertices;

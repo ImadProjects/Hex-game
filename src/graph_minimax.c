@@ -6,7 +6,7 @@ struct dynamic_array *neighbours(struct graph_t *graph, int position)
 {
   struct dynamic_array *neighbours = empty__dynamic_array();
 
-  for (int k = 0; k < graph->num_vertices; k++)
+  for (size_t k = 0; k < graph->num_vertices; k++)
     if (gsl_spmatrix_get(graph->t, position, graph->num_vertices - k - 1) == 1)
       add__to_dynamic_array(neighbours, graph->num_vertices - k - 1);
 
@@ -21,31 +21,6 @@ int max_a_b(int a, int b)
 int min_a_b(int a, int b)
 {
   return (a <= b) ? a : b;
-}
-
-struct dynamic_array *path_intesection(struct dynamic_array *p1, struct dynamic_array *p2)
-{
-  struct dynamic_array *inter = empty__dynamic_array();
-
-  for (size_t i = 0; i < p1->size; i++)
-    for (size_t j = 0; j < p2->size; j++)
-      if (p1->array[i] == p2->array[j])
-        add__to_dynamic_array(inter, p1->array[i]);
-
-  return inter;
-}
-
-struct dynamic_array *path_union(struct dynamic_array *p1, struct dynamic_array *p2)
-{
-  struct dynamic_array *unio = empty__dynamic_array();
-
-  for (size_t i = 0; i < p1->size; i++)
-    add__to_dynamic_array(unio, p1->array[i]);
-
-  for (size_t i = 0; i < p2->size; i++)
-    add__to_dynamic_array(unio, p2->array[i]);
-
-  return unio;
 }
 
 int minimax(struct graph_t *G, struct graph_t *graph_player, int maxminplayer, int depth, int alpha, int beta, enum color_t id, int M)

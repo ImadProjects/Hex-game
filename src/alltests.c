@@ -36,7 +36,10 @@ int main(void)
   recap_test("LA RESOLUTION DU SYSTEME", test_gauss(), N_GAUSS);
   recap_test("DES CALCULS D'INTENSITES POUR UN GRAPHE GAGNANT/PERDANT", test_res(), N_RES);
   recap_test("LE CHOIX DE LA BONNE CASE", test_joueur_resistances(), N_JOUEUR);
-  recap_test("test de path.c", test_all_array(), 3);
+  recap_test("test de path add realloc empty", test_all_array(), 3);
+  recap_test("test de minimax", test_minimax(), 3);
+  recap_test("test de path score", test_path_score(), 1);
+
   //  test_hexa();
   test_ratio_hex();
   return 0;

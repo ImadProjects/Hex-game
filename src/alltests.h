@@ -11,3 +11,5 @@ int test_joueur_resistances();
 int test_hexa();
 int test_ratio_hex();
 int test_all_array();
+int test_minimax();
+int test_path_score();
