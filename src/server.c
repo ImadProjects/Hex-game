@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
   FILE *fp;
   FILE *fptr;
 
-  fp = fopen("src/test.js", "r");   // read mode
+  fp = fopen("src/game.js", "r");   // read mode
   fptr = fopen("src/draw.js", "w"); // read mode
 
   if (fp == NULL || fptr == NULL)
