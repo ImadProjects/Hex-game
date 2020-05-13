@@ -37,10 +37,9 @@ struct dynamic_array *path_union(struct dynamic_array *p1, struct dynamic_array 
 
   return unio;
 }
-
 struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_t color)
 {
-  size_t vertices = G->num_vertices;
+  int vertices = G->num_vertices;
   int distance[vertices];
   int parent[vertices];
   int selected[vertices];
@@ -78,7 +77,7 @@ struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_
   else
     i = 2 * M + 1;
 
-  while (i != -1 && parent[i]!=INFINIT)
+  while (i != -1)
     add__to_dynamic_array(p, i), i = parent[i];
 
   return p;
