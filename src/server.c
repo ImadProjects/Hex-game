@@ -80,7 +80,7 @@ void moves_player(struct graph_t *graph, int *t, int *size, struct player_server
   int m = graph->num_vertices;
   for (int i = 0; i < m; i++)
   {
-    if ((gsl_spmatrix_get(graph->o, 1 - p->color, i) == 0 && gsl_spmatrix_get(graph->o, p->color, i) == 1) || (gsl_spmatrix_get(graph->o, 1 - p->color, i) == 0 && gsl_spmatrix_get(graph->o, p->color, i)))
+    if ((gsl_spmatrix_get(graph->o, 1 - p->color, i) == 1))
     {
       t[size[0]] = i;
       size[0]++;
