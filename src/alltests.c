@@ -41,8 +41,5 @@ int main(void)
   recap_test("test de path score", test_path_score(), 1);
   recap_test("test de graph minimax", test_graph_minimax(), 3);
 
-  //  test_hexa();
   return 0;
 }
-//  printf("\033[00m");
-// printf("\033[36m");

@@ -155,9 +155,12 @@ int test_neighbours()
   if (path->array[0] == 13 && path->array[1] == 12)
   {
     free__dynamic_array(path);
+    free__graph_t(g);
+
     return 1;
   }
   free__dynamic_array(path);
+  free__graph_t(g);
   return 0;
 }
 
