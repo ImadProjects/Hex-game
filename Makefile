@@ -33,7 +33,7 @@ resistance.o:src/resistance.c
 	$(CC) $(CFLAGS) -rdynamic --coverage -g -O0 -c src/resistance.c
 
 graph.o:src/graph.c
-	$(CC) $(FLAGS) -c src/graph.c
+	$(CC) $(CFLAGS) -c src/graph.c
 
 graph_aux.o:src/graph_aux.c
 	$(CC) $(CFLAGS) -c src/graph_aux.c
@@ -68,26 +68,26 @@ minimax.o: src/minimax.c
 path.o: src/path.c 
 	$(CC) $(CFLAGS) -c src/path.c
 
-test_graph.o: src/test_graph.c 
-	$(CC) $(CFLAGS) -c src/test_graph.c
+test_graph.o: src/tst/test_graph.c 
+	$(CC) $(CFLAGS) -c src/tst/test_graph.c
 graph_minimax.o: src/graph_minimax.c 
 	$(CC) $(CFLAGS) -c src/graph_minimax.c
 dynamic_array.o: src/dynamic_array.c 
 	$(CC) $(CFLAGS) -c src/dynamic_array.c
 
-test_resistances.o: src/test_resistances.c resistance.o
-	$(CC) $(CFLAGS)   -c src/test_resistances.c
+test_resistances.o: src/tst/test_resistances.c resistance.o
+	$(CC) $(CFLAGS)   -c src/tst/test_resistances.c
 
-test_minimax.o: src/test_minimax.c minimax.o path.o minimax.o graph_minimax.o dynamic_array.o
-	$(CC) $(CFLAGS)   -c src/test_minimax.c
+test_minimax.o: src/tst/test_minimax.c minimax.o path.o minimax.o graph_minimax.o dynamic_array.o
+	$(CC) $(CFLAGS)   -c src/tst/test_minimax.c
 
 
-alltests.o: src/alltests.c 
-	$(CC) $(CFLAGS) -c -rdynamic --coverage -g -O0   src/alltests.c
+alltests.o: src/tst/alltests.c 
+	$(CC) $(CFLAGS) -c -rdynamic --coverage -g -O0   src/tst/alltests.c
 
-alltests_resistance.o: src/alltests_resistance.c 
-	$(CC) $(CFLAGS) -c -rdynamic --coverage -g -O0   src/alltests_resistance.c
+alltests_resistance.o: src/tst/alltests_resistance.c 
+	$(CC) $(CFLAGS) -c -rdynamic --coverage -g -O0   src/tst/alltests_resistance.c
 
-alltests_graph.o: src/alltests_graph.c 
-	$(CC) $(CFLAGS) -c -rdynamic --coverage -g -O0   src/alltests_graph.c
+alltests_graph.o: src/tst/alltests_graph.c 
+	$(CC) $(CFLAGS) -c -rdynamic --coverage -g -O0   src/tst/alltests_graph.c
 

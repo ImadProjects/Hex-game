@@ -1,5 +1,5 @@
-#include "path.h"
-#include "graph_minimax.h"
+#include "../path.h"
+#include "../graph_minimax.h"
 #include <stdio.h>
 #include <stdlib.h>
 

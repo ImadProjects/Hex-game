@@ -1,4 +1,4 @@
-#include "alltests.h"
+#include "../tst/alltests.h"
 #include <stdio.h>
 
 #define N_GRAPH 9

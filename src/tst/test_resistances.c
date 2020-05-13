@@ -1,7 +1,7 @@
-#include "resistance.h"
+#include "../resistance.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "move.h"
+#include "../move.h"
 
 void print_m(double **mat, int n);
 void print_vect(double *v, int n);
@@ -10,8 +10,8 @@ int test_sys()
 {
   int n = 2;
   int c = 0;
-  struct graph_t* g = new__graph_t(n, 'c');
-  double** mat = generate_meshes(g, 0);
+  struct graph_t *g = new__graph_t(n, 'c');
+  double **mat = generate_meshes(g, 0);
   c += (mat[0][0] >= 1.9);
   c += (abs(mat[4][0]) < 0.6);
   c += (mat[2][0] <= 2.1);
@@ -21,13 +21,10 @@ int test_sys()
   free_sys(mat, 5);
   free__graph_t(g);
 
-  struct graph_t* gg = new__graph_t(n, 'h');
-  double** matt = generate_meshes(gg, 0);
+  struct graph_t *gg = new__graph_t(n, 'h');
+  double **matt = generate_meshes(gg, 0);
   free_sys(matt, 9);
   free__graph_t(gg);
-  
-
-  
 
   return c;
 }
@@ -72,10 +69,10 @@ int test_res()
 
   struct move_t mv = {4, 0};
   coloriate__graph_t(g, 0, mv);
-  double** mat = generate_meshes(g, 1);
-  gauss(mat, b, x, n*n + 1);
-  double tmp = x[n*n];
-  free_sys(mat, n*n + 1);
+  double **mat = generate_meshes(g, 1);
+  gauss(mat, b, x, n * n + 1);
+  double tmp = x[n * n];
+  free_sys(mat, n * n + 1);
 
   for (int i = 0; i < n * n + 1; i++)
   {
@@ -83,27 +80,27 @@ int test_res()
     b[i] = 0.;
   }
   b[n * n] = 10;
-  double** matt = generate_meshes(g, 0);
-  gauss(matt, b, x, n*n + 1);
-  c += x[n*n] > tmp;
-  free_sys(matt, n*n + 1);
+  double **matt = generate_meshes(g, 0);
+  gauss(matt, b, x, n * n + 1);
+  c += x[n * n] > tmp;
+  free_sys(matt, n * n + 1);
   free(b);
   free(x);
   free__graph_t(g);
 
-  int size = 2 * n*n;
-  struct graph_t* gg = new__graph_t(n, 'h');
+  int size = 2 * n * n;
+  struct graph_t *gg = new__graph_t(n, 'h');
   double *bb = malloc(sizeof(double) * (size + 1));
   double *xx = malloc(sizeof(double) * (size + 1));
   for (int i = 0; i < size + 1; i++)
-    {
-      xx[i] = 0.;
-      bb[i] = 0.;
-    }
+  {
+    xx[i] = 0.;
+    bb[i] = 0.;
+  }
   bb[size] = 10;
 
   coloriate__graph_t(gg, 0, mv);
-  double** math = generate_meshes(gg, 1);
+  double **math = generate_meshes(gg, 1);
   gauss(math, bb, xx, size + 1);
   tmp = xx[size];
   free_sys(math, size + 1);
@@ -114,7 +111,7 @@ int test_res()
     bb[i] = 0.;
   }
   bb[size] = 10;
-  double** matth = generate_meshes(gg, 0);
+  double **matth = generate_meshes(gg, 0);
   gauss(matth, bb, xx, size + 1);
   c += xx[size] < tmp;
   free_sys(matth, size + 1);
@@ -136,7 +133,7 @@ struct move_t play(struct move_t previous_move, struct graph_t *g)
   int best = -1;
   double sign = 1. - 2. * (mec.c == 1);
   double best_ratio = (double)sign * 2000000000.;
-  for (int i = 0; i < (int) g->num_vertices; i++)
+  for (int i = 0; i < (int)g->num_vertices; i++)
   {
     mec.m = i;
     if (is_move_possible(g, mec))
@@ -178,7 +175,7 @@ int test_joueur_resistances()
   struct graph_t *g = new__graph_t(n, 'c');
   coloriate__graph_t(g, 0, mv);
   struct graph_t *g_copy = copy_graph(g);
-  c += ((int) play(mv, g_copy).m == -1);
+  c += ((int)play(mv, g_copy).m == -1);
   free__graph_t(g_copy);
   free__graph_t(g);
 
@@ -194,4 +191,3 @@ int test_joueur_resistances()
 
   return c;
 }
-

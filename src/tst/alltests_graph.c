@@ -1,4 +1,4 @@
-#include "alltests.h"
+#include "../tst/alltests.h"
 #include <stdio.h>
 
 #define N_GRAPH 9
@@ -28,10 +28,9 @@ void recap_test(char *s, int n, int expected)
 
 int main(void)
 {
+  recap_test("LE GRAPHE", test_graph(), N_GRAPH);
 
-  recap_test("LE CHOIX DE LA BONNE CASE", test_joueur_resistances(), N_JOUEUR);
   //  test_hexa();
-  test_ratio_hex();
   return 0;
 }
 //  printf("\033[00m");

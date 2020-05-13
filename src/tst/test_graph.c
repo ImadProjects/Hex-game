@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <gsl/gsl_spmatrix.h>
-#include "graph.h"
-#include "pile.h"
+#include "../graph.h"
+#include "../pile.h"
 
 int check(int n, int att)
 {
