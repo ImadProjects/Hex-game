@@ -1,10 +1,10 @@
 var p = new Object();
-p.color = 0;
-p.move = [0,1,2,3,4,5,6,7,16,39,46,49,52,61,73,74,75,76,77,78,79,80];
+p.color = 1;
+p.move = [5,6,10,11,12,13,17,18,19,22,23,24,25,27,29,30];
 var pl = new Object();
-pl.color = 1;
-pl.move = [8,9,17,18,26,27,35,36,44,45,53,54,62,63,64,65,66,67,68,69,70,71,72];
-var size =  8;
+pl.color = 0;
+pl.move = [0,1,2,3,4,9,14,16,20,21,26,31,32,33,34,35];
+var size =  5;
 (function () {
   var canvas = document.getElementById('hexmap');
 

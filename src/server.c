@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
   FILE *fptr;
 
   fp = fopen("src/game.js", "r");   // read mode
-  fptr = fopen("src/draw.js", "w"); // read mode
+  fptr = fopen("src/draw.js", "w"); // write mode
 
   if (fp == NULL || fptr == NULL)
   {
@@ -233,13 +233,12 @@ int main(int argc, char *argv[])
   p1->finalize();
   p2->finalize();
   free__graph_t(graph);
-  dlclose(player1);
-  dlclose(player2);
   free(p1);
   free(p2);
   free(tableau2);
   free(tableau1);
   fclose(fp);
+  fclose(fptr);
   dlclose(player1);
   dlclose(player2);
 
