@@ -39,6 +39,7 @@ int main(void)
   recap_test("test de path add realloc empty", test_all_array(), 3);
   recap_test("test de minimax", test_minimax(), 3);
   recap_test("test de path score", test_path_score(), 1);
+  recap_test("test de graph minimax", test_graph_minimax(), 3);
 
   //  test_hexa();
   return 0;

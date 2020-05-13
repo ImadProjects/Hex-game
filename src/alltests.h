@@ -13,3 +13,5 @@ int test_ratio_hex();
 int test_all_array();
 int test_minimax();
 int test_path_score();
+int test_neighbours();
+int test_graph_minimax();

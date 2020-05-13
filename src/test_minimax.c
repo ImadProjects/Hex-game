@@ -140,10 +140,43 @@ int test_path_score()
     free__dynamic_array(path);
     return 1;
   }
-  
+
   return 0;
   free__graph_t(g);
   free__dynamic_array(path);
+}
+
+int test_neighbours()
+{
+  struct graph_t *g = new__graph_t(4, 'h');
+  gsl_spmatrix_set(g->o, 1, 6, 1);
+  gsl_spmatrix_set(g->o, 1, 7, 1);
+  struct dynamic_array *path = neighbours(g, 8);
+  if (path->array[0] == 13 && path->array[1] == 12)
+  {
+    free__dynamic_array(path);
+    return 1;
+  }
+  free__dynamic_array(path);
+  return 0;
+}
+
+int test_max_a_b()
+{
+  int a = 1;
+  int b = 2;
+  if (max_a_b(a, b) == 2)
+    return 1;
+  return 0;
+}
+
+int test_min_a_b()
+{
+  int a = 1;
+  int b = 2;
+  if (min_a_b(a, b) == 1)
+    return 1;
+  return 0;
 }
 
 int test_minimax()
@@ -153,6 +186,17 @@ int test_minimax()
   else if ((test_path_union() && test_find_min_distance() == 0 && test_path_intersection()) || (test_path_union() == 0 && test_find_min_distance() && test_path_intersection()) || (test_path_union() && test_find_min_distance() && test_path_intersection() == 0))
     return 2;
   else if ((test_path_union() == 0 && test_find_min_distance() == 0 && test_path_intersection()) || (test_path_union() == 0 && test_find_min_distance() && test_path_intersection() == 0) || (test_path_union() && test_find_min_distance() == 0 && test_path_intersection() == 0))
+    return 1;
+  return 0;
+}
+
+int test_graph_minimax()
+{
+  if (test_max_a_b() && test_neighbours() && test_min_a_b())
+    return 3;
+  else if ((test_max_a_b() && test_neighbours() == 0 && test_min_a_b()) || (test_max_a_b() == 0 && test_neighbours() && test_min_a_b()) || (test_max_a_b() && test_neighbours() && test_min_a_b() == 0))
+    return 2;
+  else if ((test_max_a_b() == 0 && test_neighbours() == 0 && test_min_a_b()) || (test_max_a_b() == 0 && test_neighbours() && test_min_a_b() == 0) || (test_max_a_b() && test_neighbours() == 0 && test_min_a_b() == 0))
     return 1;
   return 0;
 }
