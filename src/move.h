@@ -1,9 +1,15 @@
+/*! \file move.h                                                                                                                            
+ * \brief structures for graph positionning                                                                                                                 
+ *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+ */
 #ifndef _HEX_MOVE_H_
 #define _HEX_MOVE_H_
 
 #include <stdlib.h>
 
-/* Players */
+/**
+ * @brief type enum for the colors of the graph
+ */
 enum color_t
 {
   BLACK = 0,
@@ -11,7 +17,9 @@ enum color_t
   NO_COLOR = 2
 };
 
-/* Positions */
+/**
+ * @brief data structure for the position in the graph
+ */
 struct move_t
 {
   size_t m;       // An index between 0 and the number of vertices of - 1

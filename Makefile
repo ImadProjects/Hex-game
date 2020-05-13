@@ -3,9 +3,14 @@ CFLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -ftest-coverage -g   -I $(GSL
 FLAGS=-Wall -Wextra -fPIC -std=c99 -fprofile-arcs -g  -I $(GSL_PATH)/include
 LDFLAGS=-L $(GSL_PATH)/lib -ldl -lgsl -lgslcblas -lm
 
+.PHONY: build test doc
+
 all: build 
 
-build: precommit server  players
+build: precommit server  players 
+
+doc:
+	cd doc ; doxygen Doxyfile ; open html/index.html
 
 precommit: 
 	chmod +x ./src/scripts/install-hooks.bash
@@ -25,6 +30,7 @@ clean:
 	rm  -f *gcov *gcda
 	rm -f a.out
 	rm -rf install/*.dSYM *.dSYM
+	rm -rf doc/html doc/latex
 
 pile.o:src/pile.c
 	$(CC) $(CFLAGS) -c src/pile.c
