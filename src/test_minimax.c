@@ -135,11 +135,17 @@ int test_path_score()
   gsl_spmatrix_set(g->o, 1, 7, 1);
   int sc = path_score(path, g);
   if (sc == 3)
+  {
+    free__graph_t(g);
+    free__dynamic_array(path);
     return 1;
+  }
+  
   return 0;
   free__graph_t(g);
   free__dynamic_array(path);
 }
+
 int test_minimax()
 {
   if (test_path_union() && test_find_min_distance() && test_path_intersection())
