@@ -110,6 +110,8 @@ struct move_t play(struct move_t last_move)
       m.m = k;
     }
     free__dynamic_array(player_path);
+    free__dynamic_array(p_mv);
+
     free__dynamic_array(enemy_path);
     free__dynamic_array(un);
     free__dynamic_array(uni);

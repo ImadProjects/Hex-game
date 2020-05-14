@@ -87,8 +87,6 @@ struct dynamic_array *get__possible_moves(struct graph_t *G)
   for (size_t i = 0; i < vertices; i++)
     if (!is_taken(G->o, i))
       add__to_dynamic_array(p, i);
-
-  free__dynamic_array(p);
   return p;
 }
 struct move_t best_move(struct graph_t *graph_player, enum color_t id, int M, struct dynamic_array *inter)
