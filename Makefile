@@ -10,10 +10,10 @@ all: build
 build: precommit server  players 
 
 doc:
-	cd doc ; doxygen Doxyfile ; gnome-open html/index.html || open html/index.html
+	cd doc ; doxygen Doxyfile ; firefox html/index.html || open html/index.html
 
 show:
-	open src/game.html
+	firefox src/game.html || open src/game.html
 
 precommit: 
 	chmod +x ./src/scripts/install-hooks.bash
