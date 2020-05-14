@@ -39,7 +39,7 @@ struct dynamic_array *path_union(struct dynamic_array *p1, struct dynamic_array 
 }
 struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_t color)
 {
-  int vertices = G->num_vertices;
+  size_t vertices = G->num_vertices;
   int distance[vertices];
   int parent[vertices];
   int selected[vertices];
