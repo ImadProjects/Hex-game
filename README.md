@@ -41,11 +41,13 @@ Generate documentation
 make doc
 
 
+
 test sources
 -------------------
 
 make test
 
+./insall/alltests
 
 visualisation of the game with html (not improved but works fine)
 -------------------

@@ -10,7 +10,7 @@ all: build
 build: precommit server  players 
 
 doc:
-	cd doc ; doxygen Doxyfile ; open html/index.html
+	cd doc ; doxygen Doxyfile ; gnome-open html/index.html || open html/index.html
 
 show:
 	open src/game.html
