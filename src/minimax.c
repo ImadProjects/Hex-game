@@ -52,7 +52,18 @@ int accept_opening(const struct move_t opening)
   else
     return 0;
 }
-
+int empty_index(struct player player, size_t i)
+{
+  size_t compteur = 0;
+  for (size_t j = 0; j < player.graph->num_vertices; j++)
+  {
+    if (gsl_spmatrix_get(player.graph->o, player.color, j) == 0 && gsl_spmatrix_get(player1.graph->o, (player.color + 1) % 2, j) == 0)
+      compteur++;
+    if (compteur == i)
+      return j;
+  }
+  return -1;
+}
 void initialize_graph(struct graph_t *graph)
 {
   player1.graph = graph;
@@ -66,30 +77,43 @@ void initialize_color(enum color_t id)
 
 struct move_t play(struct move_t last_move)
 {
-  struct move_t m;
+  struct move_t m = {.m = 0, .c = player1.color};
   gsl_spmatrix_set(player1.graph->o, last_move.c, last_move.m, 1);
   int M = sqrt(size__graph_t(player1.graph)) - 1;
-  struct dynamic_array *player_path = djikstra(player1.graph, M, player1.color * (M + 1), player1.color);
-  struct dynamic_array *enemy_path = djikstra(player1.graph, M, (1 - player1.color) * (M + 1), (1 - player1.color));
-  struct dynamic_array *un = path_union(player_path, enemy_path);
-  struct dynamic_array *nb = neighbours(player1.graph, last_move.m);
-  struct dynamic_array *p = empty__dynamic_array();
-  for (size_t i = 0; i < nb->size; i++)
+  struct dynamic_array *p_mv = get__possible_moves(player1.graph);
+  if (p_mv->size == 0)
   {
-    add__to_dynamic_array(p, nb->array[i]);
+    m.m = 0;
+    m.c = player1.color;
+    return m;
   }
-  free__dynamic_array(nb);
-  struct dynamic_array *uni = path_union(un, p);
-  free__dynamic_array(p);
+  else
+  {
+    struct dynamic_array *player_path = djikstra(player1.graph, M, player1.color * (M + 1), player1.color);
+    struct dynamic_array *enemy_path = djikstra(player1.graph, M, (1 - player1.color) * (M + 1), (1 - player1.color));
+    struct dynamic_array *un = path_union(player_path, enemy_path);
+    struct dynamic_array *nb = neighbours(player1.graph, last_move.m);
+    struct dynamic_array *p = empty__dynamic_array();
+    for (size_t i = 0; i < nb->size; i++)
+    {
+      add__to_dynamic_array(p, nb->array[i]);
+    }
+    free__dynamic_array(nb);
+    struct dynamic_array *uni = path_union(un, p);
+    free__dynamic_array(p);
 
-  m = best_move(player1.graph, player1.color, M, uni);
-  free__dynamic_array(player_path);
-  free__dynamic_array(enemy_path);
-
-  free__dynamic_array(un);
+    m = best_move(player1.graph, player1.color, M, uni);
+    if (m.m == 0)
+    {
+      int mm = rand() % p_mv->size + 1;
+      int k = empty_index(player1, mm);
+      m.m = k;
+    }
+    free__dynamic_array(player_path);
+    free__dynamic_array(enemy_path);
+    free__dynamic_array(un);
     free__dynamic_array(uni);
-
-
+  }
 
   gsl_spmatrix_set(player1.graph->o, player1.color, m.m, 1);
   return m;

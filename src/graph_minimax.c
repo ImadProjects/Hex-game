@@ -78,10 +78,23 @@ int minimax(struct graph_t *G, struct graph_t *graph_player, int maxminplayer, i
   }
 }
 
+struct dynamic_array *get__possible_moves(struct graph_t *G)
+{
+
+  size_t vertices = size__graph_t(G);
+  struct dynamic_array *p = empty__dynamic_array();
+
+  for (size_t i = 0; i < vertices; i++)
+    if (!is_taken(G->o, i))
+      add__to_dynamic_array(p, i);
+
+  free__dynamic_array(p);
+  return p;
+}
 struct move_t best_move(struct graph_t *graph_player, enum color_t id, int M, struct dynamic_array *inter)
 {
-  int bestval = INFINIT;
-  struct move_t m = {.c = id};
+  int best = INFINIT;
+  struct move_t m = {.m = 0, .c = id};
 
   for (size_t i = 0; i < inter->size; i++)
   {
@@ -89,10 +102,10 @@ struct move_t best_move(struct graph_t *graph_player, enum color_t id, int M, st
     {
       struct move_t move = {.m = inter->array[i], .c = id};
       struct graph_t *copy = copy_new_graph(graph_player, move);
-      int val = minimax(copy, graph_player, 1, 50, -INFINIT, INFINIT, 1 - id, M);
+      int r = minimax(copy, graph_player, 1, 10, -INFINIT, INFINIT, 1 - id, M);
       free__graph_t(copy);
-      if (val < bestval)
-        bestval = val, m.m = inter->array[i];
+      if (r < best)
+        best = r, m.m = inter->array[i];
     }
   }
   return m;

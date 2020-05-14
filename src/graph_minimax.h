@@ -46,6 +46,10 @@ int min_a_b(int a, int b);
  * @param M 
  * @return int 
  */
+
+
+struct dynamic_array *get__possible_moves(struct graph_t *G);
+
 int minimax(struct graph_t *G, struct graph_t *graph_player, int maxminplayer, int depth, int alpha, int beta, enum color_t id, int M);
 
 /**

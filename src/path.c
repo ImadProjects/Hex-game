@@ -73,16 +73,29 @@ struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_
   struct dynamic_array *p = empty__dynamic_array();
   int i;
   if (color == BLACK)
-    i = G->num_vertices - 1;
+  {
+    int i = G->num_vertices - 1;
+    while (i != -1)
+    {
+      if (distance[i] == INFINIT)
+        break;
+      add__to_dynamic_array(p, i);
+      i = parent[i];
+    }
+  }
   else
-    i = 2 * M + 1;
-
-  while (i != -1)
-    add__to_dynamic_array(p, i), i = parent[i];
-
+  {
+    int i = 2 * M + 1;
+    while (i != -1)
+    {
+      if (distance[i] == INFINIT)
+        break;
+      add__to_dynamic_array(p, i);
+      i = parent[i];
+    }
+  }
   return p;
 }
-
 int path_score(struct dynamic_array *path, struct graph_t *G)
 {
   size_t score = 0, i = 0;
