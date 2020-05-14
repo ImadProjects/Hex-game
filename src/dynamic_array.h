@@ -25,6 +25,13 @@ struct dynamic_array
 };
 
 /**
+ * @brief allocates an empty array data structure
+ * 
+ * @return struct dynamic_array* 
+ */
+struct dynamic_array *empty__dynamic_array();
+
+/**
  * @brief realloc dynamic structure if size == capacity
  * 
  */
