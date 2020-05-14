@@ -71,7 +71,6 @@ struct dynamic_array *djikstra(struct graph_t *G, size_t M, int src, enum color_
   }
 
   struct dynamic_array *p = empty__dynamic_array();
-  int i;
   if (color == BLACK)
   {
     int i = G->num_vertices - 1;
