@@ -1,10 +1,10 @@
 var p = new Object();
-p.color = 1;
-p.move = [11,12,17];
+p.color = 0;
+p.move = [0];
 var pl = new Object();
-pl.color = 0;
-pl.move = [6,7,8,13];
-var size =  4;
+pl.color = 1;
+pl.move = [0];
+var size =  2;
 (function () {
   var canvas = document.getElementById('hexmap');
 

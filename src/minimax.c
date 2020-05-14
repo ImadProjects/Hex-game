@@ -85,6 +85,7 @@ struct move_t play(struct move_t last_move)
   {
     m.m = 0;
     m.c = player1.color;
+    free__dynamic_array(p_mv);
     return m;
   }
   else
@@ -111,7 +112,6 @@ struct move_t play(struct move_t last_move)
     }
     free__dynamic_array(player_path);
     free__dynamic_array(p_mv);
-
     free__dynamic_array(enemy_path);
     free__dynamic_array(un);
     free__dynamic_array(uni);
