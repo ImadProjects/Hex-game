@@ -47,10 +47,8 @@ graph.o:src/graph.c
 graph_aux.o:src/graph_aux.c
 	$(CC) $(CFLAGS) -c src/graph_aux.c
 
-
 player1.o: src/player1.c 
 	$(CC) $(FLAGS) -c  src/player1.c
-
 
 server.o: src/server.c 
 	$(CC) $(FLAGS) -g -c src/server.c
@@ -79,8 +77,10 @@ path.o: src/path.c
 
 test_graph.o: src/tst/test_graph.c 
 	$(CC) $(CFLAGS) -c src/tst/test_graph.c
+
 graph_minimax.o: src/graph_minimax.c 
 	$(CC) $(CFLAGS) -c src/graph_minimax.c
+
 dynamic_array.o: src/dynamic_array.c 
 	$(CC) $(CFLAGS) -c src/dynamic_array.c
 
@@ -89,7 +89,6 @@ test_resistances.o: src/tst/test_resistances.c resistance.o
 
 test_minimax.o: src/tst/test_minimax.c minimax.o path.o minimax.o graph_minimax.o dynamic_array.o
 	$(CC) $(CFLAGS)   -c src/tst/test_minimax.c
-
 
 alltests.o: src/tst/alltests.c 
 	$(CC) $(CFLAGS) -c -rdynamic --coverage -g -O0   src/tst/alltests.c
