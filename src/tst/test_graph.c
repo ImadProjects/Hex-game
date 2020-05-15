@@ -8,6 +8,7 @@ int check(int n, int att)
   return n == att;
 }
 
+//tests for the initialization of a graph_t
 int test_graph(void)
 {
   int c = 0;
@@ -25,29 +26,31 @@ int test_graph(void)
   return c;
 }
 
+//tests for the pile
 int test_pile(void)
 {
   int c = 0;
   struct pile *p = pile_vide();
-  c += check(p->size, 0); //
+  c += check(p->size, 0); 
   for (int i = 0; i < 10; i++)
   {
     empiler(p, i);
   }
-  c += check(p->size, 10); //
+  c += check(p->size, 10);
   for (int i = 0; i < 8; i++)
   {
     depiler(p);
   }
-  c += check(p->size, 2);    //
-  c += check(depiler(p), 1); //
-  c += check(depiler(p), 0); //
+  c += check(p->size, 2);    
+  c += check(depiler(p), 1); 
+  c += check(depiler(p), 0); 
   c += check(p->size, 0);
   c += check(depiler(p), -1);
   pile_free(p);
   return c;
 }
 
+//tests for is_winning
 int test_pathfinding(void)
 {
   int c = 0;
@@ -105,6 +108,7 @@ int test_pathfinding(void)
   return c;
 }
 
+//tests for the initialization of the triangular graph_t
 int test_tr()
 {
   struct graph_t *g = new__graph_t(5, 't');
@@ -125,10 +129,6 @@ int test_tr()
   c += check(gsl_spmatrix_get(g->o, 1, 148), 0);
   c += check(gsl_spmatrix_get(g->o, 0, 148), 2);
 
-  /*  print_graph(g, 't');
-  for (int i = 0; i < g->num_vertices; i++){
-    printf("\no[0][%d] = %f, o[1][%d] = %f\n", i, gsl_spmatrix_get(g->o, 0, i), i, gsl_spmatrix_get(g->o, 1, i));
-    }*/
   free__graph_t(g);
   return c;
 }

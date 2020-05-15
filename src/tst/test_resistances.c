@@ -6,6 +6,7 @@
 void print_m(double **mat, int n);
 void print_vect(double *v, int n);
 
+//tests for the establishment of the resistance system
 int test_sys()
 {
   int n = 2;
@@ -29,6 +30,7 @@ int test_sys()
   return c;
 }
 
+//tests for the gauss method
 int test_gauss()
 {
   int m = 2;
@@ -53,6 +55,7 @@ int test_gauss()
   return c;
 }
 
+//tests for total resistance values of some graph_t
 int test_res()
 {
   int n = 2;
@@ -166,6 +169,7 @@ struct move_t play(struct move_t previous_move, struct graph_t *g)
   return mec;
 }
 
+//tests for the play choice
 int test_joueur_resistances()
 {
   int c = 0;
