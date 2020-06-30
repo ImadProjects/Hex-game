@@ -1,6 +1,7 @@
 Project Hex Library        {#mainpage}
 =====================
 
+![alt text](doc/logo.png)
 
 About
 -------------------
