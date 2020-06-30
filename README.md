@@ -1,4 +1,4 @@
-Project Hex   
+Hex Project
 =====================
 
 ![alt text,30%](doc/logo.png)
