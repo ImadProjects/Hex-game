@@ -1,8 +1,11 @@
-Project Hex Library      
+Project Hex   
 =====================
 
 ![alt text](doc/logo.png)
 
+<p align="center">
+  <img src="(doc/logo.png" width="350">
+</p>
 About
 -------------------
 C implementation of Hex Game
