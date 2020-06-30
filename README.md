@@ -1,7 +1,7 @@
 Project Hex   
 =====================
 
-![alt text](doc/logo.png| width=100)
+![alt text](doc/logo.png | width=100)
 
 
 About
