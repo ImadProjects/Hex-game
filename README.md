@@ -1,4 +1,4 @@
-Project Hex Library        {#mainpage}
+Project Hex Library      
 =====================
 
 ![alt text](doc/logo.png)
